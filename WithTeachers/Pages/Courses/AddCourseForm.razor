@@ -1,0 +1,48 @@
+﻿
+@namespace  WithTeachers.Pages.Courses
+@using WithTeachers.Data
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<EditForm style="border: 1px solid lightblue; padding: 20px; border-radius: 5px" Model="@courseToAdd" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    @*<ValidationSummary />*@
+    <p>
+        <label>
+            Course title*:
+            <InputText id="title" @bind-Value="courseToAdd.Title" />
+            <ValidationMessage For="@(() => courseToAdd.Title)" />
+        </label>
+    </p>
+    <p>
+        <label>
+            Course description*:
+            <InputTextArea id="description" @bind-Value="courseToAdd.Description" />
+            <ValidationMessage For="@(() => courseToAdd.Description)" />
+        </label>
+    </p>
+    <p>
+        <label>
+            Password (optional):
+            <InputText id="password" @bind-Value="courseToAdd.Password" />
+        </label>
+    </p>
+    @*<InputText id="password" @bind-Value="courseToAdd.UserName" />*@
+
+    <button type="submit">Submit</button>
+</EditForm>
+
+@code {
+    Course courseToAdd = new Course();
+
+    private void HandleValidSubmit()
+    {
+        Console.WriteLine("OnValidSubmit");
+    }
+
+    protected override async void OnInitialized()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        //courseToAdd.UserName = user.Identity.Name;
+    }
+}

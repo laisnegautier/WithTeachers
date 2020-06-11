@@ -1,0 +1,23 @@
+﻿@page "/courses"
+@page "/courses/{CourseSlug}"
+
+@namespace WithTeachers.Pages.Courses
+
+@attribute [Authorize]
+
+<h1>Courses</h1>
+
+@if (CourseSlug == null)
+{
+    <p>dfg</p>
+}
+else
+{
+    <CoursesHistory />
+    <AddCourseForm />
+}
+
+@code {
+    [Parameter]
+    public string CourseSlug { get; set; }
+}

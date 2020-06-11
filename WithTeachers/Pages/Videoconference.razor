@@ -1,0 +1,23 @@
+﻿@page "/videoconference"
+@page "/{slug}"
+
+@attribute [Authorize]
+
+<h1>Videoconference @Slug</h1>
+
+
+<button class="btn btn-primary"><span class="oi oi-arrow-circle-right" aria-hidden="true"></span> Go to currently active videoconference</button>
+<button class="btn btn-primary"><span class="oi oi-plus" aria-hidden="true"></span> New</button>
+
+<section>
+    <h3>Planified</h3>
+</section>
+
+<section>
+    <h3>Previous</h3>
+</section>
+
+@code {
+    [Parameter]
+    public string Slug { get; set; }
+}

@@ -1,0 +1,63 @@
+﻿@namespace WithTeachers.Pages.Courses
+
+@using WithTeachers.Data
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<h3>CoursesHistory</h3>
+
+@if (courses == null)
+{
+    <p><em>Loading...</em></p>
+}
+else if (courses.Length == 0)
+{
+    <p>YA R</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Temp. (C)</th>
+                <th>Temp. (F)</th>
+                <th>Summary</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var course in courses)
+            {
+                <NavLink class="nav-link" href="courses">
+                    <tr>
+                        <td>@course.CreationDate.ToShortDateString()</td>
+                        <td>@course.CourseId</td>
+                        <td>@course.Title</td>
+                    </tr>
+                </NavLink>
+            }
+        </tbody>
+    </table>
+
+}
+@code {
+    private Course[] courses;
+
+    private async Task GetCourses()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity.IsAuthenticated)
+        {
+            //try
+            //{
+            //    courses = await Http.GetFromJsonAsync<Course[]>("Course?client=" + user.Identity.Name);
+            //}
+            //catch (AccessTokenNotAvailableException exception)
+            //{
+            //    exception.Redirect();
+            //}
+        }
+    }
+}
