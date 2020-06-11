@@ -15,6 +15,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WithTeachers.Areas.Identity;
 using WithTeachers.Data;
+using Microsoft.AspNetCore.DataProtection;
+using System.IO;
 
 namespace WithTeachers
 {
@@ -34,6 +36,8 @@ namespace WithTeachers
             //services.AddDbContext<ApplicationDbContext>(options =>
             //    options.UseSqlServer(
             //        Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDataProtection()
+                .PersistKeysToFileSystem(new DirectoryInfo(@"\\server\share\directory\"));
 
             services.AddDbContext<ApplicationDbContext>(options =>
             {
