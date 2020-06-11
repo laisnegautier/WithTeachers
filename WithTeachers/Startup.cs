@@ -37,7 +37,7 @@ namespace WithTeachers
             //        Configuration.GetConnectionString("DefaultConnection")));
             services.AddDbContext<ApplicationDbContext>(options =>
             {
-                options.UseSqlite("Data Source = Data/Database/Products.db");
+                options.UseSqlite("Data Source = Data/Database/WithTeachers.db");
             });
 
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -45,9 +45,9 @@ namespace WithTeachers
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<ApplicationUser>>();
-            
+
             services.AddSingleton<WeatherForecastService>();
-            services.AddScoped<ProductService>();
+            services.AddScoped<ClassService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

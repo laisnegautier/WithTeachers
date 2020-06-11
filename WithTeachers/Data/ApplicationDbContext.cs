@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace WithTeachers.Data
 {
@@ -21,20 +23,24 @@ namespace WithTeachers.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //modelBuilder.Entity<Product>().HasData(GetProducts());
+            modelBuilder.Entity<Class>().HasData(GetClasses());
             base.OnModelCreating(modelBuilder);
         }
 
         #region Seed
 
-        //private List<Product> GetProducts() => new List<Product>
-        //    {
-        //        new Product { Id = 1001, Name = "Laptop", Price = 20.02, Quantity = 10, Description ="This is a best gaming laptop"},
-        //        new Product { Id = 1002, Name = "Microsoft Office", Price = 20.99, Quantity = 50, Description ="This is a Office Application"},
-        //        new Product { Id = 1003, Name = "Lazer Mouse", Price = 12.02, Quantity = 20, Description ="The mouse that works on all surface"},
-        //        new Product { Id = 1004, Name = "USB Storage", Price = 5.00, Quantity = 20, Description ="To store 256GB of data"}
-        //    };
+        private List<Class> GetClasses()
+        {
+            return new List<Class>
+            {
+                new Class { ClassId = 1, Year = 2013 },
+                new Class { ClassId = 2, Year = 2015 },
+                new Class { ClassId = 3, Year = 2011 },
+                new Class { ClassId = 4, Year = 1984 },
+                new Class { ClassId = 5, Year = 1700 }
+            };
+        }
 
-        #endregion Private methods
+        #endregion Seed
     }
 }

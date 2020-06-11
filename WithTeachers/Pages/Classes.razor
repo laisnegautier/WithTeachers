@@ -1,15 +1,82 @@
 ﻿@page "/classes"
 @using WithTeachers.Data
+@inject ClassService ClassService
 @attribute [Authorize]
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> UserManager
 
 <h1>Classes</h1>
 
-<button class="btn btn-primary">2020</button><button class="btn btn-primary">2019</button><button class="btn btn-primary">2018</button>
+<button class="btn btn-primary">2020</button>
+<button class="btn btn-primary">2019</button>
+<button class="btn btn-primary">2018</button>
 
 <section>
     <h3>Groups</h3>
 </section>
 
-@code {
+<h2>TEST : @CurrentUser.Email @CurrentUser.Id</h2>
+@if (classes == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ClassId</th>
+                <th>Year</th>
+                <th>UserId</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var cl in classes)
+            {
+                <tr>
+                    <td>@cl.ClassId</td>
+                    <td>@cl.Year</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
 
+<EditForm Model="@classToAdd" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    @*<ValidationSummary />*@
+    <p>
+        <label>
+            Class year*:
+            <InputNumber id="year" @bind-Value="classToAdd.Year" />
+            <ValidationMessage For="@(() => classToAdd.Year)" />
+        </label>
+    </p>
+
+    <button type="submit">Submit</button>
+</EditForm>
+
+@code {
+    private List<Class> classes;
+    private ApplicationUser CurrentUser;
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        System.Security.Claims.ClaimsPrincipal User = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User;
+        CurrentUser = await UserManager.GetUserAsync(User);
+
+        classes = await ClassService.GetAllAsync();
+    }
+
+
+    private Class classToAdd = new Class();
+
+    private void HandleValidSubmit()
+    {
+        classToAdd.User = CurrentUser;
+        ClassService.Create(classToAdd);
+    }
 }

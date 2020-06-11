@@ -39,42 +39,12 @@ namespace WithTeachers.Migrations
                     TwoFactorEnabled = table.Column<bool>(nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
-                    AccessFailedCount = table.Column<int>(nullable: false)
+                    AccessFailedCount = table.Column<int>(nullable: false),
+                    Lastname = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Classes",
-                columns: table => new
-                {
-                    ClassId = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Year = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Classes", x => x.ClassId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Courses",
-                columns: table => new
-                {
-                    CourseId = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Title = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: false),
-                    Slug = table.Column<string>(nullable: true),
-                    Password = table.Column<string>(nullable: true),
-                    CreationDate = table.Column<DateTime>(nullable: false),
-                    UpdateDate = table.Column<DateTime>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Courses", x => x.CourseId);
                 });
 
             migrationBuilder.CreateTable(
@@ -199,6 +169,51 @@ namespace WithTeachers.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Classes",
+                columns: table => new
+                {
+                    ClassId = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Year = table.Column<int>(nullable: false),
+                    UserId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Classes", x => x.ClassId);
+                    table.ForeignKey(
+                        name: "FK_Classes_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Courses",
+                columns: table => new
+                {
+                    CourseId = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Title = table.Column<string>(nullable: false),
+                    Description = table.Column<string>(nullable: false),
+                    Slug = table.Column<string>(nullable: true),
+                    Password = table.Column<string>(nullable: true),
+                    CreationDate = table.Column<DateTime>(nullable: false),
+                    UpdateDate = table.Column<DateTime>(nullable: false),
+                    UserId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Courses", x => x.CourseId);
+                    table.ForeignKey(
+                        name: "FK_Courses_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Students",
                 columns: table => new
                 {
@@ -217,6 +232,43 @@ namespace WithTeachers.Migrations
                         column: x => x.ClassId,
                         principalTable: "Classes",
                         principalColumn: "ClassId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Activities",
+                columns: table => new
+                {
+                    ActivityId = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Title = table.Column<string>(nullable: false),
+                    Description = table.Column<string>(nullable: false),
+                    ScheduledFor = table.Column<DateTime>(nullable: false),
+                    Completed = table.Column<bool>(nullable: false),
+                    VideoconferenceId = table.Column<int>(nullable: true),
+                    CourseId = table.Column<int>(nullable: true),
+                    ClassId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Activities", x => x.ActivityId);
+                    table.ForeignKey(
+                        name: "FK_Activities_Classes_ClassId",
+                        column: x => x.ClassId,
+                        principalTable: "Classes",
+                        principalColumn: "ClassId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Activities_Courses_CourseId",
+                        column: x => x.CourseId,
+                        principalTable: "Courses",
+                        principalColumn: "CourseId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Activities_Videoconferences_VideoconferenceId",
+                        column: x => x.VideoconferenceId,
+                        principalTable: "Videoconferences",
+                        principalColumn: "VideoconferenceId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -264,42 +316,30 @@ namespace WithTeachers.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "Activities",
-                columns: table => new
-                {
-                    ActivityId = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Title = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: false),
-                    ScheduledFor = table.Column<DateTime>(nullable: false),
-                    Completed = table.Column<bool>(nullable: false),
-                    VideoconferenceId = table.Column<int>(nullable: true),
-                    CourseId = table.Column<int>(nullable: true),
-                    ClassId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Activities", x => x.ActivityId);
-                    table.ForeignKey(
-                        name: "FK_Activities_Classes_ClassId",
-                        column: x => x.ClassId,
-                        principalTable: "Classes",
-                        principalColumn: "ClassId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Activities_Courses_CourseId",
-                        column: x => x.CourseId,
-                        principalTable: "Courses",
-                        principalColumn: "CourseId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Activities_Videoconferences_VideoconferenceId",
-                        column: x => x.VideoconferenceId,
-                        principalTable: "Videoconferences",
-                        principalColumn: "VideoconferenceId",
-                        onDelete: ReferentialAction.Restrict);
-                });
+            migrationBuilder.InsertData(
+                table: "Classes",
+                columns: new[] { "ClassId", "UserId", "Year" },
+                values: new object[] { 1, null, 2013 });
+
+            migrationBuilder.InsertData(
+                table: "Classes",
+                columns: new[] { "ClassId", "UserId", "Year" },
+                values: new object[] { 2, null, 2015 });
+
+            migrationBuilder.InsertData(
+                table: "Classes",
+                columns: new[] { "ClassId", "UserId", "Year" },
+                values: new object[] { 3, null, 2011 });
+
+            migrationBuilder.InsertData(
+                table: "Classes",
+                columns: new[] { "ClassId", "UserId", "Year" },
+                values: new object[] { 4, null, 1984 });
+
+            migrationBuilder.InsertData(
+                table: "Classes",
+                columns: new[] { "ClassId", "UserId", "Year" },
+                values: new object[] { 5, null, 1700 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Activities_ClassId",
@@ -354,9 +394,19 @@ namespace WithTeachers.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Classes_UserId",
+                table: "Classes",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CourseDocuments_CourseId",
                 table: "CourseDocuments",
                 column: "CourseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Courses_UserId",
+                table: "Courses",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Skills_CourseId",
@@ -405,13 +455,13 @@ namespace WithTeachers.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
                 name: "Courses");
 
             migrationBuilder.DropTable(
                 name: "Classes");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
         }
     }
 }

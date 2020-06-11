@@ -4,4 +4,7 @@
     <ActiveDebugProfile>Docker</ActiveDebugProfile>
     <NameOfLastUsedPublishProfile>registry.hub.docker.com_laisnegautier</NameOfLastUsedPublishProfile>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebuggerFlavor>ProjectDebugger</DebuggerFlavor>
+  </PropertyGroup>
 </Project>
