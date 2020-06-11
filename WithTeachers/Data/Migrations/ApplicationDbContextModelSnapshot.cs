@@ -506,14 +506,14 @@ namespace WithTeachers.Migrations
             modelBuilder.Entity("WithTeachers.Data.Class", b =>
                 {
                     b.HasOne("WithTeachers.Data.ApplicationUser", "User")
-                        .WithMany()
+                        .WithMany("Classes")
                         .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("WithTeachers.Data.Course", b =>
                 {
                     b.HasOne("WithTeachers.Data.ApplicationUser", "User")
-                        .WithMany()
+                        .WithMany("Courses")
                         .HasForeignKey("UserId");
                 });
 

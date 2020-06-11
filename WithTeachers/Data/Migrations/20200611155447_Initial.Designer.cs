@@ -9,8 +9,8 @@ using WithTeachers.Data;
 namespace WithTeachers.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200611123902_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20200611155447_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -508,14 +508,14 @@ namespace WithTeachers.Migrations
             modelBuilder.Entity("WithTeachers.Data.Class", b =>
                 {
                     b.HasOne("WithTeachers.Data.ApplicationUser", "User")
-                        .WithMany()
+                        .WithMany("Classes")
                         .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("WithTeachers.Data.Course", b =>
                 {
                     b.HasOne("WithTeachers.Data.ApplicationUser", "User")
-                        .WithMany()
+                        .WithMany("Courses")
                         .HasForeignKey("UserId");
                 });
 

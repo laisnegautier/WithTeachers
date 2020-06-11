@@ -1,37 +1,54 @@
-﻿using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace WithTeachers.Data
 {
+    /// <summary>
+    /// CRUD for Class
+    /// </summary>
     public class ClassService
-    {    
+    {
         private readonly ApplicationDbContext _context;
-        private readonly UserManager<ApplicationUser> _userManager;
 
-        private AuthenticationStateProvider AuthenticationStateProvider { get; }
-
-        public ClassService(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public ClassService(ApplicationDbContext context)
         {
             _context = context;
-            _userManager = userManager;
         }
 
-        public async Task<List<Class>> GetAllAsync()
-        {
-            return await _context.Classes.ToListAsync();
-        }
-
-        public async void Create(Class cl) 
+        public async Task<Class> CreateAsync(Class cl)
         {
             _context.Classes.Add(cl);
             await _context.SaveChangesAsync();
-            //return toDo;
+            return cl;
+        }
+
+        public async Task<Class> ReadAsync(int id) 
+            => await _context.Classes.SingleOrDefaultAsync(x => x.ClassId == id);
+
+        public async Task<List<Class>> ReadAllAsync()
+            => await _context.Classes.ToListAsync();
+
+        public async Task<Class> UpdateAsync(Class cl)
+        {
+            Class classExists = await _context.Classes.SingleOrDefaultAsync(x => x.ClassId == cl.ClassId);
+            if (classExists != null)
+            {
+                _context.Classes.Update(cl);
+                await _context.SaveChangesAsync();
+            }
+
+            return cl;
+        }
+
+        public async Task Delete(Class cl)
+        {
+            Class classExists = await _context.Classes.SingleOrDefaultAsync(x => x.ClassId == cl.ClassId);
+            if (classExists != null)
+            {
+                _context.Classes.Remove(cl);
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }

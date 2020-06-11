@@ -9,5 +9,8 @@ namespace WithTeachers.Data
     public class ApplicationUser : IdentityUser
     {
         public string Lastname { get; set; }
+
+        public virtual ICollection<Class> Classes { get; set; }
+        public virtual ICollection<Course> Courses { get; set; }
     }
 }

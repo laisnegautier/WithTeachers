@@ -118,4 +118,3 @@ C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\obj\Debug\n
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\obj\Debug\netcoreapp3.1\Razor\Pages\Courses\Courses.razor.g.cs
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\obj\Debug\netcoreapp3.1\Razor\Pages\Courses\CoursesHistory.razor.g.cs
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\obj\Debug\netcoreapp3.1\Razor\Pages\Videoconference.razor.g.cs
-C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\obj\Debug\netcoreapp3.1\WithTeachers.csprojAssemblyReference.cache

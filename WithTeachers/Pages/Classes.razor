@@ -59,24 +59,30 @@ else
 </EditForm>
 
 @code {
-    private List<Class> classes;
     private ApplicationUser CurrentUser;
+    private List<Class> classes;
+    private Class classToAdd = new Class();
 
     protected override async Task OnInitializedAsync()
     {
-
         System.Security.Claims.ClaimsPrincipal User = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User;
         CurrentUser = await UserManager.GetUserAsync(User);
 
-        classes = await ClassService.GetAllAsync();
+        classes = await ClassService.ReadAllAsync();
     }
 
+    private async Task RefreshClasses()
+    {
+        classes = await ClassService.ReadAllAsync();
+    }
 
-    private Class classToAdd = new Class();
-
-    private void HandleValidSubmit()
+    private async void HandleValidSubmit()
     {
         classToAdd.User = CurrentUser;
-        ClassService.Create(classToAdd);
+        await ClassService.CreateAsync(classToAdd);
+        classToAdd = new Class();
+
+        await RefreshClasses();
     }
+
 }
