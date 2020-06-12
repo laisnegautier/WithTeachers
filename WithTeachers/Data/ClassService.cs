@@ -18,7 +18,7 @@ namespace WithTeachers.Data
         }
 
         public async Task<List<int>> ReadYearsAsync(ApplicationUser user)
-            =>  await _context.Classes.Where(x => x.User == user).OrderByDescending(x => x.Year).GroupBy(x => x.Year).Select(grouping => grouping.Key).ToListAsync();
+            =>  await _context.Classes.Where(x => x.User == user).GroupBy(x => x.Year).Select(grouping => grouping.Key).ToListAsync();
 
         public async Task<Class> CreateAsync(Class cl)
         {

@@ -24,5 +24,19 @@ namespace WithTeachers.Data
             await _context.SaveChangesAsync();
             return student;
         }
+
+        public async Task<List<Student>> ReadAllAsync(Class cl)
+            => await _context.Students.Where(x => x.Class == cl).OrderBy(x => x.Lastname).ToListAsync();
+
+
+        public async Task Delete(Student student)
+        {
+            Student studentExists = await _context.Students.SingleOrDefaultAsync(x => x.StudentId == student.StudentId);
+            if (studentExists != null)
+            {
+                _context.Students.Remove(student);
+                await _context.SaveChangesAsync();
+            }
+        }
     }
 }

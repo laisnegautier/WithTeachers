@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace WithTeachers.Data
 {
@@ -14,5 +16,7 @@ namespace WithTeachers.Data
 
         public string UserId { get; set; }
         public virtual ApplicationUser User { get; set; }
+
+        public virtual ICollection<Student> Students { get; set; }
     }
 }
