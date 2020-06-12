@@ -13,6 +13,7 @@ namespace WithTeachers.Data
         [DataType(DataType.MultilineText)]
         public string Description { get; set; }
 
+        public int CourseId { get; set; }
         public virtual Course Course { get; set; }
     }
 }

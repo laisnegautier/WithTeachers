@@ -1,11 +1,69 @@
 ﻿@page "/classes"
+
 @using WithTeachers.Data
+@inject ApplicationUserService ApplicationUserService
 @inject ClassService ClassService
+@inject StudentService StudentService
 @attribute [Authorize]
 
-@inject AuthenticationStateProvider AuthenticationStateProvider
-@using Microsoft.AspNetCore.Identity
-@inject UserManager<ApplicationUser> UserManager
+@* --- AJOUTER UNE CLASSE --- *@
+<EditForm class="form-row" Model="@classToAdd" OnValidSubmit="HandleValidSubmitAddClass">
+    <DataAnnotationsValidator />
+
+    <div class="form-group">
+        <label for="nameClass">Name*</label>
+        <InputText id="nameClass" class="form-control" @bind-Value="classToAdd.Name" />
+        <ValidationMessage For="@(() => classToAdd.Name)" />
+    </div>
+
+    <div class="form-group">
+        <label for="yearClass">Add a class (year)*</label>
+        <InputNumber id="yearClass" class="form-control" @bind-Value="classToAdd.Year" />
+        <ValidationMessage For="@(() => classToAdd.Year)" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</EditForm>
+<hr />
+
+@* --- AJOUTER UN ELEVE --- *@
+<EditForm class="form-row" Model="@studentToAdd" OnValidSubmit="HandleValidSubmitAddStudent">
+    <DataAnnotationsValidator />
+
+    <div class="form-group">
+        <label for="lastnameStudent">Last name*</label>
+        <InputText id="lastnameStudent" class="form-control" @bind-Value="studentToAdd.Lastname" />
+        <ValidationMessage For="@(() => studentToAdd.Lastname)" />
+    </div>
+
+    <div class="form-group">
+        <label for="firstnameStudent">First name*</label>
+        <InputText id="firstnameStudent" class="form-control" @bind-Value="studentToAdd.Firstname" />
+        <ValidationMessage For="@(() => studentToAdd.Firstname)" />
+    </div>
+
+    <div class="form-group">
+        <label for="commentsStudent">Comments</label>
+        <InputTextArea id="commentsStudent" class="form-control" @bind-Value="studentToAdd.Comments" />
+        <ValidationMessage For="@(() => studentToAdd.Comments)" />
+    </div>
+
+    <div class="form-group">
+        <label for="classStudent">Class associated*</label>
+        <select id="classStudent" class="form-control selectpicker" @bind="studentToAdd.ClassId">
+            <option selected>-- select --</option>
+            @foreach (Class cl in allClasses)
+            {
+                <option value="@(cl.ClassId.ToString())">@cl.Name - @cl.Year</option>
+            }
+        </select>
+        <ValidationMessage For="@(() => studentToAdd.Class)" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</EditForm>
+<hr />
+
 @* --- CHOIX ANNEE --- *@
 <div>
     @if (years == null)
@@ -50,11 +108,12 @@
             <tbody>
                 @foreach (Class cl in classes)
                 {
-                    <tr>
-                        <td>@cl.ClassId</td>
-                        <td>@cl.Year</td>
-                        <td>@cl.User.UserName</td>
-                    </tr>
+                <tr>
+                    <td>@cl.ClassId</td>
+                    <td>@cl.Name</td>
+                    <td>@cl.Year</td>
+                    <td>@cl.User.UserName</td>
+                </tr>
                 }
             </tbody>
         </table>
@@ -65,104 +124,56 @@
 @* --- AJOUT D'UN ETUDIANT DANS L'ANNE EN COURS *@
 
 @code {
+    private ApplicationUser currentUser;
     private List<int> years = null;
     private int selectedYear;
     private List<Class> classes = null;
-
-    private ApplicationUser CurrentUser;
+    private List<Class> allClasses = null;
+    private Class classToAdd = new Class();
+    private Student studentToAdd = new Student();
 
     protected override async Task OnInitializedAsync()
     {
-        System.Security.Claims.ClaimsPrincipal User = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User;
-        CurrentUser = await UserManager.GetUserAsync(User);
-
-        // RECUPERATION DES ANNEES
-        years = await ClassService.ReadYearsAsync(CurrentUser);
+        currentUser = await ApplicationUserService.GetCurrentUser();
+        years = await GetYears();
+        allClasses = await GetAllClasses();
+        classToAdd.Year = DateTime.Now.Year;
     }
 
     private async void selectYear(int year)
     {
         selectedYear = year;
-        classes = await ClassService.ReadAllAsync(CurrentUser, year);
+        classes = await GetClasses();
     }
+
+    // FORMS
+    private async void HandleValidSubmitAddClass()
+    {
+        // Adding data
+        classToAdd.User = currentUser;
+        await ClassService.CreateAsync(classToAdd);
+
+        // Refreshing components
+        years = await GetYears();
+        selectedYear = classToAdd.Year;
+        classes = await GetClasses();
+        allClasses = await GetAllClasses();
+
+        // Formatting form
+        classToAdd = new Class();
+    }
+
+    private async void HandleValidSubmitAddStudent()
+    {
+        // Adding data
+        await StudentService.CreateAsync(studentToAdd);
+
+        // Formatting form
+        studentToAdd = new Student();
+    }
+
+    // PROPERTY UPDATES
+    private async Task<List<int>> GetYears() => await ClassService.ReadYearsAsync(currentUser);
+    private async Task<List<Class>> GetClasses() => await ClassService.ReadAllAsync(currentUser, selectedYear);
+    private async Task<List<Class>> GetAllClasses() => await ClassService.ReadAllAsync(currentUser);
 }
-
-@*<h1>Classes</h1>
-
-    <button class="btn btn-primary">2020</button>
-    <button class="btn btn-primary">2019</button>
-    <button class="btn btn-primary">2018</button>
-
-    <section>
-        <h3>Groups</h3>
-    </section>
-
-    <h2>TEST : @CurrentUser.Email @CurrentUser.Id</h2>
-    @if (classes == null)
-    {
-        <p><em>Loading...</em></p>
-    }
-    else
-    {
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>ClassId</th>
-                    <th>Year</th>
-                    <th>UserId</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var cl in classes)
-                {
-                    <tr>
-                        <td>@cl.ClassId</td>
-                        <td>@cl.Year</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    }
-
-    <EditForm Model="@classToAdd" OnValidSubmit="HandleValidSubmit">
-        <DataAnnotationsValidator />
-*@
-@*<ValidationSummary />*@
-@*<p>
-        <label>
-            Class year*:
-            <InputNumber id="year" @bind-Value="classToAdd.Year" />
-            <ValidationMessage For="@(() => classToAdd.Year)" />
-        </label>
-    </p>
-
-    <button type="submit">Submit</button>
-    </EditForm>
-
-    @code {
-        private ApplicationUser CurrentUser;
-        private List<Class> classes;
-        private Class classToAdd = new Class();
-
-        protected override async Task OnInitializedAsync()
-        {
-            System.Security.Claims.ClaimsPrincipal User = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User;
-            CurrentUser = await UserManager.GetUserAsync(User);
-
-            classes = await ClassService.ReadAllAsync();
-        }
-
-        private async Task RefreshClasses()
-        {
-            classes = await ClassService.ReadAllAsync();
-        }
-
-        private async void HandleValidSubmit()
-        {
-            classToAdd.User = CurrentUser;
-            await ClassService.CreateAsync(classToAdd);
-            classToAdd = new Class();
-
-            await RefreshClasses();
-        }
-    }*@

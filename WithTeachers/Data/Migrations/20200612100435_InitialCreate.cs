@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WithTeachers.Migrations
 {
-    public partial class Initial : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -174,6 +174,7 @@ namespace WithTeachers.Migrations
                 {
                     ClassId = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(nullable: false),
                     Year = table.Column<int>(nullable: false),
                     UserId = table.Column<string>(nullable: true)
                 },
@@ -222,7 +223,7 @@ namespace WithTeachers.Migrations
                     Lastname = table.Column<string>(nullable: false),
                     Firstname = table.Column<string>(nullable: false),
                     Comments = table.Column<string>(nullable: true),
-                    ClassId = table.Column<int>(nullable: true)
+                    ClassId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -232,7 +233,7 @@ namespace WithTeachers.Migrations
                         column: x => x.ClassId,
                         principalTable: "Classes",
                         principalColumn: "ClassId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -245,9 +246,9 @@ namespace WithTeachers.Migrations
                     Description = table.Column<string>(nullable: false),
                     ScheduledFor = table.Column<DateTime>(nullable: false),
                     Completed = table.Column<bool>(nullable: false),
-                    VideoconferenceId = table.Column<int>(nullable: true),
-                    CourseId = table.Column<int>(nullable: true),
-                    ClassId = table.Column<int>(nullable: true)
+                    VideoconferenceId = table.Column<int>(nullable: false),
+                    CourseId = table.Column<int>(nullable: false),
+                    ClassId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -257,19 +258,19 @@ namespace WithTeachers.Migrations
                         column: x => x.ClassId,
                         principalTable: "Classes",
                         principalColumn: "ClassId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Activities_Courses_CourseId",
                         column: x => x.CourseId,
                         principalTable: "Courses",
                         principalColumn: "CourseId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Activities_Videoconferences_VideoconferenceId",
                         column: x => x.VideoconferenceId,
                         principalTable: "Videoconferences",
                         principalColumn: "VideoconferenceId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -282,7 +283,7 @@ namespace WithTeachers.Migrations
                     Title = table.Column<string>(nullable: false),
                     FileUrl = table.Column<string>(nullable: true),
                     UploadDate = table.Column<DateTime>(nullable: false),
-                    CourseId = table.Column<int>(nullable: true)
+                    CourseId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -292,7 +293,7 @@ namespace WithTeachers.Migrations
                         column: x => x.CourseId,
                         principalTable: "Courses",
                         principalColumn: "CourseId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -303,7 +304,7 @@ namespace WithTeachers.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Title = table.Column<string>(nullable: false),
                     Description = table.Column<string>(nullable: false),
-                    CourseId = table.Column<int>(nullable: true)
+                    CourseId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -313,33 +314,33 @@ namespace WithTeachers.Migrations
                         column: x => x.CourseId,
                         principalTable: "Courses",
                         principalColumn: "CourseId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
                 table: "Classes",
-                columns: new[] { "ClassId", "UserId", "Year" },
-                values: new object[] { 1, null, 2013 });
+                columns: new[] { "ClassId", "Name", "UserId", "Year" },
+                values: new object[] { 1, "3A", null, 2013 });
 
             migrationBuilder.InsertData(
                 table: "Classes",
-                columns: new[] { "ClassId", "UserId", "Year" },
-                values: new object[] { 2, null, 2015 });
+                columns: new[] { "ClassId", "Name", "UserId", "Year" },
+                values: new object[] { 2, "6B", null, 2015 });
 
             migrationBuilder.InsertData(
                 table: "Classes",
-                columns: new[] { "ClassId", "UserId", "Year" },
-                values: new object[] { 3, null, 2011 });
+                columns: new[] { "ClassId", "Name", "UserId", "Year" },
+                values: new object[] { 3, "6C", null, 2011 });
 
             migrationBuilder.InsertData(
                 table: "Classes",
-                columns: new[] { "ClassId", "UserId", "Year" },
-                values: new object[] { 4, null, 1984 });
+                columns: new[] { "ClassId", "Name", "UserId", "Year" },
+                values: new object[] { 4, "5D", null, 1984 });
 
             migrationBuilder.InsertData(
                 table: "Classes",
-                columns: new[] { "ClassId", "UserId", "Year" },
-                values: new object[] { 5, null, 1700 });
+                columns: new[] { "ClassId", "Name", "UserId", "Year" },
+                values: new object[] { 5, "4A", null, 1700 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Activities_ClassId",

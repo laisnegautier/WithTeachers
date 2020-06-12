@@ -15,7 +15,7 @@ namespace WithTeachers.Data
         [DataType(DataType.MultilineText)]
         public string Comments { get; set; }
 
-
+        public int ClassId { get; set; }
         public virtual Class Class { get; set; }
     }
 }

@@ -9,8 +9,8 @@ using WithTeachers.Data;
 namespace WithTeachers.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200611155447_Initial")]
-    partial class Initial
+    [Migration("20200612100435_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -156,13 +156,13 @@ namespace WithTeachers.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("ClassId")
+                    b.Property<int>("ClassId")
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("Completed")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("CourseId")
+                    b.Property<int>("CourseId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
@@ -176,7 +176,7 @@ namespace WithTeachers.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("VideoconferenceId")
+                    b.Property<int>("VideoconferenceId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("ActivityId");
@@ -263,6 +263,10 @@ namespace WithTeachers.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("UserId")
                         .HasColumnType("TEXT");
 
@@ -279,26 +283,31 @@ namespace WithTeachers.Migrations
                         new
                         {
                             ClassId = 1,
+                            Name = "3A",
                             Year = 2013
                         },
                         new
                         {
                             ClassId = 2,
+                            Name = "6B",
                             Year = 2015
                         },
                         new
                         {
                             ClassId = 3,
+                            Name = "6C",
                             Year = 2011
                         },
                         new
                         {
                             ClassId = 4,
+                            Name = "5D",
                             Year = 1984
                         },
                         new
                         {
                             ClassId = 5,
+                            Name = "4A",
                             Year = 1700
                         });
                 });
@@ -345,7 +354,7 @@ namespace WithTeachers.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("CourseId")
+                    b.Property<int>("CourseId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("FileUrl")
@@ -374,7 +383,7 @@ namespace WithTeachers.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("CourseId")
+                    b.Property<int>("CourseId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
@@ -398,7 +407,7 @@ namespace WithTeachers.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("ClassId")
+                    b.Property<int>("ClassId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Comments")
@@ -494,15 +503,21 @@ namespace WithTeachers.Migrations
                 {
                     b.HasOne("WithTeachers.Data.Class", "Class")
                         .WithMany()
-                        .HasForeignKey("ClassId");
+                        .HasForeignKey("ClassId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("WithTeachers.Data.Course", "Course")
                         .WithMany()
-                        .HasForeignKey("CourseId");
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("WithTeachers.Data.Videoconference", "Videoconference")
                         .WithMany()
-                        .HasForeignKey("VideoconferenceId");
+                        .HasForeignKey("VideoconferenceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("WithTeachers.Data.Class", b =>
@@ -523,21 +538,27 @@ namespace WithTeachers.Migrations
                 {
                     b.HasOne("WithTeachers.Data.Course", "Course")
                         .WithMany()
-                        .HasForeignKey("CourseId");
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("WithTeachers.Data.Skill", b =>
                 {
                     b.HasOne("WithTeachers.Data.Course", "Course")
                         .WithMany()
-                        .HasForeignKey("CourseId");
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("WithTeachers.Data.Student", b =>
                 {
                     b.HasOne("WithTeachers.Data.Class", "Class")
                         .WithMany()
-                        .HasForeignKey("ClassId");
+                        .HasForeignKey("ClassId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

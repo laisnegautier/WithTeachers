@@ -18,6 +18,7 @@ namespace WithTeachers.Data
         [DataType(DataType.Date)]
         public DateTime UploadDate { get; set; }
 
+        public int CourseId { get; set; }
         public virtual Course Course { get; set; }
     }
 }

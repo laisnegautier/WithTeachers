@@ -31,13 +31,13 @@ namespace WithTeachers.Data
             => await _context.Classes.SingleOrDefaultAsync(x => x.ClassId == id);
 
         public async Task<List<Class>> ReadAllAsync()
-            => await _context.Classes.ToListAsync();
+            => await _context.Classes.OrderByDescending(x => x.Year).ToListAsync();
 
         public async Task<List<Class>> ReadAllAsync(ApplicationUser user)
-            => await _context.Classes.Where(x => x.User == user).ToListAsync();
+            => await _context.Classes.Where(x => x.User == user).OrderByDescending(x => x.Year).ToListAsync();
 
         public async Task<List<Class>> ReadAllAsync(ApplicationUser user, int year)
-            => await _context.Classes.Where(x => x.User == user && x.Year == year).ToListAsync();
+            => await _context.Classes.Where(x => x.User == user && x.Year == year).OrderByDescending(x => x.Year).ToListAsync();
 
         public async Task<Class> UpdateAsync(Class cl)
         {

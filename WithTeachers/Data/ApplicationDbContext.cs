@@ -38,11 +38,11 @@ namespace WithTeachers.Data
         {
             return new List<Class>
             {
-                new Class { ClassId = 1, Year = 2013 },
-                new Class { ClassId = 2, Year = 2015 },
-                new Class { ClassId = 3, Year = 2011 },
-                new Class { ClassId = 4, Year = 1984 },
-                new Class { ClassId = 5, Year = 1700 }
+                new Class { ClassId = 1, Name = "3A", Year = 2013 },
+                new Class { ClassId = 2, Name = "6B", Year = 2015 },
+                new Class { ClassId = 3, Name = "6C", Year = 2011 },
+                new Class { ClassId = 4, Name = "5D", Year = 1984 },
+                new Class { ClassId = 5, Name = "4A", Year = 1700 }
             };
         }
 
