@@ -6,48 +6,98 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @using Microsoft.AspNetCore.Identity
 @inject UserManager<ApplicationUser> UserManager
+@* --- CHOIX ANNEE --- *@
+<div>
+    @if (years == null)
+    {
+        <p>Loading...</p>
+    }
+    else if (years.Count <= 0)
+    {
+        <p>Nothing in the year list</p>
+    }
+    else
+    {
+        foreach (int year in years)
+        {
+            <button class="btn btn-primary" @onclick="(() => selectYear(year))">@year</button>
+        }
+        @selectedYear
+    }
+</div>
+<hr />
 
-<h1>Classes</h1>
+@* --- CHOIX CLASSE --- *@
+<div>
+</div>
+<hr />
 
-<button class="btn btn-primary">2020</button>
-<button class="btn btn-primary">2019</button>
-<button class="btn btn-primary">2018</button>
+@* --- AJOUT D'UN ETUDIANT DANS L'ANNE EN COURS *@
 
-<section>
-    <h3>Groups</h3>
-</section>
+@code {
+    private List<int> years = null;
+    private int selectedYear;
 
-<h2>TEST : @CurrentUser.Email @CurrentUser.Id</h2>
-@if (classes == null)
-{
-    <p><em>Loading...</em></p>
+    private ApplicationUser CurrentUser;
+
+    protected override async Task OnInitializedAsync()
+    {
+        System.Security.Claims.ClaimsPrincipal User = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User;
+        CurrentUser = await UserManager.GetUserAsync(User);
+
+        // RECUPERATION DES ANNEES
+        years = await ClassService.ReadYearsAsync(CurrentUser);
+;
+    }
+
+    private void selectYear(int year)
+    {
+        selectedYear = year;
+    }
 }
-else
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>ClassId</th>
-                <th>Year</th>
-                <th>UserId</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var cl in classes)
-            {
+
+@*<h1>Classes</h1>
+
+    <button class="btn btn-primary">2020</button>
+    <button class="btn btn-primary">2019</button>
+    <button class="btn btn-primary">2018</button>
+
+    <section>
+        <h3>Groups</h3>
+    </section>
+
+    <h2>TEST : @CurrentUser.Email @CurrentUser.Id</h2>
+    @if (classes == null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>@cl.ClassId</td>
-                    <td>@cl.Year</td>
+                    <th>ClassId</th>
+                    <th>Year</th>
+                    <th>UserId</th>
                 </tr>
-            }
-        </tbody>
-    </table>
-}
+            </thead>
+            <tbody>
+                @foreach (var cl in classes)
+                {
+                    <tr>
+                        <td>@cl.ClassId</td>
+                        <td>@cl.Year</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
 
-<EditForm Model="@classToAdd" OnValidSubmit="HandleValidSubmit">
-    <DataAnnotationsValidator />
-    @*<ValidationSummary />*@
-    <p>
+    <EditForm Model="@classToAdd" OnValidSubmit="HandleValidSubmit">
+        <DataAnnotationsValidator />
+*@
+@*<ValidationSummary />*@
+@*<p>
         <label>
             Class year*:
             <InputNumber id="year" @bind-Value="classToAdd.Year" />
@@ -56,33 +106,32 @@ else
     </p>
 
     <button type="submit">Submit</button>
-</EditForm>
+    </EditForm>
 
-@code {
-    private ApplicationUser CurrentUser;
-    private List<Class> classes;
-    private Class classToAdd = new Class();
+    @code {
+        private ApplicationUser CurrentUser;
+        private List<Class> classes;
+        private Class classToAdd = new Class();
 
-    protected override async Task OnInitializedAsync()
-    {
-        System.Security.Claims.ClaimsPrincipal User = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User;
-        CurrentUser = await UserManager.GetUserAsync(User);
+        protected override async Task OnInitializedAsync()
+        {
+            System.Security.Claims.ClaimsPrincipal User = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User;
+            CurrentUser = await UserManager.GetUserAsync(User);
 
-        classes = await ClassService.ReadAllAsync();
-    }
+            classes = await ClassService.ReadAllAsync();
+        }
 
-    private async Task RefreshClasses()
-    {
-        classes = await ClassService.ReadAllAsync();
-    }
+        private async Task RefreshClasses()
+        {
+            classes = await ClassService.ReadAllAsync();
+        }
 
-    private async void HandleValidSubmit()
-    {
-        classToAdd.User = CurrentUser;
-        await ClassService.CreateAsync(classToAdd);
-        classToAdd = new Class();
+        private async void HandleValidSubmit()
+        {
+            classToAdd.User = CurrentUser;
+            await ClassService.CreateAsync(classToAdd);
+            classToAdd = new Class();
 
-        await RefreshClasses();
-    }
-
-}
+            await RefreshClasses();
+        }
+    }*@

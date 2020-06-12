@@ -26,6 +26,6 @@ namespace WithTeachers.Data
         public DateTime UpdateDate { get; set; }
 
 
-        public ApplicationUser User { get; set; }
+        public virtual ApplicationUser User { get; set; }
     }
 }

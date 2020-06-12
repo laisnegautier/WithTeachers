@@ -9,6 +9,6 @@ namespace WithTeachers.Data
         [Required(ErrorMessage = "The class year should not be left empty.")]
         public int Year { get; set; }
         
-        public ApplicationUser User { get; set; }
+        public virtual ApplicationUser User { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace WithTeachers.Data
@@ -15,6 +16,9 @@ namespace WithTeachers.Data
         {
             _context = context;
         }
+
+        public async Task<List<int>> ReadYearsAsync(ApplicationUser user)
+            =>  await _context.Classes.Where(x => x.User == user).OrderByDescending(x => x.Year).GroupBy(x => x.Year).Select(grouping => grouping.Key).ToListAsync();
 
         public async Task<Class> CreateAsync(Class cl)
         {

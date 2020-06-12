@@ -21,10 +21,10 @@ namespace WithTeachers.Data
         public bool Completed { get; set; } = false;
 
 
-        public Videoconference Videoconference { get; set; }
+        public virtual Videoconference Videoconference { get; set; }
 
-        public Course Course { get; set; }
+        public virtual Course Course { get; set; }
 
-        public Class Class { get; set; }
+        public virtual Class Class { get; set; }
     }
 }

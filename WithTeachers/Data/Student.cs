@@ -16,6 +16,6 @@ namespace WithTeachers.Data
         public string Comments { get; set; }
 
 
-        public Class Class { get; set; }
+        public virtual Class Class { get; set; }
     }
 }
