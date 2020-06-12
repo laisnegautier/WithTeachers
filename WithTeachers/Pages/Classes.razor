@@ -29,6 +29,36 @@
 
 @* --- CHOIX CLASSE --- *@
 <div>
+    @if (classes == null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else if (classes.Count <= 0)
+    {
+        <p><em>No class</em></p>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ClassId</th>
+                    <th>Year</th>
+                    <th>UserName</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Class cl in classes)
+                {
+                    <tr>
+                        <td>@cl.ClassId</td>
+                        <td>@cl.Year</td>
+                        <td>@cl.User.UserName</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
 </div>
 <hr />
 
@@ -37,6 +67,7 @@
 @code {
     private List<int> years = null;
     private int selectedYear;
+    private List<Class> classes = null;
 
     private ApplicationUser CurrentUser;
 
@@ -47,12 +78,12 @@
 
         // RECUPERATION DES ANNEES
         years = await ClassService.ReadYearsAsync(CurrentUser);
-;
     }
 
-    private void selectYear(int year)
+    private async void selectYear(int year)
     {
         selectedYear = year;
+        classes = await ClassService.ReadAllAsync(CurrentUser, year);
     }
 }
 

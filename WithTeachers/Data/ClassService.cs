@@ -33,6 +33,12 @@ namespace WithTeachers.Data
         public async Task<List<Class>> ReadAllAsync()
             => await _context.Classes.ToListAsync();
 
+        public async Task<List<Class>> ReadAllAsync(ApplicationUser user)
+            => await _context.Classes.Where(x => x.User == user).ToListAsync();
+
+        public async Task<List<Class>> ReadAllAsync(ApplicationUser user, int year)
+            => await _context.Classes.Where(x => x.User == user && x.Year == year).ToListAsync();
+
         public async Task<Class> UpdateAsync(Class cl)
         {
             Class classExists = await _context.Classes.SingleOrDefaultAsync(x => x.ClassId == cl.ClassId);
