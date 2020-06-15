@@ -32,5 +32,13 @@
     </div>
 
     <script src="_framework/blazor.server.js"></script>
+    <script>
+        function ShowModal(modalId) {
+            $('#' + modalId).modal('show');
+        }
+        function CloseModal(modalId) {
+            $('#' + modalId).modal('hide');
+        }
+    </script>
 </body>
 </html>

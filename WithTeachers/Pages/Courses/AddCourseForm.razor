@@ -1,48 +1,51 @@
-﻿
-@namespace  WithTeachers.Pages.Courses
+﻿@namespace WithTeachers.Pages.Courses
 @using WithTeachers.Data
-@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject ApplicationUserService ApplicationUserService
+@inject CourseService CourseService
 
-<EditForm style="border: 1px solid lightblue; padding: 20px; border-radius: 5px" Model="@courseToAdd" OnValidSubmit="HandleValidSubmit">
-    <DataAnnotationsValidator />
-    @*<ValidationSummary />*@
-    <p>
-        <label>
-            Course title*:
-            <InputText id="title" @bind-Value="courseToAdd.Title" />
+<section class="bg-light py-3 px-4 mb-3 rounded">
+    <h3 class="font-weight-light">Add a course</h3>
+    <EditForm Model="@courseToAdd" OnValidSubmit="HandleValidSubmitAddCourse">
+        <DataAnnotationsValidator />
+
+        <div class="form-group">
+            <label for="title">Course title*</label>
+            <InputText id="title" class="form-control" @bind-Value="courseToAdd.Title" />
             <ValidationMessage For="@(() => courseToAdd.Title)" />
-        </label>
-    </p>
-    <p>
-        <label>
-            Course description*:
-            <InputTextArea id="description" @bind-Value="courseToAdd.Description" />
-            <ValidationMessage For="@(() => courseToAdd.Description)" />
-        </label>
-    </p>
-    <p>
-        <label>
-            Password (optional):
-            <InputText id="password" @bind-Value="courseToAdd.Password" />
-        </label>
-    </p>
-    @*<InputText id="password" @bind-Value="courseToAdd.UserName" />*@
+        </div>
 
-    <button type="submit">Submit</button>
-</EditForm>
+        <div class="form-group">
+            <label for="courseDescription">Course description*</label>
+            <InputTextArea id="courseDescription" class="form-control" @bind-Value="courseToAdd.Description" />
+            <ValidationMessage For="@(() => courseToAdd.Description)" />
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password (optional)</label>
+            <InputText type="password" placeholder="Password" id="password" class="form-control" @bind-Value="courseToAdd.Password" />
+            <ValidationMessage For="@(() => courseToAdd.Password)" />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </EditForm>
+</section>
 
 @code {
+    ApplicationUser currentUser;
     Course courseToAdd = new Course();
 
-    private void HandleValidSubmit()
-    {
-        Console.WriteLine("OnValidSubmit");
-    }
+    [Parameter] 
+    public EventCallback<string> OnSubmitValidated { get; set; }
 
     protected override async void OnInitialized()
     {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
-        //courseToAdd.UserName = user.Identity.Name;
+        currentUser = await ApplicationUserService.GetCurrentUser();
+    }
+
+    private async Task HandleValidSubmitAddCourse()
+    {
+        await CourseService.CreateAsync(courseToAdd);
+        await OnSubmitValidated.InvokeAsync("The course has been added!");
+        courseToAdd = new Course();
     }
 }

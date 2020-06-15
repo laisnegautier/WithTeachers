@@ -7,17 +7,25 @@
 
 <h1>Courses</h1>
 
-@if (CourseSlug == null)
+@if (CourseSlug != null)
 {
     <p>dfg</p>
 }
 else
 {
     <CoursesHistory />
-    <AddCourseForm />
+    <AddCourseForm OnSubmitValidated="OnSubmitAddCourseForm" />
+    <p>@validationText</p>
 }
 
 @code {
     [Parameter]
     public string CourseSlug { get; set; }
+
+    string validationText = "lol";
+
+    private async Task OnSubmitAddCourseForm(string message)
+    {
+        validationText = message;
+    }
 }

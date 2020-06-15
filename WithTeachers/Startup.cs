@@ -16,6 +16,7 @@ using Microsoft.Extensions.Hosting;
 using WithTeachers.Areas.Identity;
 using WithTeachers.Data;
 using System.IO;
+using WithTeachers.Pages.Courses;
 
 namespace WithTeachers
 {
@@ -49,6 +50,7 @@ namespace WithTeachers
             services.AddSingleton<WeatherForecastService>();
             services.AddScoped<ClassService>();
             services.AddScoped<StudentService>();
+            services.AddScoped<CourseService>();
             services.AddScoped<ApplicationUserService>();
         }
 
