@@ -101,7 +101,6 @@ C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\obj\Debug\n
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Videoconference.razor.g.cs
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\bin\Debug\netcoreapp3.1\Castle.Core.dll
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Proxies.dll
-C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\obj\Debug\netcoreapp3.1\WithTeachers.csprojAssemblyReference.cache
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\obj\Debug\netcoreapp3.1\RazorDeclaration\Shared\Notification.razor.g.cs
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\bin\Debug\netcoreapp3.1\Slugify.Core.dll
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Courses\CourseAdministration.razor.g.cs
@@ -112,6 +111,7 @@ C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\bin\Debug\n
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Components.Forms.dll
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Metadata.dll
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\bin\Debug\netcoreapp3.1\Microsoft.JSInterop.dll
+C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\bin\Debug\netcoreapp3.1\BlazorInputFile.dll
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\obj\Debug\netcoreapp3.1\WithTeachers.csproj.CoreCompileInputs.cache
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\obj\Debug\netcoreapp3.1\WithTeachers.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\obj\Debug\netcoreapp3.1\WithTeachers.MvcApplicationPartsAssemblyInfo.cache
@@ -134,3 +134,4 @@ C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\obj\Debug\n
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\obj\Debug\netcoreapp3.1\Razor\Shared\Notification.razor.g.cs
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\obj\Debug\netcoreapp3.1\Razor\Shared\SurveyPrompt.razor.g.cs
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\obj\Debug\netcoreapp3.1\Razor\_Imports.razor.g.cs
+C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\obj\Debug\netcoreapp3.1\WithTeachers.csprojAssemblyReference.cache

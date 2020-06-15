@@ -5,6 +5,7 @@
 @inject ApplicationUserService ApplicationUserService
 @inject CourseService CourseService
 @inject CourseDocumentService CourseDocumentService
+@inject IFileUpload FileUploadService
 
 <section class="bg-light py-3 px-4 mb-3 rounded">
     <h3 class="font-weight-light">Add a course</h3>
@@ -37,6 +38,12 @@
             <InputText id="title" class="form-control" @bind-Value="model.CourseDocument.Title" />
             <ValidationMessage For="@(() => model.CourseDocument.Title)" />
         </div>
+
+        <div class="form-group">
+            <label for="document">Document upload*</label>
+            <InputFile OnChange="HandleSelection" />
+        </div>
+        <p><strong>@fileStatus</strong></p>
 
         <button type="submit" class="btn btn-primary">Submit</button>
     </EditForm>
@@ -77,5 +84,18 @@
 
         // Notifier
         await OnSubmitValidated.InvokeAsync("The course <strong>" + model.Course.Title + "</strong> has been added to your courses!");
+    }
+
+    private string fileStatus;
+
+    async Task HandleSelection(IFileListEntry[] files)
+    {
+        var file = files.FirstOrDefault();
+        if (file != null)
+        {
+            await FileUploadService.UploadAsync(file);
+
+            fileStatus = $"Finished loading {file.Size} bytes from {file.Name}";
+        }
     }
 }

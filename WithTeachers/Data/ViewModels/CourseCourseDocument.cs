@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WithTeachers.Data;
 using System.ComponentModel.DataAnnotations;
+using BlazorInputFile;
 
 namespace WithTeachers.Data.ViewModels
 {

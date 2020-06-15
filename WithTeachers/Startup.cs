@@ -16,7 +16,6 @@ using Microsoft.Extensions.Hosting;
 using WithTeachers.Areas.Identity;
 using WithTeachers.Data;
 using System.IO;
-using WithTeachers.Pages.Courses;
 
 namespace WithTeachers
 {
@@ -53,6 +52,7 @@ namespace WithTeachers
             services.AddScoped<CourseService>();
             services.AddScoped<CourseDocumentService>();
             services.AddScoped<ApplicationUserService>();
+            services.AddScoped<IFileUpload, FileUploadService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
