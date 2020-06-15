@@ -2,30 +2,33 @@
 @page "/courses/{CourseSlug}"
 
 @namespace WithTeachers.Pages.Courses
-
-@attribute [Authorize]
+@using WithTeachers.Data
+@inject ApplicationUserService ApplicationUserService
 
 <h1>Courses</h1>
 
-@if (CourseSlug != null)
+@if (!String.IsNullOrEmpty(CourseSlug))
 {
-    <p>dfg</p>
+    <CourseDetails Slug="@CourseSlug" />
 }
 else
 {
-    <CoursesHistory />
-    <AddCourseForm OnSubmitValidated="OnSubmitAddCourseForm" />
-    <p>@validationText</p>
+    if (userClaim.Identity.IsAuthenticated)
+    {
+        <CourseAdministration />
+    }
+    else
+    { <p>Not authorized</p>}
 }
 
 @code {
     [Parameter]
     public string CourseSlug { get; set; }
 
-    string validationText = "lol";
+    System.Security.Claims.ClaimsPrincipal userClaim;
 
-    private async Task OnSubmitAddCourseForm(string message)
+    protected override async void OnInitialized()
     {
-        validationText = message;
+        userClaim = await ApplicationUserService.GetUserClaim();
     }
 }

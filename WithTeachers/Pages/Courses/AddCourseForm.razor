@@ -1,29 +1,41 @@
 ﻿@namespace WithTeachers.Pages.Courses
 @using WithTeachers.Data
+@using WithTeachers.Data.ViewModels
+@using Slugify;
 @inject ApplicationUserService ApplicationUserService
 @inject CourseService CourseService
+@inject CourseDocumentService CourseDocumentService
 
 <section class="bg-light py-3 px-4 mb-3 rounded">
     <h3 class="font-weight-light">Add a course</h3>
-    <EditForm Model="@courseToAdd" OnValidSubmit="HandleValidSubmitAddCourse">
-        <DataAnnotationsValidator />
+    <EditForm Model="@model" OnValidSubmit="HandleValidSubmitAddCourse">
+        <ObjectGraphDataAnnotationsValidator />
 
+        @* COURSE *@
         <div class="form-group">
             <label for="title">Course title*</label>
-            <InputText id="title" class="form-control" @bind-Value="courseToAdd.Title" />
-            <ValidationMessage For="@(() => courseToAdd.Title)" />
+            <InputText id="title" class="form-control" @bind-Value="model.Course.Title" />
+            <ValidationMessage For="@(() => model.Course.Title)" />
         </div>
 
         <div class="form-group">
             <label for="courseDescription">Course description*</label>
-            <InputTextArea id="courseDescription" class="form-control" @bind-Value="courseToAdd.Description" />
-            <ValidationMessage For="@(() => courseToAdd.Description)" />
+            <InputTextArea id="courseDescription" class="form-control" @bind-Value="model.Course.Description" />
+            <ValidationMessage For="@(() => model.Course.Description)" />
         </div>
 
         <div class="form-group">
             <label for="password">Password (optional)</label>
-            <InputText type="password" placeholder="Password" id="password" class="form-control" @bind-Value="courseToAdd.Password" />
-            <ValidationMessage For="@(() => courseToAdd.Password)" />
+            <InputText type="password" placeholder="Password" id="password" class="form-control" @bind-Value="model.Course.Password" />
+            <ValidationMessage For="@(() => model.Course.Password)" />
+        </div>
+
+        @* DOCUMENT *@
+        <p><strong>Add a PDF document (optional)</strong></p>
+        <div class="form-group">
+            <label for="title">Document title*</label>
+            <InputText id="title" class="form-control" @bind-Value="model.CourseDocument.Title" />
+            <ValidationMessage For="@(() => model.CourseDocument.Title)" />
         </div>
 
         <button type="submit" class="btn btn-primary">Submit</button>
@@ -32,9 +44,10 @@
 
 @code {
     ApplicationUser currentUser;
-    Course courseToAdd = new Course();
+    CourseCourseDocument model = new CourseCourseDocument();
+    SlugHelper slugHelper = new SlugHelper();
 
-    [Parameter] 
+    [Parameter]
     public EventCallback<string> OnSubmitValidated { get; set; }
 
     protected override async void OnInitialized()
@@ -44,8 +57,25 @@
 
     private async Task HandleValidSubmitAddCourse()
     {
-        await CourseService.CreateAsync(courseToAdd);
-        await OnSubmitValidated.InvokeAsync("The course has been added!");
-        courseToAdd = new Course();
+        // Course
+        model.Course.Slug = slugHelper.GenerateSlug(model.Course.Title);
+        model.Course.CreationDate = DateTime.Now;
+        model.Course.UpdateDate = DateTime.Now;
+        model.Course.User = currentUser;
+
+        await CourseService.CreateAsync(model.Course);
+
+        // CourseDocument
+        model.CourseDocument.FileUrl = "test";
+        model.CourseDocument.UploadDate = DateTime.Now;
+        model.CourseDocument.Course = model.Course;
+
+        await CourseDocumentService.CreateAsync(model.CourseDocument);
+
+        // Reset
+        model = new CourseCourseDocument();
+
+        // Notifier
+        await OnSubmitValidated.InvokeAsync("The course <strong>" + model.Course.Title + "</strong> has been added to your courses!");
     }
 }

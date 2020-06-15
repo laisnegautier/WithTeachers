@@ -9,7 +9,7 @@ namespace WithTeachers.Data
 
         public int Index { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "The document title should not be left empty.")]
         public string Title { get; set; }
 
         [DataType(DataType.Url)]

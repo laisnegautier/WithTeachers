@@ -1,0 +1,18 @@
+﻿@namespace WithTeachers.Pages.Courses
+@attribute [Authorize]
+
+@if (!String.IsNullOrEmpty(validationMessage))
+{
+    <Notification Success="true" Message="@validationMessage" />
+}
+<AddCourseForm OnSubmitValidated="OnSubmitAddCourseForm" />
+<CoursesHistory />
+
+@code {
+    private string validationMessage = null;
+
+    private void OnSubmitAddCourseForm(string message)
+    {
+        validationMessage = message;
+    }
+}

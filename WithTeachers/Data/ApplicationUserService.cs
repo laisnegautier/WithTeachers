@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace WithTeachers.Data
@@ -17,8 +18,11 @@ namespace WithTeachers.Data
 
         public async Task<ApplicationUser> GetCurrentUser()
         {
-            System.Security.Claims.ClaimsPrincipal User = (await _authenticationStateProvider.GetAuthenticationStateAsync()).User;
+            ClaimsPrincipal User = (await _authenticationStateProvider.GetAuthenticationStateAsync()).User;
             return await _userManager.GetUserAsync(User);
         }
+
+        public async Task<ClaimsPrincipal> GetUserClaim()
+            => (await _authenticationStateProvider.GetAuthenticationStateAsync()).User;
     }
 }
