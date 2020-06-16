@@ -2,23 +2,25 @@
 
 @namespace WithTeachers.Pages.Scheduler
 @using WithTeachers.Data
+@using System.Globalization
+@using System.Collections.Generic
 @inject ApplicationUserService ApplicationUserService
 @attribute [Authorize]
 
 <h3>Scheduler</h3>
+
+<div class="form-group col-4">
+    <label for="datePicker">Choose a date:</label>
+    <input type="date" class="form-control" id="datePicker" @bind="@SelectedDate">
+</div>
+<p><strong>@SelectedDate.ToShortDateString() bla</strong></p>
 
 <section class="scheduler">
     <table class="table table-bordered">
         <thead class="thead-dark">
             <tr>
                 <th></th>
-                <th>Monday _</th>
-                <th>Tuesday _</th>
-                <th>Wednesday _</th>
-                <th>Thursday _</th>
-                <th>Friday _</th>
-                <th>Saturday _</th>
-                <th>Sunday _</th>
+                <DaysHeading Week="@Week" />
             </tr>
         </thead>
         <tbody>
@@ -44,5 +46,15 @@
 </section>
 
 @code {
+    private static DateTime _selectedDate = DateTime.Now;
+    private static DateTime SelectedDate
+    {
+        get => _selectedDate;
+        set { 
+            _selectedDate = value; 
+            Week = new Week(value); 
+        }
+    }
 
+    private static Week Week = new Week(SelectedDate);
 }
