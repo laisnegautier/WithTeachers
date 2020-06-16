@@ -137,6 +137,36 @@ app {
 }
 
 .scheduler {
+    .datePicker {
+        padding: 8px 16px !important;
+        background-color: #fff;
+        border: 0;
+        border-radius: 7px;
+        box-shadow: 0 5px 10px lightgray;
+    }
+
+    .button-week {
+        padding: 8px 16px 6px 16px !important;
+        background-color: #fff;
+        border: 0;
+        border-radius: 7px;
+        box-shadow: 0 5px 10px lightgray;
+        color: gray;
+        transition: all .1s ease-in;
+
+        &:hover {
+            background-color: #ddd;
+            color: black;
+            background-color: #fafafa;
+            box-shadow: 0 3px 6px lightgray;
+        }
+
+        &:focus, &:active {
+            border: 0px;
+            outline: 0;
+        }
+    }
+
     > table {
         > thead {
             > tr {

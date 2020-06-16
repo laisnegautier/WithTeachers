@@ -9,40 +9,43 @@
 
 <h3>Scheduler</h3>
 
-<div class="form-group col-4">
-    <label for="datePicker">Choose a date:</label>
-    <input type="date" class="form-control" id="datePicker" @bind="@SelectedDate">
-</div>
-<p><strong>@SelectedDate.ToShortDateString() bla</strong></p>
-
 <section class="scheduler">
-    <table class="table table-bordered">
-        <thead class="thead-dark">
-            <tr>
-                <th></th>
-                <DaysHeading Week="@Week" />
-            </tr>
-        </thead>
-        <tbody>
-            @{
-                int hour = -1;
-            }
-            @for (int i = 0; i < 48; i++)
-            {
-                hour = i % 2 == 0 ? i / 2 : -1;
-                <tr>
-                    @if (hour != -1)
-                    {
-                        <th rowspan="2">@(hour != -1 ? hour < 13 ? hour + ":00 AM" : hour % 12 + ":00 PM" : "")</th>
+
+        <div class="form-group col-4">
+            <input type="date" class="form-control datePicker" @bind="@SelectedDate">
+        </div>
+        <div class="form-group col-4">
+            <button class="button-week" @onclick="PreviousWeek">&#8249; Previous week</button>
+            <button class="button-week" @onclick="NextWeek">Next week &#8250;</button>
+        </div>
+
+            <table class="table table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th></th>
+                        <DaysHeading Week="@Week" />
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int hour = -1;
                     }
-                    @for (int j = 0; j < 7; j++)
+                    @for (int i = 0; i < 48; i++)
                     {
-                        <td class="@(hour != -1 ? "dash" : "nolineTop")"></td>
+                        hour = i % 2 == 0 ? i / 2 : -1;
+                        <tr>
+                            @if (hour != -1)
+                            {
+                                <th rowspan="2">@(hour != -1 ? hour < 13 ? hour + ":00 AM" : hour % 12 + ":00 PM" : "")</th>
+                            }
+                            @for (int j = 0; j < 7; j++)
+                            {
+                                <td class="@(hour != -1 ? "dash" : "nolineTop")"></td>
+                            }
+                        </tr>
                     }
-                </tr>
-            }
-        </tbody>
-    </table>
+                </tbody>
+            </table>
 </section>
 
 @code {
@@ -50,11 +53,14 @@
     private static DateTime SelectedDate
     {
         get => _selectedDate;
-        set { 
-            _selectedDate = value; 
-            Week = new Week(value); 
+        set {
+            _selectedDate = value;
+            Week = new Week(value);
         }
     }
 
     private static Week Week = new Week(SelectedDate);
+
+    private void NextWeek() => SelectedDate = SelectedDate.AddDays(7).StartOfWeek(DayOfWeek.Monday);
+    private void PreviousWeek() => SelectedDate = SelectedDate.AddDays(-7).StartOfWeek(DayOfWeek.Monday);
 }

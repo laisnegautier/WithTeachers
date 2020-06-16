@@ -109,6 +109,30 @@ app {
   right: 0.75rem;
   top: 0.5rem; }
 
+.scheduler .datePicker {
+  padding: 8px 16px !important;
+  background-color: #fff;
+  border: 0;
+  border-radius: 7px;
+  box-shadow: 0 5px 10px lightgray; }
+
+.scheduler .button-week {
+  padding: 8px 16px 6px 16px !important;
+  background-color: #fff;
+  border: 0;
+  border-radius: 7px;
+  box-shadow: 0 5px 10px lightgray;
+  color: gray;
+  transition: all .1s ease-in; }
+  .scheduler .button-week:hover {
+    background-color: #ddd;
+    color: black;
+    background-color: #fafafa;
+    box-shadow: 0 3px 6px lightgray; }
+  .scheduler .button-week:focus, .scheduler .button-week:active {
+    border: 0px;
+    outline: 0; }
+
 .scheduler > table > tbody > tr > td {
   background-color: #fff !important; }
   .scheduler > table > tbody > tr > td:hover {
