@@ -1,6 +1,7 @@
 ﻿@namespace WithTeachers.Pages.Scheduler
 @using WithTeachers.Data
 
+<th></th>
 @foreach (DateTime day in Week)
 {
     <th>@day.DayOfWeek <span class="small">@day.Day @day.ToString("MMMM") @day.Year</span></th>

@@ -3,10 +3,28 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WithTeachers.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class TestRemove : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Activities",
+                columns: table => new
+                {
+                    ActivityId = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Title = table.Column<string>(nullable: false),
+                    Description = table.Column<string>(nullable: false),
+                    ScheduledFor = table.Column<DateTime>(nullable: false),
+                    TimeSpan = table.Column<TimeSpan>(nullable: false),
+                    Completed = table.Column<bool>(nullable: false),
+                    CreationDate = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Activities", x => x.ActivityId);
+                });
+
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -45,21 +63,6 @@ namespace WithTeachers.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Videoconferences",
-                columns: table => new
-                {
-                    VideoconferenceId = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Slug = table.Column<string>(nullable: true),
-                    Password = table.Column<string>(nullable: true),
-                    Ongoing = table.Column<bool>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Videoconferences", x => x.VideoconferenceId);
                 });
 
             migrationBuilder.CreateTable(
@@ -215,6 +218,28 @@ namespace WithTeachers.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Videoconferences",
+                columns: table => new
+                {
+                    VideoconferenceId = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Slug = table.Column<string>(nullable: true),
+                    Password = table.Column<string>(nullable: true),
+                    Ongoing = table.Column<bool>(nullable: false),
+                    ApplicationUserId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Videoconferences", x => x.VideoconferenceId);
+                    table.ForeignKey(
+                        name: "FK_Videoconferences_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Students",
                 columns: table => new
                 {
@@ -233,43 +258,6 @@ namespace WithTeachers.Migrations
                         column: x => x.ClassId,
                         principalTable: "Classes",
                         principalColumn: "ClassId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Activities",
-                columns: table => new
-                {
-                    ActivityId = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Title = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: false),
-                    ScheduledFor = table.Column<DateTime>(nullable: false),
-                    Completed = table.Column<bool>(nullable: false),
-                    VideoconferenceId = table.Column<int>(nullable: false),
-                    CourseId = table.Column<int>(nullable: false),
-                    ClassId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Activities", x => x.ActivityId);
-                    table.ForeignKey(
-                        name: "FK_Activities_Classes_ClassId",
-                        column: x => x.ClassId,
-                        principalTable: "Classes",
-                        principalColumn: "ClassId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Activities_Courses_CourseId",
-                        column: x => x.CourseId,
-                        principalTable: "Courses",
-                        principalColumn: "CourseId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Activities_Videoconferences_VideoconferenceId",
-                        column: x => x.VideoconferenceId,
-                        principalTable: "Videoconferences",
-                        principalColumn: "VideoconferenceId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -343,21 +331,6 @@ namespace WithTeachers.Migrations
                 values: new object[] { 5, "4A", null, 1700 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Activities_ClassId",
-                table: "Activities",
-                column: "ClassId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Activities_CourseId",
-                table: "Activities",
-                column: "CourseId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Activities_VideoconferenceId",
-                table: "Activities",
-                column: "VideoconferenceId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
                 column: "RoleId");
@@ -418,6 +391,11 @@ namespace WithTeachers.Migrations
                 name: "IX_Students_ClassId",
                 table: "Students",
                 column: "ClassId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Videoconferences_ApplicationUserId",
+                table: "Videoconferences",
+                column: "ApplicationUserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

@@ -12,5 +12,6 @@ namespace WithTeachers.Data
 
         public virtual ICollection<Class> Classes { get; set; }
         public virtual ICollection<Course> Courses { get; set; }
+        public virtual ICollection<Videoconference> Videoconferences { get; set; }
     }
 }

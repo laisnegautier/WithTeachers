@@ -5,30 +5,32 @@
 @using System.Globalization
 @using System.Collections.Generic
 @inject ApplicationUserService ApplicationUserService
+@inject ActivityService ActivityService
 @attribute [Authorize]
 
 <h3>Scheduler</h3>
 
-<section class="scheduler">
-        <div class="form-group col-4">
-            <input type="date" class="form-control datePicker" @bind="@SelectedDate">
-        </div>
-        <div class="form-group col-4">
-            <button class="button-week" @onclick="PreviousWeek">&#8249; Previous week</button>
-            <button class="button-week" @onclick="NextWeek">Next week &#8250;</button>
-        </div>
+<AddActivityForm />
 
-            <table class="table table-bordered">
-                <thead class="thead-dark">
-                    <tr>
-                        <th></th>
-                        <DaysHeading Week="@Week" />
-                    </tr>
-                </thead>
-                <tbody>
-                    <Matrix Week="@Week" SizeX="8" SizeY="48" />
-                </tbody>
-            </table>
+<section class="scheduler">
+    <div class="form-group col-4">
+        <input type="date" class="form-control datePicker" @bind="@SelectedDate">
+    </div>
+    <div class="form-group col-4">
+        <button class="button-week" @onclick="PreviousWeek">&#8249; Previous week</button>
+        <button class="button-week" @onclick="NextWeek">Next week &#8250;</button>
+    </div>
+
+    <table class="table table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <DaysHeading Week="@Week" />
+            </tr>
+        </thead>
+        <tbody>
+            <Matrix Week="@Week" Activities="@Activities" SizeX="8" SizeY="48" />
+        </tbody>
+    </table>
 </section>
 
 @code {
@@ -36,13 +38,22 @@
     private static DateTime SelectedDate
     {
         get => _selectedDate;
-        set {
+        set
+        {
             _selectedDate = value;
             Week = new Week(value);
         }
     }
 
-    private static Week Week = new Week(SelectedDate);
+    public static Week Week { get; set; } = new Week(SelectedDate);
+
+
+    private List<Activity> Activities = new List<Activity>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Activities = await ActivityService.ReadAllAsync(Week);
+    }
 
     private void NextWeek() => SelectedDate = SelectedDate.AddDays(7).StartOfWeek(DayOfWeek.Monday);
     private void PreviousWeek() => SelectedDate = SelectedDate.AddDays(-7).StartOfWeek(DayOfWeek.Monday);

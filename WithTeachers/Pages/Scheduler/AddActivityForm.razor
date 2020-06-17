@@ -1,0 +1,52 @@
+﻿@namespace WithTeachers.Pages.Scheduler
+@using WithTeachers.Data
+
+@inject ApplicationUserService ApplicationUserService
+@inject ActivityService ActivityService
+
+<section class="bg-light py-3 px-4 mb-3 rounded">
+    <h3 class="font-weight-light">Add an activity</h3>
+    <EditForm Model="@activityToAdd" OnValidSubmit="HandleValidSubmitAddActivity">
+        <DataAnnotationsValidator />
+
+        @* ACTIVITY *@
+        <div class="form-group">
+            <label for="activityTitle">Activity title*</label>
+            <InputText id="activityTitle" class="form-control" @bind-Value="activityToAdd.Title" />
+            <ValidationMessage For="@(() => activityToAdd.Title)" />
+        </div>
+
+        <div class="form-group">
+            <label for="activityDescription">Activity description*</label>
+            <InputTextArea id="activityDescription" class="form-control" @bind-Value="activityToAdd.Description" />
+            <ValidationMessage For="@(() => activityToAdd.Description)" />
+        </div>
+
+        <div class="form-group">
+            <label for="activityScheduledFor">Scheduled for*</label>
+            <input type="datetime-local" id="activityScheduledFor" class="form-control" @bind="activityToAdd.ScheduledFor" />
+            <ValidationMessage For="@(() => activityToAdd.ScheduledFor)" />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </EditForm>
+</section>
+
+@code {
+    ApplicationUser currentUser;
+    Activity activityToAdd = new Activity();
+
+    protected override async void OnInitialized()
+    {
+        currentUser = await ApplicationUserService.GetCurrentUser();
+    }
+
+    private async Task HandleValidSubmitAddActivity()
+    {
+        activityToAdd.CreationDate = DateTime.Now;
+        await ActivityService.CreateAsync(activityToAdd);
+
+        // Reset
+        activityToAdd = new Activity();
+    }
+}

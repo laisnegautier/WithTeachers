@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WithTeachers.Data;
 
 namespace WithTeachers.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200617144620_TestRemove")]
+    partial class TestRemove
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -154,14 +156,11 @@ namespace WithTeachers.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("ClassId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<bool>("Completed")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("CourseId")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -170,20 +169,14 @@ namespace WithTeachers.Migrations
                     b.Property<DateTime>("ScheduledFor")
                         .HasColumnType("TEXT");
 
+                    b.Property<TimeSpan>("TimeSpan")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("VideoconferenceId")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("ActivityId");
-
-                    b.HasIndex("ClassId");
-
-                    b.HasIndex("CourseId");
-
-                    b.HasIndex("VideoconferenceId");
 
                     b.ToTable("Activities");
                 });
@@ -432,6 +425,9 @@ namespace WithTeachers.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("TEXT");
+
                     b.Property<bool>("Ongoing")
                         .HasColumnType("INTEGER");
 
@@ -442,6 +438,8 @@ namespace WithTeachers.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("VideoconferenceId");
+
+                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("Videoconferences");
                 });
@@ -497,27 +495,6 @@ namespace WithTeachers.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("WithTeachers.Data.Activity", b =>
-                {
-                    b.HasOne("WithTeachers.Data.Class", "Class")
-                        .WithMany()
-                        .HasForeignKey("ClassId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("WithTeachers.Data.Course", "Course")
-                        .WithMany()
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("WithTeachers.Data.Videoconference", "Videoconference")
-                        .WithMany()
-                        .HasForeignKey("VideoconferenceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("WithTeachers.Data.Class", b =>
                 {
                     b.HasOne("WithTeachers.Data.ApplicationUser", "User")
@@ -553,10 +530,17 @@ namespace WithTeachers.Migrations
             modelBuilder.Entity("WithTeachers.Data.Student", b =>
                 {
                     b.HasOne("WithTeachers.Data.Class", "Class")
-                        .WithMany()
+                        .WithMany("Students")
                         .HasForeignKey("ClassId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("WithTeachers.Data.Videoconference", b =>
+                {
+                    b.HasOne("WithTeachers.Data.ApplicationUser", null)
+                        .WithMany("Videoconferences")
+                        .HasForeignKey("ApplicationUserId");
                 });
 #pragma warning restore 612, 618
         }

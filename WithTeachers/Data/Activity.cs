@@ -18,16 +18,22 @@ namespace WithTeachers.Data
         [DataType(DataType.DateTime)]
         public DateTime ScheduledFor { get; set; }
 
+        [DataType(DataType.Duration)]
+        public TimeSpan TimeSpan { get; set; } = new TimeSpan(2, 0, 0);
+
         public bool Completed { get; set; } = false;
 
+        [DataType(DataType.DateTime)]
+        public DateTime CreationDate { get; set; }
 
-        public int VideoconferenceId { get; set; }
-        public virtual Videoconference Videoconference { get; set; }
 
-        public int CourseId { get; set; }
-        public virtual Course Course { get; set; }
+        //public int VideoconferenceId { get; set; }
+        //public virtual Videoconference Videoconference { get; set; }
 
-        public int ClassId { get; set; }
-        public virtual Class Class { get; set; }
+        //public int CourseId { get; set; }
+        //public virtual Course Course { get; set; }
+
+        //public int ClassId { get; set; }
+        //public virtual Class Class { get; set; }
     }
 }

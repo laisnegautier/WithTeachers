@@ -1,18 +1,29 @@
 ﻿@namespace WithTeachers.Pages.Scheduler
 @using WithTeachers.Data
+@inject ActivityService ActivityService
+@*@for (int k = 0; k < SizeY; k++)
+    {
+        <em>@((int)(k/2))  </em>
+        for (int h = 0; h < SizeX; h++)
+        {
+            <b>@SpanMatrix[h, k] </b>
+        }
+        <hr />
+    }*@
 
 @{ int x; }
 @for (int y = 0; y < SizeY; y++)
 {
+    x = 1;
     <tr>
         <HourCell Hour="@HandleDateTime(y)" />
 
-        @{ x = 1; int spanY = 1; }
         @foreach (DateTime day in Week)
         {
-            spanY = HandleSpanY(x, y);
-
-            <Cell SpanY="@spanY" IsDisplayable="@HandleDisplay(x, y)" IsResizable="true" Day="@HandleDateTime(y, day)" />
+            if (!IsCellHidden(x, y))
+            {
+                <Cell SpanMatrix="@SpanMatrix" Activities="@Activities" X="@x" Y="@y" IsResizable="true" Day="@HandleDateTime(y, day)" />
+            }
             x++;
         }
     </tr>
@@ -28,6 +39,47 @@
     [Parameter]
     public int SizeY { get; set; }
 
+    private int[,] SpanMatrix;
+
+    [Parameter]
+    public List<Activity> Activities { get; set; }
+
+    private int X;
+    private int Y;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Activities = await ActivityService.ReadAllAsync(Week);
+        SpanMatrix = await CreateSpanMatrixAsync(Activities);
+    }
+
+    // Computing the span matrix for UI purpose
+    private async Task<int[,]> CreateSpanMatrixAsync(List<Activity> activities)
+    {
+        // HERE WE SHOULD GET ALL ACTIVITIES OF THE WEEK TO PUT THEM IN THE SPAN MATRIX
+
+        int[,] spanMatrix = new int[SizeX, SizeY];
+
+        for (int i = 0; i < SizeX; i++)
+            for (int j = 0; j < SizeY; j++)
+                spanMatrix[i, j] = 1;
+
+        int hourStart;
+        int minStart;
+        foreach (Activity activity in activities)
+        {
+            hourStart = activity.ScheduledFor.Hour;
+            minStart = activity.ScheduledFor.Minute;
+
+            if (minStart >= 30) hourStart = 2 * hourStart + 1;
+            else hourStart = 2 * hourStart;
+
+            spanMatrix[(int)activity.ScheduledFor.DayOfWeek, hourStart] = (int)(activity.TimeSpan.TotalMinutes) / 30;
+        }
+
+        return spanMatrix;
+    }
+
     private bool HandleDisplay(int x, int y)
     {
         // First column
@@ -37,11 +89,6 @@
         // This else has to be completed when sizable cell will be implemented
         else
             return true;
-    }
-
-    private int HandleSpanY(int x, int y)
-    {
-        return x == 0 ? (y % 2 == 0 ? 2 : 1) : 1;
     }
 
     internal struct HourMinute
@@ -62,6 +109,16 @@
                 Minute = 30;
             }
         }
+    }
+
+    // Hiding cell if it is under a spanned cell above
+    private bool IsCellHidden(int x, int y)
+    {
+        for (int j = 0; j < y; j++)
+            if (SpanMatrix[x, j] > 1)
+                if (y - j < SpanMatrix[x, j])
+                    return true;
+        return false;
     }
 
     private DateTime HandleDateTime(int y, DateTime day)
