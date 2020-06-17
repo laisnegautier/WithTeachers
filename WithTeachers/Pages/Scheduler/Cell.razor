@@ -3,14 +3,7 @@
 
 @if (IsDisplayable)
 {
-    if (!IsResizable)
-    {
-    <th rowspan="@SpanY">@DateTime.ToString("hh:mm tt")</th>
-    }
-    else
-    {
-    <td class="@(DateTime.Minute != 30 ? "dash" : "nolineTop")">@DateTime.ToString("dd MMMM hh:mm tt")</td>
-    }
+    <td class="@(Day.Minute != 30 ? "dash" : "nolineTop")">@Day.ToString("dd MMMM hh:mm tt")</td>
 }
 
 @code {
@@ -24,5 +17,5 @@
     public bool IsResizable { get; set; }
 
     [Parameter]
-    public DateTime DateTime { get; set; }
+    public DateTime Day { get; set; }
 }

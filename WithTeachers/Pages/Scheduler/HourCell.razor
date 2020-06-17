@@ -1,0 +1,11 @@
+﻿@namespace WithTeachers.Pages.Scheduler
+
+@if (Hour.Minute == 0)
+{
+    <th rowspan="2">@Hour.ToString("hh:mm tt")</th>
+}
+
+@code {
+    [Parameter]
+    public DateTime Hour { get; set; }
+}

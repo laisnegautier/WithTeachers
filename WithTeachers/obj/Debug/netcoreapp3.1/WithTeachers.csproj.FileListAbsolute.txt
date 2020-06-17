@@ -143,3 +143,5 @@ C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\obj\Debug\n
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Scheduler\Matrix.razor.g.cs
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\obj\Debug\netcoreapp3.1\Razor\Pages\Scheduler\Cell.razor.g.cs
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\obj\Debug\netcoreapp3.1\Razor\Pages\Scheduler\Matrix.razor.g.cs
+C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Scheduler\HourCell.razor.g.cs
+C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\obj\Debug\netcoreapp3.1\Razor\Pages\Scheduler\HourCell.razor.g.cs

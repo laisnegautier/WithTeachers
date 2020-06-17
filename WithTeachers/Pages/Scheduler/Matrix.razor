@@ -4,11 +4,13 @@
 @while (y < sizeY)
 {
     <tr>
-        @for (int x = 0; x < sizeX; x++)
+        <HourCell Hour="@HandleDateTime(y)" />
+        
+        @foreach (DateTime day in Week)
         {
             spanY = HandleSpanY(x, y);
 
-            <Cell SpanY="@spanY" IsDisplayable="@HandleDisplay(x, y)" IsResizable="@(x != 0)" DateTime="@HandleDateTime(x, y)" />
+            <Cell SpanY="@spanY" IsDisplayable="@HandleDisplay(x, y)" IsResizable="@(x != 0)" Day="@HandleDateTime(y, day)" />
         }
     </tr>
 
@@ -30,8 +32,6 @@
 
     private bool HandleDisplay(int x, int y)
     {
-        //(x == 0 ? (y % 2 == 0) : false)
-
         // First column
         if (x == 0)
             // We don't want :30 minutes on the first column
@@ -46,25 +46,37 @@
         return x == 0 ? (y % 2 == 0 ? 2 : 1) : 1;
     }
 
-    private DateTime HandleDateTime(int x, int y)
+    internal struct HourMinute
     {
-        int hour;
-        int minute;
+        public int Hour { get; set; }
+        public int Minute { get; set; }
 
-        if (y % 2 == 0)
+        public HourMinute(int y)
         {
-            hour = y / 2;
-            minute = 0;
+            if (y % 2 == 0)
+            {
+                Hour = y / 2;
+                Minute = 0;
+            }
+            else
+            {
+                Hour = (y - 1) / 2;
+                Minute = 30;
+            }
         }
-        else
-        {
-            hour = (y - 1) / 2;
-            minute = 30;
-        }
+    }
 
-        // Get Day
-        DateTime day = Week.Single(date => (int)date.DayOfWeek == 1);
+    private DateTime HandleDateTime(int y, DateTime day)
+    {
+        HourMinute hourMinute = new HourMinute(y);
 
-        return new DateTime(day.Year, day.Month, day.Day, hour, minute, 0);
+        return new DateTime(day.Year, day.Month, day.Day, hourMinute.Hour, hourMinute.Minute, 0);
+    }
+
+    private DateTime HandleDateTime(int y)
+    {
+        HourMinute hourMinute = new HourMinute(y);
+
+        return new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, hourMinute.Hour, hourMinute.Minute, 0);
     }
 }
