@@ -27,23 +27,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @{
-                        int hour = -1;
-                    }
-                    @for (int i = 0; i < 48; i++)
-                    {
-                        hour = i % 2 == 0 ? i / 2 : -1;
-                        <tr>
-                            @if (hour != -1)
-                            {
-                                <th rowspan="2">@(hour != -1 ? hour < 13 ? hour + ":00 AM" : hour % 12 + ":00 PM" : "")</th>
-                            }
-                            @for (int j = 0; j < 7; j++)
-                            {
-                                <td class="@(hour != -1 ? "dash" : "nolineTop")"></td>
-                            }
-                        </tr>
-                    }
+                    <Matrix Week="@Week" />
                 </tbody>
             </table>
 </section>

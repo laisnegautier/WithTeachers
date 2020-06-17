@@ -1,0 +1,28 @@
+﻿@namespace WithTeachers.Pages.Scheduler
+@using WithTeachers.Data
+
+@if (IsDisplayable)
+{
+    if (!IsResizable)
+    {
+    <th rowspan="@SpanY">@DateTime.ToString("hh:mm tt")</th>
+    }
+    else
+    {
+    <td class="@(DateTime.Minute != 30 ? "dash" : "nolineTop")">@DateTime.ToString("dd MMMM hh:mm tt")</td>
+    }
+}
+
+@code {
+    [Parameter]
+    public int SpanY { get; set; }
+
+    [Parameter]
+    public bool IsDisplayable { get; set; }
+
+    [Parameter]
+    public bool IsResizable { get; set; }
+
+    [Parameter]
+    public DateTime DateTime { get; set; }
+}

@@ -1,0 +1,70 @@
+﻿@namespace WithTeachers.Pages.Scheduler
+@using WithTeachers.Data
+
+@while (y < sizeY)
+{
+    <tr>
+        @for (int x = 0; x < sizeX; x++)
+        {
+            spanY = HandleSpanY(x, y);
+
+            <Cell SpanY="@spanY" IsDisplayable="@HandleDisplay(x, y)" IsResizable="@(x != 0)" DateTime="@HandleDateTime(x, y)" />
+        }
+    </tr>
+
+    y++;
+}
+
+@code {
+    [Parameter]
+    public Week Week { get; set; }
+
+    private int sizeX = 8;
+    private int sizeY = 48;
+
+    private int x = 0;
+    private int y = 0;
+    private int spanY;
+
+    private int hour = -1;
+
+    private bool HandleDisplay(int x, int y)
+    {
+        //(x == 0 ? (y % 2 == 0) : false)
+
+        // First column
+        if (x == 0)
+            // We don't want :30 minutes on the first column
+            return y % 2 == 0;
+        // This else has to be completed when sizable cell will be implemented
+        else
+            return true;
+    }
+
+    private int HandleSpanY(int x, int y)
+    {
+        return x == 0 ? (y % 2 == 0 ? 2 : 1) : 1;
+    }
+
+    private DateTime HandleDateTime(int x, int y)
+    {
+        int hour;
+        int minute;
+
+        if (y % 2 == 0)
+        {
+            hour = y / 2;
+            minute = 0;
+        }
+        else
+        {
+            hour = (y - 1) / 2;
+            minute = 30;
+        }
+
+        // Get Day
+        DateTime day = Week.Single(date => (int)date.DayOfWeek == 1);
+
+        return new DateTime(day.Year, day.Month, day.Day, hour, minute, 0);
+    }
+}
