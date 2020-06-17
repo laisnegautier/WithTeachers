@@ -1,34 +1,32 @@
 ﻿@namespace WithTeachers.Pages.Scheduler
 @using WithTeachers.Data
 
-@while (y < sizeY)
+@{ int x; }
+@for (int y = 0; y < SizeY; y++)
 {
     <tr>
         <HourCell Hour="@HandleDateTime(y)" />
-        
+
+        @{ x = 1; int spanY = 1; }
         @foreach (DateTime day in Week)
         {
             spanY = HandleSpanY(x, y);
 
-            <Cell SpanY="@spanY" IsDisplayable="@HandleDisplay(x, y)" IsResizable="@(x != 0)" Day="@HandleDateTime(y, day)" />
+            <Cell SpanY="@spanY" IsDisplayable="@HandleDisplay(x, y)" IsResizable="true" Day="@HandleDateTime(y, day)" />
+            x++;
         }
     </tr>
-
-    y++;
 }
 
 @code {
     [Parameter]
     public Week Week { get; set; }
 
-    private int sizeX = 8;
-    private int sizeY = 48;
+    [Parameter]
+    public int SizeX { get; set; }
 
-    private int x = 0;
-    private int y = 0;
-    private int spanY;
-
-    private int hour = -1;
+    [Parameter]
+    public int SizeY { get; set; }
 
     private bool HandleDisplay(int x, int y)
     {
