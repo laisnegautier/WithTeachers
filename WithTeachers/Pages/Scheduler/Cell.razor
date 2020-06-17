@@ -3,7 +3,7 @@
 
 @if (IsDisplayable)
 {
-    <td class="@(Day.Minute != 30 ? "dash" : "nolineTop")">@Day.ToString("dd MMMM hh:mm tt")</td>
+    <td class="@(Day.DayOfYear == DateTime.Now.DayOfYear ? "currentDay" : "") @(Day.Minute != 30 ? "dash" : "nolineTop")">@Day.ToString("dd MMMM hh:mm tt")</td>
 }
 
 @code {

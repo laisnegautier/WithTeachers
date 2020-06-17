@@ -155,7 +155,6 @@ app {
         transition: all .1s ease-in;
 
         &:hover {
-            background-color: #ddd;
             color: black;
             background-color: #fafafa;
             box-shadow: 0 3px 6px lightgray;
@@ -179,14 +178,23 @@ app {
             > tr {
                 > td {
                     background-color: #fff !important;
+                    transition: all .1s ease-in;
+                    position: relative;
+                    z-index: 1;
 
                     &:hover {
-                        background-color: #f3f3f3 !important;
+                        background-color: #fafafa !important;
+                        box-shadow: 0 5px 10px lightgray;
+                        z-index: 2;
                     }
                 }
 
+                .currentDay {
+                    background-color: #e9f2ff !important;
+                }
+
                 .dash {
-                    border-bottom: 2px dashed #f3f3f3 !important;
+                    border-bottom: 1px dashed #f3f3f3 !important;
                 }
 
                 .nolineTop {
