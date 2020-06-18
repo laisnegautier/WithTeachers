@@ -1,7 +1,7 @@
 ﻿@namespace WithTeachers.Pages.Scheduler
 @using WithTeachers.Data
 
-<td rowspan="@SpanMatrix[X, Y]" style="background-color: @backgroundBlue;" class="@(Day.DayOfYear == DateTime.Now.DayOfYear ? "currentDay" : "") @(Day.Minute != 30 ? "dash" : "nolineTop")">@Day.ToString("dd MMMM hh:mm tt")</td>
+<td rowspan="@SpanMatrix[X, Y]" class="small @CellClass @(Day.DayOfYear == DateTime.Now.DayOfYear ? "currentDay" : "") @(Day.Minute != 30 ? "dash" : "nolineTop")">@Day.ToString("dd MMMM hh:mm tt")</td>
 
 @code {
     [Parameter]
@@ -19,31 +19,10 @@
     [Parameter]
     public DateTime Day { get; set; }
 
-    private string backgroundBlue = "white";
+    [Parameter]
+    public string CellClass { get; set; }
 
     [Parameter]
     public List<Activity> Activities { get; set; }
 
-    protected override async Task OnInitializedAsync()
-    {
-        int hourStart;
-        int minStart;
-        foreach(Activity act in Activities)
-        {
-            if((int)act.ScheduledFor.DayOfWeek == X)
-            {
-                hourStart = act.ScheduledFor.Hour;
-                minStart = act.ScheduledFor.Minute;
-
-                if (minStart >= 30) hourStart = 2 * hourStart + 1;
-                else hourStart = 2 * hourStart;
-
-                if (hourStart == Y)
-                {
-                    backgroundBlue = "rgba(0,0,0,0.2) !important";
-                    break;
-                }
-            }
-        }
-    }
 }

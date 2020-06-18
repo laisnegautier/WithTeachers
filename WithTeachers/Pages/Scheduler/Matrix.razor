@@ -1,16 +1,15 @@
 ﻿@namespace WithTeachers.Pages.Scheduler
 @using WithTeachers.Data
 @inject ActivityService ActivityService
-@*@for (int k = 0; k < SizeY; k++)
-    {
-        <em>@((int)(k/2))  </em>
-        for (int h = 0; h < SizeX; h++)
-        {
-            <b>@SpanMatrix[h, k] </b>
-        }
-        <hr />
-    }*@
 
+@*@for (int j = 0; j < SizeY; j++)
+{
+    for (int i = 0; i < SizeX; i++)
+    {
+        <b>@SpanMatrix[i, j];</b>
+    }
+    <br />
+}*@
 @{ int x; }
 @for (int y = 0; y < SizeY; y++)
 {
@@ -22,7 +21,8 @@
         {
             if (!IsCellHidden(x, y))
             {
-                <Cell SpanMatrix="@SpanMatrix" Activities="@Activities" X="@x" Y="@y" IsResizable="true" Day="@HandleDateTime(y, day)" />
+                cellClass = HandleCellClass(x, y);
+                <Cell SpanMatrix="@SpanMatrix" Activities="@Activities" X="@x" Y="@y" IsResizable="true" Day="@HandleDateTime(y, day)" CellClass="@cellClass" />
             }
             x++;
         }
@@ -34,50 +34,54 @@
     public Week Week { get; set; }
 
     [Parameter]
+    public List<Activity> Activities { get; set; }
+
+    [Parameter]
     public int SizeX { get; set; }
 
     [Parameter]
     public int SizeY { get; set; }
 
-    private int[,] SpanMatrix;
-
     [Parameter]
-    public List<Activity> Activities { get; set; }
+    public int[,] SpanMatrix { get; set; }
 
     private int X;
     private int Y;
 
-    protected override async Task OnInitializedAsync()
+    private string cellClass;
+
+    private string HandleCellClass(int x, int y)
     {
-        Activities = await ActivityService.ReadAllAsync(Week);
-        SpanMatrix = await CreateSpanMatrixAsync(Activities);
-    }
-
-    // Computing the span matrix for UI purpose
-    private async Task<int[,]> CreateSpanMatrixAsync(List<Activity> activities)
-    {
-        // HERE WE SHOULD GET ALL ACTIVITIES OF THE WEEK TO PUT THEM IN THE SPAN MATRIX
-
-        int[,] spanMatrix = new int[SizeX, SizeY];
-
-        for (int i = 0; i < SizeX; i++)
-            for (int j = 0; j < SizeY; j++)
-                spanMatrix[i, j] = 1;
-
         int hourStart;
         int minStart;
-        foreach (Activity activity in activities)
+
+        foreach (Activity act in Activities)
         {
-            hourStart = activity.ScheduledFor.Hour;
-            minStart = activity.ScheduledFor.Minute;
+            if ((int)act.ScheduledFor.DayOfWeek == x)
+            {
+                hourStart = act.ScheduledFor.Hour;
+                minStart = act.ScheduledFor.Minute;
 
-            if (minStart >= 30) hourStart = 2 * hourStart + 1;
-            else hourStart = 2 * hourStart;
+                if (minStart >= 30) hourStart = 2 * hourStart + 1;
+                else hourStart = 2 * hourStart;
 
-            spanMatrix[(int)activity.ScheduledFor.DayOfWeek, hourStart] = (int)(activity.TimeSpan.TotalMinutes) / 30;
+                if (hourStart == y)
+                {
+                    cellClass = "filled-cell";
+                    break;
+                }
+                else
+                {
+                    cellClass = "empty-cell";
+                }
+            }
+            else
+            {
+                cellClass = "empty-cell";
+            }
         }
 
-        return spanMatrix;
+        return cellClass;
     }
 
     private bool HandleDisplay(int x, int y)

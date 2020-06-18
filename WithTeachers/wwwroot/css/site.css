@@ -142,6 +142,12 @@ app {
     box-shadow: 0 5px 10px lightgray;
     z-index: 2; }
 
+.scheduler > table > tbody > tr .empty-cell {
+  background-color: #fff !important; }
+
+.scheduler > table > tbody > tr .filled-cell {
+  background-color: #0366d6 !important; }
+
 .scheduler > table > tbody > tr .currentDay {
   background-color: #e9f2ff !important; }
 
