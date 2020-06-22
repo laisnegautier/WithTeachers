@@ -1,7 +1,7 @@
 ﻿@namespace WithTeachers.Pages.Scheduler
 @using WithTeachers.Data
 
-<td rowspan="@SpanMatrix[X, Y]" class="small @CellClass @(Day.DayOfYear == DateTime.Now.DayOfYear ? "currentDay" : "") @(Day.Minute != 30 ? "dash" : "nolineTop")">@Day.ToString("dd MMMM hh:mm tt")</td>
+<td rowspan="@RowSpan" @onclick="HandleClick" class="small @CellClass @(Day.DayOfYear == DateTime.Now.DayOfYear ? "currentDay" : "") @(Day.Minute != 30 ? "dash" : "nolineTop")">@Day.ToString("dd MMMM hh:mm tt")</td>
 
 @code {
     [Parameter]
@@ -25,4 +25,15 @@
     [Parameter]
     public List<Activity> Activities { get; set; }
 
+    private int RowSpan;
+
+    protected override async Task OnInitializedAsync()
+    {
+        RowSpan = SpanMatrix[X, Y];
+    }
+
+    private void HandleClick()
+    {
+        RowSpan++;
+    }
 }
