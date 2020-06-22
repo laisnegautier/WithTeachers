@@ -2,16 +2,8 @@
 @using WithTeachers.Data
 @inject ActivityService ActivityService
 
-@*@for (int j = 0; j < SizeY; j++)
-{
-    for (int i = 0; i < SizeX; i++)
-    {
-        <b>@SpanMatrix[i, j];</b>
-    }
-    <br />
-}*@
 @{ int x; }
-@for (int y = 0; y < SizeY; y++)
+@for (int y = 0; y < SpanMatrix.GetLength(1); y++)
 {
     x = 1;
     <tr>
@@ -21,8 +13,9 @@
         {
             if (!IsCellHidden(x, y))
             {
-                cellClass = HandleCellClass(x, y);
-                <Cell SpanMatrix="@SpanMatrix" Activities="@Activities" X="@x" Y="@y" IsResizable="true" Day="@HandleDateTime(y, day)" CellClass="@cellClass" />
+                Activity activity;
+                cellClass = HandleCellClass(x, y, out activity);
+                <Cell SpanMatrix="@SpanMatrix" Activity="@activity" X="@x" Y="@y" IsResizable="true" Day="@HandleDateTime(y, day)" CellClass="@cellClass" />
             }
             x++;
         }
@@ -37,23 +30,15 @@
     public List<Activity> Activities { get; set; }
 
     [Parameter]
-    public int SizeX { get; set; }
-
-    [Parameter]
-    public int SizeY { get; set; }
-
-    [Parameter]
     public int[,] SpanMatrix { get; set; }
-
-    private int X;
-    private int Y;
 
     private string cellClass;
 
-    private string HandleCellClass(int x, int y)
+    private string HandleCellClass(int x, int y, out Activity activity)
     {
         int hourStart;
         int minStart;
+        activity = null;
 
         foreach (Activity act in Activities)
         {
@@ -68,6 +53,7 @@
                 if (hourStart == y)
                 {
                     cellClass = "filled-cell";
+                    activity = act;
                     break;
                 }
                 else

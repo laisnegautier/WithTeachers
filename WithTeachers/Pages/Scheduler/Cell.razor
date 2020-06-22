@@ -1,7 +1,24 @@
 ﻿@namespace WithTeachers.Pages.Scheduler
 @using WithTeachers.Data
 
-<td rowspan="@RowSpan" @onclick="HandleClick" class="small @CellClass @(Day.DayOfYear == DateTime.Now.DayOfYear ? "currentDay" : "") @(Day.Minute != 30 ? "dash" : "nolineTop")">@Day.ToString("dd MMMM hh:mm tt")</td>
+<td rowspan="@SpanMatrix[X, Y]"
+    draggable="true"
+    @ondrag="HandleDrag"
+    @ondragstart="@(() => HandleDragStart(Activity))"
+    @ondragenter="HandleDragEnter"
+    @ondragleave="HandleDragLeave"
+    @ondrop="HandleDrop"
+    class="small @CellClass @(Day.DayOfYear == DateTime.Now.DayOfYear ? "currentDay" : "") @(Day.Minute != 30 ? "dash" : "nolineTop")"
+    style="@dragClass"
+    ondragover="event.preventDefault();">
+        @if (Activity != null)
+    {
+            <strong>@Activity.Title</strong>
+    }
+    @Day.ToString("dd MMMM hh:mm tt")
+</td>
+
+@*ondragstart="event.dataTransfer.setData('', event.target.id);"*@
 
 @code {
     [Parameter]
@@ -23,17 +40,34 @@
     public string CellClass { get; set; }
 
     [Parameter]
-    public List<Activity> Activities { get; set; }
+    public Activity Activity { get; set; }
 
-    private int RowSpan;
+    private string evento = "";
 
-    protected override async Task OnInitializedAsync()
+    private string dragClass = "";
+
+    private void HandleDragStart(Activity selectedActivity)
     {
-        RowSpan = SpanMatrix[X, Y];
+        dragClass = "border: 2px dashed blue !important;";
     }
 
-    private void HandleClick()
+    private void HandleDrag(DragEventArgs e)
     {
-        RowSpan++;
+        dragClass = "border: 2px dashed green !important;";
+    }
+
+    private void HandleDragEnter(DragEventArgs e)
+    {
+        dragClass = "border: 2px dashed pink !important;";
+    }
+
+    private void HandleDragLeave(DragEventArgs e)
+    {
+        dragClass = "";
+    }
+
+    private void HandleDrop(DragEventArgs e)
+    {
+        dragClass = "border: 2px dashed cyan !important;";
     }
 }

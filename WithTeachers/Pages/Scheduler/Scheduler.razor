@@ -11,12 +11,7 @@
 <h3>Scheduler</h3>
 
 <AddActivityForm />
-@SelectedDate.ToShortDateString()
-<br />
-@Week.Monday.ToShortDateString()
-<br />
-@Activities.Count
-<br />
+
 <section class="scheduler">
     <div class="form-group col-4">
         <input type="date" class="form-control datePicker" value="@SelectedDate.ToString("yyy-MM-dd")" @onchange="@ChangeSelectedDateAsync">
@@ -33,13 +28,13 @@
             </tr>
         </thead>
         <tbody>
-            <Matrix Week="@Week" Activities="@Activities" SpanMatrix="@SpanMatrix" SizeX="8" SizeY="48" />
+            <Matrix Week="@Week" Activities="@Activities" SpanMatrix="@SpanMatrix" />
         </tbody>
     </table>
 </section>
 
 @code {
-    public DateTime SelectedDate { get; set; }
+    public DateTime SelectedDate { get; set; } = DateTime.Now;
 
     public static Week Week { get; set; }
 
@@ -49,7 +44,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-        SelectedDate = DateTime.Now;
         Week = new Week(SelectedDate);
         Activities = await ActivityService.ReadAllAsync(Week);
         CreateSpanMatrix(Activities);
