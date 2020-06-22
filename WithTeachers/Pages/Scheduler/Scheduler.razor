@@ -12,6 +12,8 @@
 
 <AddActivityForm />
 
+<strong>@XX - @YY - @((ActivityToUpdate != null) ? ActivityToUpdate.Title : "lol")</strong>
+
 <section class="scheduler">
     <div class="form-group col-4">
         <input type="date" class="form-control datePicker" value="@SelectedDate.ToString("yyy-MM-dd")" @onchange="@ChangeSelectedDateAsync">
@@ -28,12 +30,23 @@
             </tr>
         </thead>
         <tbody>
-            <Matrix Week="@Week" Activities="@Activities" SpanMatrix="@SpanMatrix" />
+            <Matrix ModifySpanMatrix="HandleModifySpanMatrix" Week="@Week" Activities="@Activities" SpanMatrix="@SpanMatrix" />
         </tbody>
     </table>
 </section>
 
 @code {
+    int XX = 0;
+    int YY = 0;
+    Activity ActivityToUpdate;
+    protected void HandleModifySpanMatrix(Tuple<int, int, Activity> bag)
+    {
+        SpanMatrix[bag.Item1, bag.Item2]++;
+        XX = bag.Item1;
+        YY = bag.Item2;
+        ActivityToUpdate = bag.Item3;
+    }
+
     public DateTime SelectedDate { get; set; } = DateTime.Now;
 
     public static Week Week { get; set; }

@@ -15,7 +15,7 @@
             {
                 Activity activity;
                 cellClass = HandleCellClass(x, y, out activity);
-                <Cell SpanMatrix="@SpanMatrix" Activity="@activity" X="@x" Y="@y" IsResizable="true" Day="@HandleDateTime(y, day)" CellClass="@cellClass" />
+                <Cell OnDragActivity="@HandleOnDragActivity" OnDropCoordinates="@HandleOnDropCoordinates" SpanMatrix="@SpanMatrix" Activity="@activity" X="@x" Y="@y" IsResizable="true" Day="@HandleDateTime(y, day)" CellClass="@cellClass" />
             }
             x++;
         }
@@ -31,6 +31,26 @@
 
     [Parameter]
     public int[,] SpanMatrix { get; set; }
+
+
+
+
+    private Activity ActivityToUpdate { get; set; }
+    [Parameter]
+    public EventCallback<Tuple<int, int, Activity>> ModifySpanMatrix { get; set; }
+
+    protected async Task HandleOnDropCoordinates(int[] coordinates)
+    {
+        Tuple<int, int, Activity> monTuple = new Tuple<int, int, Activity>(coordinates[0], coordinates[1], ActivityToUpdate);
+        await ModifySpanMatrix.InvokeAsync(monTuple);
+    }
+    protected void HandleOnDragActivity(Activity act)
+    {
+        ActivityToUpdate = act;
+    }
+
+
+
 
     private string cellClass;
 

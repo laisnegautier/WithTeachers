@@ -6,14 +6,13 @@
     @ondrag="HandleDrag"
     @ondragstart="@(() => HandleDragStart(Activity))"
     @ondragenter="HandleDragEnter"
-    @ondragleave="HandleDragLeave"
-    @ondrop="HandleDrop"
+    @ondrop="@(() => HandleDrop(X, Y))"
     class="small @CellClass @(Day.DayOfYear == DateTime.Now.DayOfYear ? "currentDay" : "") @(Day.Minute != 30 ? "dash" : "nolineTop")"
     style="@dragClass"
     ondragover="event.preventDefault();">
-        @if (Activity != null)
+    @if (Activity != null)
     {
-            <strong>@Activity.Title</strong>
+        <strong>@Activity.Title</strong>
     }
     @Day.ToString("dd MMMM hh:mm tt")
 </td>
@@ -42,13 +41,17 @@
     [Parameter]
     public Activity Activity { get; set; }
 
-    private string evento = "";
+    [Parameter]
+    public EventCallback<int[]> OnDropCoordinates { get; set; }
+    [Parameter]
+    public EventCallback<Activity> OnDragActivity { get; set; }
 
     private string dragClass = "";
 
-    private void HandleDragStart(Activity selectedActivity)
+    private async Task HandleDragStart(Activity selectedActivity)
     {
         dragClass = "border: 2px dashed blue !important;";
+        await OnDragActivity.InvokeAsync(selectedActivity);
     }
 
     private void HandleDrag(DragEventArgs e)
@@ -61,13 +64,9 @@
         dragClass = "border: 2px dashed pink !important;";
     }
 
-    private void HandleDragLeave(DragEventArgs e)
+    private async Task HandleDrop(int x, int y)
     {
-        dragClass = "";
-    }
-
-    private void HandleDrop(DragEventArgs e)
-    {
+        await OnDropCoordinates.InvokeAsync(new int[] { x, y });
         dragClass = "border: 2px dashed cyan !important;";
     }
 }
