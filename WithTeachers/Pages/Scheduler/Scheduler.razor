@@ -12,6 +12,7 @@
 
 <AddActivityForm />
 
+<h1>@OK</h1>
 <strong>@XX - @YY - @((ActivityToUpdate != null) ? ActivityToUpdate.Title : "lol")</strong>
 
 <section class="scheduler">
@@ -38,14 +39,31 @@
 @code {
     int XX = 0;
     int YY = 0;
+    private string OK = "oh non";
     Activity ActivityToUpdate;
-    protected void HandleModifySpanMatrix(Tuple<int, int, Activity> bag)
+    protected async Task HandleModifySpanMatrix(Tuple<int, int, Activity, int, int> bag)
     {
-        SpanMatrix[bag.Item1, bag.Item2]++;
+        //SpanMatrix[bag.Item1, bag.Item2]++;
         XX = bag.Item1;
         YY = bag.Item2;
         ActivityToUpdate = bag.Item3;
+        if (ActivityToUpdate != null)
+        {
+            ActivityToUpdate.TimeSpan = TimeSpan.FromMinutes((bag.Item2 - bag.Item5) * 30 + 30);
+            await ActivityService.UpdateAsync(ActivityToUpdate);
+            OK = "YEAH";
+        }
+
+        await RefreshAsync();
     }
+
+    private async Task RefreshAsync()
+    {
+        Week = new Week(SelectedDate);
+        Activities = await ActivityService.ReadAllAsync(Week);
+        CreateSpanMatrix(Activities);
+    }
+
 
     public DateTime SelectedDate { get; set; } = DateTime.Now;
 
@@ -62,26 +80,22 @@
         CreateSpanMatrix(Activities);
     }
 
-    private async Task NextWeek() {
+    private async Task NextWeek()
+    {
         SelectedDate = SelectedDate.AddDays(7).StartOfWeek(DayOfWeek.Monday);
-        Week = new Week(SelectedDate);
-        Activities = await ActivityService.ReadAllAsync(Week);
-        CreateSpanMatrix(Activities);
+        await RefreshAsync();
     }
 
-    private async Task PreviousWeek() {
+    private async Task PreviousWeek()
+    {
         SelectedDate = SelectedDate.AddDays(-7).StartOfWeek(DayOfWeek.Monday);
-        Week = new Week(SelectedDate);
-        Activities = await ActivityService.ReadAllAsync(Week);
-        CreateSpanMatrix(Activities);
+        await RefreshAsync();
     }
 
     private async Task ChangeSelectedDateAsync(ChangeEventArgs e)
     {
         SelectedDate = DateTime.Parse(e.Value.ToString());
-        Week = new Week(SelectedDate);
-        Activities = await ActivityService.ReadAllAsync(Week);
-        CreateSpanMatrix(Activities);
+        await RefreshAsync();
     }
 
     // Computing the span matrix for UI purpose

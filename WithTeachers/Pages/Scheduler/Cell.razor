@@ -4,7 +4,7 @@
 <td rowspan="@SpanMatrix[X, Y]"
     draggable="true"
     @ondrag="HandleDrag"
-    @ondragstart="@(() => HandleDragStart(Activity))"
+    @ondragstart="@(() => HandleDragStart(Activity, X, Y))"
     @ondragenter="HandleDragEnter"
     @ondrop="@(() => HandleDrop(X, Y))"
     class="small @CellClass @(Day.DayOfYear == DateTime.Now.DayOfYear ? "currentDay" : "") @(Day.Minute != 30 ? "dash" : "nolineTop")"
@@ -42,16 +42,22 @@
     public Activity Activity { get; set; }
 
     [Parameter]
-    public EventCallback<int[]> OnDropCoordinates { get; set; }
+    public EventCallback<Tuple<Activity, int, int>> OnDragActivity { get; set; }
     [Parameter]
-    public EventCallback<Activity> OnDragActivity { get; set; }
+    public EventCallback<int[]> OnDropCoordinates { get; set; }
 
     private string dragClass = "";
 
-    private async Task HandleDragStart(Activity selectedActivity)
+    private async Task HandleDragStart(Activity selectedActivity, int startX, int startY)
     {
         dragClass = "border: 2px dashed blue !important;";
-        await OnDragActivity.InvokeAsync(selectedActivity);
+        await OnDragActivity.InvokeAsync(new Tuple<Activity, int, int>(selectedActivity, startX, startY));
+    }
+
+    private async Task HandleDrop(int x, int y)
+    {
+        await OnDropCoordinates.InvokeAsync(new int[] { x, y });
+        dragClass = "border: 2px dashed cyan !important;";
     }
 
     private void HandleDrag(DragEventArgs e)
@@ -62,11 +68,5 @@
     private void HandleDragEnter(DragEventArgs e)
     {
         dragClass = "border: 2px dashed pink !important;";
-    }
-
-    private async Task HandleDrop(int x, int y)
-    {
-        await OnDropCoordinates.InvokeAsync(new int[] { x, y });
-        dragClass = "border: 2px dashed cyan !important;";
     }
 }

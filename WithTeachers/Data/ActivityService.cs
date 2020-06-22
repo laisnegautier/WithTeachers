@@ -23,5 +23,17 @@ namespace WithTeachers.Data
 
         public async Task<List<Activity>> ReadAllAsync(Week week)
             => await _context.Activities.OrderByDescending(x => x.ScheduledFor).Where(x => x.ScheduledFor > week.First() && x.ScheduledFor < week.Last()).ToListAsync();
+
+        public async Task<Activity> UpdateAsync(Activity activity)
+        {
+            Activity activityExists = await _context.Activities.SingleOrDefaultAsync(x => x.ActivityId == activity.ActivityId);
+            if (activityExists != null)
+            {
+                _context.Activities.Update(activity);
+                await _context.SaveChangesAsync();
+            }
+
+            return activity;
+        }
     }
 }

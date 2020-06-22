@@ -2,6 +2,7 @@
 @using WithTeachers.Data
 @inject ActivityService ActivityService
 
+<strong>@((ActivityToUpdate != null) ? ActivityToUpdate.Title : "rien") - @StartX - @StartY </strong> 
 @{ int x; }
 @for (int y = 0; y < SpanMatrix.GetLength(1); y++)
 {
@@ -34,19 +35,23 @@
 
 
 
-
     private Activity ActivityToUpdate { get; set; }
+    private int StartX { get; set; }
+    private int StartY { get; set; }
     [Parameter]
-    public EventCallback<Tuple<int, int, Activity>> ModifySpanMatrix { get; set; }
+    public EventCallback<Tuple<int, int, Activity, int, int>> ModifySpanMatrix { get; set; }
 
     protected async Task HandleOnDropCoordinates(int[] coordinates)
     {
-        Tuple<int, int, Activity> monTuple = new Tuple<int, int, Activity>(coordinates[0], coordinates[1], ActivityToUpdate);
+        Tuple<int, int, Activity, int, int> monTuple = new Tuple<int, int, Activity, int, int>(coordinates[0], coordinates[1], ActivityToUpdate, StartX, StartY);
         await ModifySpanMatrix.InvokeAsync(monTuple);
     }
-    protected void HandleOnDragActivity(Activity act)
+
+    protected void HandleOnDragActivity(Tuple<Activity, int, int> bag)
     {
-        ActivityToUpdate = act;
+        ActivityToUpdate = bag.Item1;
+        StartX = bag.Item2;
+        StartY = bag.Item3;
     }
 
 
