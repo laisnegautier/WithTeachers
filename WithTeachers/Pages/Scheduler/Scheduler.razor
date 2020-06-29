@@ -12,9 +12,6 @@
 
 <AddActivityForm />
 
-<h1>@OK</h1>
-<strong>@XX - @YY - @((ActivityToUpdate != null) ? ActivityToUpdate.Title : "lol")</strong>
-
 <section class="scheduler">
     <div class="form-group col-4">
         <input type="date" class="form-control datePicker" value="@SelectedDate.ToString("yyy-MM-dd")" @onchange="@ChangeSelectedDateAsync">
@@ -37,21 +34,31 @@
 </section>
 
 @code {
-    int XX = 0;
-    int YY = 0;
-    private string OK = "oh non";
+
     Activity ActivityToUpdate;
     protected async Task HandleModifySpanMatrix(Tuple<int, int, Activity, int, int> bag)
     {
-        //SpanMatrix[bag.Item1, bag.Item2]++;
-        XX = bag.Item1;
-        YY = bag.Item2;
         ActivityToUpdate = bag.Item3;
+
+        int DropX = bag.Item1;
+        int DropY = bag.Item2;
+        int DragX = bag.Item4;
+        int DragY = bag.Item5;
         if (ActivityToUpdate != null)
         {
-            ActivityToUpdate.TimeSpan = TimeSpan.FromMinutes((bag.Item2 - bag.Item5) * 30 + 30);
-            await ActivityService.UpdateAsync(ActivityToUpdate);
-            OK = "YEAH";
+            // Go down
+            if(DragY < DropY)
+            {
+                ActivityToUpdate.TimeSpan = TimeSpan.FromMinutes((DropY - DragY + 1) * 30);
+                await ActivityService.UpdateAsync(ActivityToUpdate);
+            }
+            // Go up
+            else
+            {
+                ActivityToUpdate.ScheduledFor = ActivityToUpdate.ScheduledFor.Subtract(TimeSpan.FromMinutes((DragY - DropY) * 30));
+                ActivityToUpdate.TimeSpan = TimeSpan.FromMinutes(ActivityToUpdate.TimeSpan.TotalMinutes + (DragY - DropY) * 30);
+                await ActivityService.UpdateAsync(ActivityToUpdate);
+            }
         }
 
         await RefreshAsync();

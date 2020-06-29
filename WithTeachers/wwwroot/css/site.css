@@ -37,7 +37,7 @@ app {
   text-overflow: ellipsis; }
 
 .sidebar {
-  background-image: linear-gradient(180deg, #052767 0%, #3a0647 70%); }
+  background-color: #182127; }
 
 .sidebar .top-row {
   background-color: rgba(0, 0, 0, 0.4); }
@@ -67,15 +67,18 @@ app {
   height: 3rem;
   display: flex;
   align-items: center;
-  line-height: 3rem; }
+  line-height: 3rem;
+  background-color: #293843;
+  border: 2px solid black;
+  font-weight: bold; }
 
 .sidebar .nav-item a.active {
-  background-color: rgba(255, 255, 255, 0.25);
-  color: white; }
+  background-color: #00A2FF;
+  color: black; }
 
 .sidebar .nav-item a:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  color: white; }
+  background-color: #00A2FF;
+  color: black; }
 
 .content {
   padding-top: 1.1rem; }
@@ -108,6 +111,24 @@ app {
   position: absolute;
   right: 0.75rem;
   top: 0.5rem; }
+
+.form-shadowed {
+  padding: 8px 16px !important;
+  background-color: #fff;
+  border: 0;
+  border-radius: 7px;
+  box-shadow: 0 5px 10px lightgray; }
+
+.button-shadowed {
+  padding: 8px 16px 6px 16px !important;
+  background-color: #fff;
+  border: 0;
+  border-radius: 7px;
+  box-shadow: 0 5px 10px lightgray; }
+  .button-shadowed:hover {
+    color: black;
+    background-color: #fafafa;
+    box-shadow: 0 3px 6px lightgray; }
 
 .scheduler .datePicker {
   padding: 8px 16px !important;
