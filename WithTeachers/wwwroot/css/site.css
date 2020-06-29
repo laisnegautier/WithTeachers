@@ -1,6 +1,7 @@
 ﻿@import url("open-iconic/font/css/open-iconic-bootstrap.min.css");
 html, body {
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  background: #3F4D5A; }
 
 a, .btn-link {
   color: #0366d6; }
@@ -17,6 +18,7 @@ app {
 
 .top-row {
   height: 3.5rem;
+  display: flex;
   display: flex;
   align-items: center; }
 
@@ -70,7 +72,8 @@ app {
   line-height: 3rem;
   background-color: #293843;
   border: 2px solid black;
-  font-weight: bold; }
+  font-weight: bold;
+  transition: .1s linear all; }
 
 .sidebar .nav-item a.active {
   background-color: #00A2FF;
@@ -112,12 +115,51 @@ app {
   right: 0.75rem;
   top: 0.5rem; }
 
+.form-section {
+  background-color: #161D25;
+  padding: 20px;
+  border: 2px solid black;
+  border-radius: 3px; }
+
 .form-shadowed {
   padding: 8px 16px !important;
   background-color: #fff;
-  border: 0;
-  border-radius: 7px;
-  box-shadow: 0 5px 10px lightgray; }
+  border: 0px;
+  border-radius: 7px; }
+
+.btn-group {
+  border-radius: 6px;
+  border: 0; }
+  .btn-group .dropdown-toggle {
+    border-right: 2px solid black !important; }
+  .btn-group .btn {
+    color: #000;
+    font-weight: bold;
+    outline: none;
+    border-top: 2px solid black;
+    border-left: 2px solid black;
+    border-right: 1px solid black;
+    border-bottom: 2px solid black; }
+    .btn-group .btn:first-child {
+      border-left: 2px solid black !important; }
+    .btn-group .btn:disabled {
+      opacity: 1;
+      background-color: #00A2FF; }
+    .btn-group .btn:not([disabled]) {
+      color: #fff;
+      background-color: #293843; }
+    .btn-group .btn:hover, .btn-group .btn:active, .btn-group .btn:focus {
+      color: #000;
+      background-color: #00A2FF !important; }
+  .btn-group select {
+    border-top: 2px solid black;
+    border-left: 1px solid black;
+    border-right: 2px solid black;
+    border-bottom: 2px solid black;
+    border-radius: 0 3px 3px 0;
+    background-color: #293843;
+    color: #fff;
+    font-weight: bold; }
 
 .button-shadowed {
   padding: 8px 16px 6px 16px !important;

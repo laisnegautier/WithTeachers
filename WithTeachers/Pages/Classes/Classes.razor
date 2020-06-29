@@ -1,5 +1,5 @@
 ﻿@page "/classes"
-
+@namespace WithTeachers.Pages.Classes
 @using WithTeachers.Data
 @inject ApplicationUserService ApplicationUserService
 @inject ClassService ClassService
@@ -7,37 +7,32 @@
 @attribute [Authorize]
 @* --- AJOUTER UNE CLASSE --- *@
 
-    <h3 class="font-weight-light">Add a class</h3>
-    <EditForm class="form-row" Model="@classToAdd" OnValidSubmit="HandleValidSubmitAddClass">
-        <DataAnnotationsValidator />
+<h3 class="font-weight-light">Add a class</h3>
+<EditForm class="form-row form-section" Model="@classToAdd" OnValidSubmit="HandleValidSubmitAddClass">
+    <DataAnnotationsValidator />
 
-        <div class="input-group">
-            <label for="nameClass" class="sr-only">Class name*</label>
-            <div class="input-group-prepend">
-                <span class="input-group-text" id="basic-addon3">Class name</span>
-            </div>
-            <InputText id="nameClass" placeholder="3C, 4A, 6B..." class="form-control form-shadowed mr-2" @bind-Value="classToAdd.Name" />
-            <ValidationMessage For="@(() => classToAdd.Name)" />
+    <div class="input-group">
+        <label for="nameClass" class="sr-only">Class name*</label>
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon3">Class name</span>
         </div>
+        <InputText id="nameClass" placeholder="3C, 4A, 6B..." class="form-control form-shadowed mr-2" @bind-Value="classToAdd.Name" />
+        <ValidationMessage For="@(() => classToAdd.Name)" />
+    </div>
 
-        <div class="input-group">
-            <label for="yearClass" class="sr-only">Class year*</label>
+    <div class="input-group">
+        <label for="yearClass" class="sr-only">Class year*</label>
 
-            <div class="input-group-prepend">
-                <span class="input-group-text" id="basic-addon3">Class year</span>
-            </div>
-            <InputNumber id="yearClass" class="form-control form-shadowed mr-2" @bind-Value="classToAdd.Year" />
-            <ValidationMessage For="@(() => classToAdd.Year)" />
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon3">Class year</span>
         </div>
+        <InputNumber id="yearClass" class="form-control form-shadowed mr-2" @bind-Value="classToAdd.Year" />
+        <ValidationMessage For="@(() => classToAdd.Year)" />
+    </div>
 
-        <button type="submit" class="btn button-shadowed">Submit</button>
-    </EditForm>
+    <button type="submit" class="btn button-shadowed">Submit</button>
+</EditForm>
 
-
-<div class="row">
-    <button class="button-shadowed mr-2">&#8249; Previous week</button>
-    <button class="button-shadowed">Next week &#8250;</button>
-</div>
 @* --- AJOUTER UN ELEVE --- *@
 @*<section class="bg-light py-3 px-4 mb-3 rounded">
         <h3 class="font-weight-light">Add a student</h3>
@@ -78,7 +73,7 @@
     </section>*@
 
 @* --- CHOIX ANNEE --- *@
-<div class="btn-group">
+<div class="btn-group btn-group-sm">
     @if (years == null)
     {
         <p>Loading...</p>
@@ -89,10 +84,33 @@
     }
     else
     {
-        foreach (int year in years)
+        int i = 0;
+        @foreach (int year in years)
         {
-            <button type="button" class="btn btn-primary" @onclick="(() => selectYear(year))" disabled=@tabSelected(year)>@year</button>
+            <button type="button" class="btn" @onclick="(() => selectYear(year))" disabled=@tabSelected(year)>@year</button>
+            i++;
+            if (i >= 3)
+            {
+                break;
+            }
         }
+        @*<select class="custom-select" id="inputGroupSelect01">
+            <option selected>All years</option>
+                @foreach (int year in years)
+                {
+                    <option value="@year">@year</option>
+                }
+        </select>*@
+
+        <button id="btnGroupDrop1" type="button" class="btn dropdown-toggle small" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            All years
+        </button>
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="btnGroupDrop1">
+            @foreach (int year in years)
+            {
+                <a class="dropdown-item" href="#">@year</a>
+            }
+        </div>
     }
 </div>
 
