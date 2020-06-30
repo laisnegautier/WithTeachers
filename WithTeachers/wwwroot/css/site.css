@@ -1,7 +1,41 @@
 ﻿@import url("open-iconic/font/css/open-iconic-bootstrap.min.css");
 html, body {
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  background: #3F4D5A; }
+  background: #3F4D5A;
+  color: white; }
+
+.card-deck .card {
+  background-color: #161D25;
+  padding: 20px;
+  border: 2px solid black;
+  border-radius: 3px;
+  transition: .1s linear all;
+  text-align: center; }
+  .card-deck .card > .card-body > h5 {
+    font-weight: bold !important; }
+  .card-deck .card > .card-body > button {
+    border: 2px solid #00A2FF;
+    font-weight: bold;
+    color: #fff;
+    background-color: #3F4D5A;
+    margin-bottom: 0; }
+    .card-deck .card > .card-body > button:hover {
+      border: 2px solid black;
+      background-color: #293843;
+      color: #fff; }
+  .card-deck .card:hover {
+    color: black;
+    background-color: #00A2FF;
+    /*            box-shadow: 0px 10px 30px $gray;*/ }
+  .card-deck .card > .card-img-top {
+    height: 200px;
+    color: blue; }
+
+.blackground {
+  background-color: #161D25;
+  padding: 20px;
+  border: 2px solid black;
+  border-radius: 3px; }
 
 a, .btn-link {
   color: #0366d6; }
@@ -37,6 +71,24 @@ app {
 .main .top-row a:first-child {
   overflow: hidden;
   text-overflow: ellipsis; }
+
+.dropdown-menu {
+  border: 2px solid #000;
+  background-color: #293843;
+  min-width: 0 !important; }
+  .dropdown-menu > .dropdown-item {
+    color: #fff;
+    border-top: 2px solid transparent;
+    border-bottom: 2px solid transparent;
+    font-weight: bold !important;
+    transition: .1s linear all; }
+    .dropdown-menu > .dropdown-item:hover {
+      color: #000;
+      background-color: #00A2FF;
+      border-top: 2px solid black;
+      border-bottom: 2px solid black; }
+    .dropdown-menu > .dropdown-item:focus, .dropdown-menu > .dropdown-item:active {
+      outline: 0; }
 
 .sidebar {
   background-color: #182127; }
