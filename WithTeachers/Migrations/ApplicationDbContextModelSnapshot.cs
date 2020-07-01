@@ -419,11 +419,10 @@ namespace WithTeachers.Migrations
 
             modelBuilder.Entity("WithTeachers.Data.Videoconference", b =>
                 {
-                    b.Property<int>("VideoconferenceId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("VideoconferenceId")
+                        .HasColumnType("TEXT");
 
-                    b.Property<string>("ApplicationUserId")
+                    b.Property<DateTime>("CreationDate")
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("Ongoing")
@@ -432,12 +431,12 @@ namespace WithTeachers.Migrations
                     b.Property<string>("Password")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Slug")
+                    b.Property<string>("UserId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("VideoconferenceId");
 
-                    b.HasIndex("ApplicationUserId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Videoconferences");
                 });
@@ -536,9 +535,9 @@ namespace WithTeachers.Migrations
 
             modelBuilder.Entity("WithTeachers.Data.Videoconference", b =>
                 {
-                    b.HasOne("WithTeachers.Data.ApplicationUser", null)
+                    b.HasOne("WithTeachers.Data.ApplicationUser", "User")
                         .WithMany("Videoconferences")
-                        .HasForeignKey("ApplicationUserId");
+                        .HasForeignKey("UserId");
                 });
 #pragma warning restore 612, 618
         }

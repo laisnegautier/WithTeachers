@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WithTeachers.Migrations
 {
-    public partial class TestRemove : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -221,19 +221,18 @@ namespace WithTeachers.Migrations
                 name: "Videoconferences",
                 columns: table => new
                 {
-                    VideoconferenceId = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Slug = table.Column<string>(nullable: true),
+                    VideoconferenceId = table.Column<string>(nullable: false),
                     Password = table.Column<string>(nullable: true),
                     Ongoing = table.Column<bool>(nullable: false),
-                    ApplicationUserId = table.Column<string>(nullable: true)
+                    CreationDate = table.Column<DateTime>(nullable: false),
+                    UserId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Videoconferences", x => x.VideoconferenceId);
                     table.ForeignKey(
-                        name: "FK_Videoconferences_AspNetUsers_ApplicationUserId",
-                        column: x => x.ApplicationUserId,
+                        name: "FK_Videoconferences_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -393,9 +392,9 @@ namespace WithTeachers.Migrations
                 column: "ClassId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Videoconferences_ApplicationUserId",
+                name: "IX_Videoconferences_UserId",
                 table: "Videoconferences",
-                column: "ApplicationUserId");
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

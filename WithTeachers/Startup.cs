@@ -51,6 +51,7 @@ namespace WithTeachers
             services.AddScoped<StudentService>();
             services.AddScoped<CourseService>();
             services.AddScoped<CourseDocumentService>();
+            services.AddScoped<VideoconferenceService>();
             services.AddScoped<ActivityService>();
             services.AddScoped<ApplicationUserService>();
             services.AddScoped<IFileUpload, FileUploadService>();

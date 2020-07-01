@@ -1,0 +1,96 @@
+﻿@namespace WithTeachers.Pages.Videoconference
+
+@page "/videoconferenceChoice"
+@page "/{videoconferenceId}"
+
+@using WithTeachers.Data
+
+@inject NavigationManager NavigationManager
+@inject VideoconferenceService VideoconferenceService
+@inject ApplicationUserService ApplicationUserService
+
+@attribute [Authorize]
+
+@if (!String.IsNullOrEmpty(VideoconferenceId))
+{
+    <h1>Videoconference @VideoconferenceId</h1>
+    <VideoconferenceLaunch Id="@VideoconferenceId" />
+}
+else
+{
+    <h1>Videoconference</h1>
+
+    @*<div class="alert alert-danger">There is already a videoconference launched. <button class="btn btn-primary"><span class="oi oi-arrow-circle-right" aria-hidden="true"></span> Go to currently active videoconference</button></div>*@
+
+    <div class="card-deck col-lg-8 mx-auto py-5">
+        <div class="card">
+            <img src="img/website/meeting.svg" class="card-img-top mx-auto" alt="New meeting">
+            <div class="card-body">
+                <h5 class="card-title">Start a videoconference</h5>
+                <p class="card-text">Send your students a link to meet with you.</p>
+                <button class="btn stretched-link" @onclick="HandleClickStart">Start</button>
+            </div>
+        </div>
+        <div class="card">
+            <img src="img/website/schedule.svg" class="card-img-top mx-auto" alt="Schedule a meeting">
+            <div class="card-body">
+                <h5 class="card-title">Schedule a meeting</h5>
+                <p class="card-text">Set the date and prepare your meeting.</p>
+                <button class="btn stretched-link">Schedule</button>
+            </div>
+        </div>
+    </div>
+
+    <EditForm class="blackground" Model="@videoconferenceToAdd" OnValidSubmit="HandleValidSubmitAddVideoconference" hidden="@(!startIsSelected)">
+        <DataAnnotationsValidator />
+
+        <div class="form-group">
+            <label for="videoconferencePassword">Videoconference password (optional)</label>
+            <InputText type="password" id="videoconferencePassword" class="form-control" @bind-Value="videoconferenceToAdd.Password" />
+            <ValidationMessage For="@(() => videoconferenceToAdd.Password)" />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </EditForm>
+    @*<section>
+            <h3>Planified</h3>
+        </section>
+
+        <section>
+            <h3>Previous</h3>
+        </section>*@
+}
+
+@code {
+    [Parameter]
+    public string VideoconferenceId { get; set; }
+
+    ApplicationUser currentUser;
+    Videoconference videoconferenceToAdd = new Videoconference();
+
+    protected override async void OnInitialized()
+    {
+        currentUser = await ApplicationUserService.GetCurrentUser();
+        startIsSelected = false;
+    }
+
+    bool startIsSelected;
+
+    private void HandleClickStart()
+    {
+        startIsSelected = true;
+    }
+
+    private async Task HandleValidSubmitAddVideoconference()
+    {
+        string guid = Guid.NewGuid().ToString("N").ToUpper();
+        videoconferenceToAdd.VideoconferenceId = guid;
+        videoconferenceToAdd.Ongoing = true;
+        videoconferenceToAdd.CreationDate = DateTime.Now;
+        videoconferenceToAdd.User = currentUser;
+
+        await VideoconferenceService.CreateAsync(videoconferenceToAdd);
+
+        NavigationManager.NavigateTo("/" + guid);
+    }
+}
