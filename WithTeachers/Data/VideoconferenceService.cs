@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,5 +21,7 @@ namespace WithTeachers.Data
             return videoconference;
         }
 
+        public async Task<Videoconference> ReadAsync(string id)
+            => await _context.Videoconferences.SingleOrDefaultAsync(x => x.VideoconferenceId == id);
     }
 }

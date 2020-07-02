@@ -1,8 +1,31 @@
-﻿@namespace WithTeachers.Pages.Videoconference 
+﻿@namespace WithTeachers.Pages.Videoconference
 @using WithTeachers.Data
-<h3>VideoconferenceLaunch</h3>
+@inject VideoconferenceService VideoconferenceService
+
+
+@if(Videoconference == null)
+{
+    <p>There is no such thing</p>
+}
+else
+{
+    if(!Videoconference.Ongoing)
+    {
+        <p>The videoconference is over or has not occured yet.</p>
+    }
+    else
+    {
+        <Room />
+    }
+}
 
 @code {
     [Parameter]
-    public string Id { get; set; }
+    public string VideoconferenceId { get; set; }
+    private Videoconference Videoconference { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Videoconference = await VideoconferenceService.ReadAsync(VideoconferenceId);
+    }
 }
