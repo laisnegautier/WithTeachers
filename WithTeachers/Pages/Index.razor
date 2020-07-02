@@ -1,11 +1,24 @@
 ﻿@page "/"
 @using WithTeachers.Data
 @inject IJSRuntime JSRuntime
-<h1>HI</h1>
+@using Microsoft.AspNetCore.SignalR.Client
+@inject NavigationManager NavigationManager
 
+
+<input type="text" @bind="_userInput" placeholder="userInput" />
+<input type="text" @bind="_messageInput" placeholder="messageInput" />
+<button @onclick="Send" disabled="@(!IsConnected)">Send</button>
+
+<ul id="messageList">
+    @foreach(var message in _messages)
+    {
+        <li>@message</li>
+    }
+</ul>
 @* TEST *@
 <div id="container">
-    <h1>VIDEOCONFERENCE TEST
+    <h1>
+        VIDEOCONFERENCE TEST
     </h1>
 
     <video id="localVideo" playsinline autoplay muted></video>
@@ -24,6 +37,36 @@
 
 
 @code {
+    // SIGNALR
+    private HubConnection _hubConnection;
+    private string _userInput = "";
+    private string _messageInput = "";
+    private List<string> _messages = new List<string>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        _hubConnection = new HubConnectionBuilder()
+            .WithUrl(NavigationManager.ToAbsoluteUri("/chatHub"))
+            .Build();
+
+        _hubConnection.On<string, string>("ReceiveMessage", (user, message) =>
+        {
+            var encodedMsg = $"{user}:{message}";
+            _messages.Add(encodedMsg);
+            StateHasChanged();
+        });
+
+        await _hubConnection.StartAsync();
+    }
+
+    Task Send() =>
+        _hubConnection.SendAsync("SendMessage", _userInput, _messageInput);
+
+    public bool IsConnected =>
+        _hubConnection.State == HubConnectionState.Connected;
+
+
+
     private string testValue = "click";
     string message = "";
 
@@ -58,4 +101,5 @@
     {
         JSRuntime.InvokeVoidAsync("attachHandlers");
     }
+
 }
