@@ -1,10 +1,16 @@
 ﻿@page "/classes"
-@namespace WithTeachers.Pages.Classes
-@using WithTeachers.Data
 @attribute [Authorize]
 
-<AddClassForm />
-<ClassDetails />
+<AddClassForm OnSubmit="Refresh" />
+<ClassDetails Refresh="@refresh" />
 
 @code {
+    protected bool AddClassSubmitted = false;
+    bool refresh = false;
+    bool loading = true;
+
+    void Refresh()
+    {
+        refresh = !refresh;
+    }
 }

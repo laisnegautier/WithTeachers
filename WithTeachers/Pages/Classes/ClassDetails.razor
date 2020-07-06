@@ -1,8 +1,15 @@
-﻿@namespace WithTeachers.Pages.Classes
-@using WithTeachers.Data
-@inject ApplicationUserService ApplicationUserService
+﻿@inject ApplicationUserService ApplicationUserService
 @inject ClassService ClassService
 @inject StudentService StudentService
+
+@if(loading)
+{
+    <strong>LOADING</strong>
+}
+else
+{
+    <p>DONE</p>
+}
 
 @if (!(years == null || years.Count <= 0))
 {
@@ -134,11 +141,15 @@
 else
 {
     <div class="alert alert-info" role="alert">
-        <strong>You don't have any class for now.</strong> Create one then add students in it to supervise them!
+        <strong>You don't have any class for now.</strong> Create one <u>then</u> add students in it to supervise them!
     </div>
 }
 
 @code {
+    [Parameter]
+    public bool Refresh { get; set; }
+    bool loading;
+
     private ApplicationUser currentUser;
     private List<int> years = null;
     private int selectedYear;
@@ -150,6 +161,20 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        loading = true;
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await Task.Run(() => APICalls());  //<--here!
+    }
+
+    async Task APICalls()
+    {
+        loading = true;
+
+        await Task.Delay(1);      // flushing changes. The trick!!
+
         currentUser = await ApplicationUserService.GetCurrentUser();
         years = await GetYears();
         allClasses = await GetAllClasses();
@@ -157,7 +182,11 @@ else
         // Automatic selection
         if (years != null && years.Count > 0)
             selectYear(years.Max());
+
+        loading = false;
+        await Task.Delay(1);
     }
+
 
     private async void selectYear(int year)
     {

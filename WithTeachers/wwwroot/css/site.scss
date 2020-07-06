@@ -246,6 +246,7 @@ app {
     border-radius: 3px;
     margin-bottom: 20px;
     display: flex;
+    flex-wrap: wrap;
     align-items: start;
 
     .input-group {
@@ -262,11 +263,14 @@ app {
             background: #1E272F !important;
             border: 2px solid #000;
             border-radius: 3px !important;
+            transition: all .1s ease-in;
+            color: white;
 
             &:hover, &:focus, &:active {
                 color: white;
                 background: #33414E !important;
                 box-shadow: 0;
+                border: 2px solid #00A2FF;
             }
         }
     }
@@ -276,7 +280,7 @@ app {
         background: #3F4D5A;
         border: 2px solid #00A2FF;
         font-weight: bold;
-        font-size: 0.8rem;
+        font-size: 0.9rem;
 
         &:hover {
             color: #000;

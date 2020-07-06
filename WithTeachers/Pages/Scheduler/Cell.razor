@@ -1,7 +1,4 @@
-﻿@namespace WithTeachers.Pages.Scheduler
-@using WithTeachers.Data
-
-<td rowspan="@SpanMatrix[X, Y]"
+﻿<td rowspan="@SpanMatrix[X, Y]"
     draggable="true"
     @ondrag="HandleDrag"
     @ondragstart="@(() => HandleDragStart(Activity, X, Y))"
