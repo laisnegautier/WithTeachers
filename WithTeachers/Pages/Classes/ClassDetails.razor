@@ -1,0 +1,231 @@
+﻿@namespace WithTeachers.Pages.Classes
+@using WithTeachers.Data
+@inject ApplicationUserService ApplicationUserService
+@inject ClassService ClassService
+@inject StudentService StudentService
+
+@if (!(years == null || years.Count <= 0))
+{
+    <div class="btn-group btn-group-sm">
+        @if (years == null)
+        {
+            <p>Loading...</p>
+        }
+        else if (years.Count <= 0)
+        {
+            <p>Nothing in the year list</p>
+        }
+        else
+        {
+            int i = 0;
+            @foreach (int year in years)
+            {
+                <button type="button" class="btn" @onclick="(() => selectYear(year))" disabled=@tabSelected(year)>@year</button>
+                i++;
+                if (i >= 3)
+                {
+                    break;
+                }
+            }
+            @*<select class="custom-select" id="inputGroupSelect01">
+                    <option selected>All years</option>
+                        @foreach (int year in years)
+                        {
+                            <option value="@year">@year</option>
+                        }
+                </select>*@
+
+            <button id="btnGroupDrop1" type="button" class="btn dropdown-toggle small" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                All years
+            </button>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="btnGroupDrop1">
+                @foreach (int year in years)
+                {
+                    <button class="dropdown-item small">@year</button>
+                }
+            </div>
+        }
+    </div>
+
+    @* --- CHOIX CLASSE --- *@
+    <div>
+        @if (classes == null)
+        {
+            <p><em>Loading...</em></p>
+        }
+        else if (classes.Count <= 0)
+        {
+            <p><em>No class</em></p>
+        }
+        else
+        {
+            <div class="btn-group">
+                @foreach (Class cl in classes)
+                {
+                    <button type="button" class="btn btn-primary" @onclick="(() => selectClass(cl))" disabled=@classSelected(cl)>@cl.Name</button>
+                }
+            </div>
+
+            <button type="button" class="btn btn-danger" @onclick="DeleteSelectedClass">Delete class</button>
+        }
+    </div>
+
+    @if (students == null)
+    {
+        <p><em>Choose a class</em></p>
+    }
+    else
+    {
+        if (students.Count <= 0)
+        {
+            <p><em>Nothing yet</em></p>
+        }
+        else
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Last name</th>
+                        <th>Firstname</th>
+                        <th>Comments</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (Student student in students)
+                    {
+                        <tr>
+                            <td>@student.Lastname</td>
+                            <td>@student.Firstname</td>
+                            <td>@student.Comments</td>
+                            <td><button type="button" class="btn btn-primary">Edit</button></td>
+                            <td><button type="button" class="btn btn-danger" @onclick="(() => DeleteStudent(student))">Delete</button></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        <EditForm class="form-row" Model="@studentToAdd" OnValidSubmit="HandleValidSubmitAddStudent">
+            <DataAnnotationsValidator />
+
+            <div class="form-group">
+                <label for="lastnameStudent">Last name*</label>
+                <InputText id="lastnameStudent" class="form-control" @bind-Value="studentToAdd.Lastname" />
+                <ValidationMessage For="@(() => studentToAdd.Lastname)" />
+            </div>
+
+            <div class="form-group">
+                <label for="firstnameStudent">First name*</label>
+                <InputText id="firstnameStudent" class="form-control" @bind-Value="studentToAdd.Firstname" />
+                <ValidationMessage For="@(() => studentToAdd.Firstname)" />
+            </div>
+
+            <div class="form-group">
+                <label for="commentsStudent">Comments</label>
+                <InputTextArea id="commentsStudent" class="form-control" @bind-Value="studentToAdd.Comments" />
+                <ValidationMessage For="@(() => studentToAdd.Comments)" />
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </EditForm>
+    }
+}
+else
+{
+    <div class="alert alert-info" role="alert">
+        <strong>You don't have any class for now.</strong> Create one then add students in it to supervise them!
+    </div>
+}
+
+@code {
+    private ApplicationUser currentUser;
+    private List<int> years = null;
+    private int selectedYear;
+    private Class selectedClass;
+    private List<Class> classes = null;
+    private List<Class> allClasses = null;
+    private List<Student> students = null;
+    private Student studentToAdd = new Student();
+
+    protected override async Task OnInitializedAsync()
+    {
+        currentUser = await ApplicationUserService.GetCurrentUser();
+        years = await GetYears();
+        allClasses = await GetAllClasses();
+
+        // Automatic selection
+        if (years != null && years.Count > 0)
+            selectYear(years.Max());
+    }
+
+    private async void selectYear(int year)
+    {
+        selectedYear = year;
+        classes = await GetClasses();
+
+        if (classes != null && classes.Count > 0)
+        {
+            selectedClass = classes.First();
+            if (selectedClass.Students != null && selectedClass.Students.Count > 0)
+                students = await GetStudents();
+        }
+    }
+
+    private async void selectClass(Class cl)
+    {
+        selectedClass = cl;
+        students = await GetStudents();
+    }
+
+    private bool tabSelected(int year) => selectedYear == year;
+    private bool classSelected(Class cl) => selectedClass == cl;
+
+    private async void HandleValidSubmitAddStudent()
+    {
+        // Adding data
+        studentToAdd.ClassId = selectedClass.ClassId;
+        await StudentService.CreateAsync(studentToAdd);
+
+        // Refreshing components
+        students = await GetStudents();
+
+        // Formatting form
+        studentToAdd = new Student();
+    }
+
+    private async void DeleteStudent(Student student)
+    {
+        await StudentService.Delete(student);
+
+        // Refreshing components
+        students = await GetStudents();
+    }
+
+    private async void DeleteSelectedClass()
+    {
+        await ClassService.Delete(selectedClass);
+
+        // Refreshing components
+        years = await GetYears();
+        allClasses = await GetAllClasses();
+        classes = await GetClasses();
+
+        // Automatic selection
+        if (years != null && years.Count > 0)
+        {
+            if (years.Contains(selectedYear))
+                selectYear(selectedYear);
+            else
+                selectYear(years.Max());
+        }
+
+        students = await GetStudents();
+    }
+
+    // PROPERTY UPDATES
+    private async Task<List<int>> GetYears() => await ClassService.ReadYearsAsync(currentUser);
+    private async Task<List<Class>> GetClasses() => await ClassService.ReadAllAsync(currentUser, selectedYear);
+    private async Task<List<Class>> GetAllClasses() => await ClassService.ReadAllAsync(currentUser);
+    private async Task<List<Student>> GetStudents() => await StudentService.ReadAllAsync(selectedClass);
+}

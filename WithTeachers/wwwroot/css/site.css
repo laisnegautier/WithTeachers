@@ -167,11 +167,53 @@ app {
   right: 0.75rem;
   top: 0.5rem; }
 
+.form-title {
+  background: #161D25;
+  font-weight: bold;
+  color: #fff;
+  border: 2px solid #000;
+  border-bottom: 2px solid #161D25;
+  margin: 0;
+  margin-bottom: -2px;
+  padding: 5px 10px;
+  display: inline-block !important;
+  border-radius: 3px 3px 0 0;
+  font-size: 0.8rem; }
+  .form-title span {
+    margin-right: 5px; }
+
 .form-section {
   background-color: #161D25;
   padding: 20px;
   border: 2px solid black;
-  border-radius: 3px; }
+  border-radius: 3px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: start; }
+  .form-section .input-group {
+    background: none;
+    display: flex;
+    align-items: center; }
+    .form-section .input-group label {
+      margin: 0;
+      padding: 0; }
+    .form-section .input-group input {
+      background: #1E272F !important;
+      border: 2px solid #000;
+      border-radius: 3px !important; }
+      .form-section .input-group input:hover, .form-section .input-group input:focus, .form-section .input-group input:active {
+        color: white;
+        background: #33414E !important;
+        box-shadow: 0; }
+  .form-section .btn {
+    color: #fff;
+    background: #3F4D5A;
+    border: 2px solid #00A2FF;
+    font-weight: bold;
+    font-size: 0.8rem; }
+    .form-section .btn:hover {
+      color: #000;
+      background: #00A2FF; }
 
 .form-shadowed {
   padding: 8px 16px !important;

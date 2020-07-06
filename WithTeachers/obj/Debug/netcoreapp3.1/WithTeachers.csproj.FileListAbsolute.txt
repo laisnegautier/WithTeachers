@@ -167,3 +167,5 @@ C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\obj\Debug\n
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\obj\Debug\netcoreapp3.1\Razor\Shared\Notification.razor.g.cs
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\obj\Debug\netcoreapp3.1\Razor\Shared\SurveyPrompt.razor.g.cs
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\obj\Debug\netcoreapp3.1\Razor\_Imports.razor.g.cs
+C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Classes\ClassDetails.razor.g.cs
+C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\obj\Debug\netcoreapp3.1\Razor\Pages\Classes\ClassDetails.razor.g.cs
