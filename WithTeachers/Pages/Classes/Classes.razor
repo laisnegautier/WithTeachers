@@ -1,16 +1,27 @@
 ﻿@page "/classes"
 @attribute [Authorize]
 
+@if (!classesExist)
+{
+    <div class="alert alert-info" role="alert">
+        <strong>You don't have any class for now.</strong> Create one <u>then</u> add students in it to supervise them!
+    </div>
+}
 <AddClassForm OnSubmit="Refresh" />
-<ClassDetails Refresh="@refresh" />
+<ClassDetails Refresh="@refresh" ClassesExist="ClassesExist" />
 
 @code {
     protected bool AddClassSubmitted = false;
-    bool refresh = false;
-    bool loading = true;
+    private bool refresh = false;
+    private bool classesExist = false;
 
     void Refresh()
     {
         refresh = !refresh;
+    }
+
+    void ClassesExist(bool b)
+    {
+        classesExist = b;
     }
 }

@@ -2,30 +2,83 @@
 @inject ClassService ClassService
 
 <h4 class="form-title"><span class="oi oi-plus" aria-hidden="true"></span> Add a class</h4>
-<EditForm class="form-section col-12" Model="@classToAdd" OnValidSubmit="HandleValidSubmitAddClass">
+<EditForm class="form-section" Model="@classToAdd" OnValidSubmit="HandleValidSubmitAddClass">
     <DataAnnotationsValidator />
 
-    <div class="input-group col-12 col-lg-4 mb-2 mb-lg-0">
-        <label for="nameClass" class="col-4">Class name:</label>
-        <InputText id="nameClass" placeholder="3C, 4A, 6B..." class="form-control col-8" @bind-Value="classToAdd.Name" />
-        <ValidationMessage For="@(() => classToAdd.Name)" />
+    <div class="row add-class">
+        <div class="col-12 col-md-5">
+            <div class="input-group mb-2">
+                <label for="nameClass" class="col-4">Class name:</label>
+                <InputText id="nameClass" placeholder="3C, 4A, 6B..." class="form-control" @bind-Value="classToAdd.Name" />
+                <ValidationMessage For="@(() => classToAdd.Name)" />
+            </div>
+
+            <div class="input-group mb-2 mb-md-0">
+                <label for="yearClass" class="col-4">Class year:</label>
+                <InputNumber id="yearClass" class="form-control" @bind-Value="classToAdd.Year" />
+                <ValidationMessage For="@(() => classToAdd.Year)" />
+            </div>
+        </div>
+
+        <div class="col-12 col-md-7 textarea-container">
+            <label for="descriptionClass" class="sr-only">Description:</label>
+            <InputTextArea id="descriptionClass" class="form-control col-12" placeholder="Description" @bind-Value="classToAdd.Description" />
+        </div>
     </div>
 
-    <div class="input-group col-12 col-lg-4 offset-lg-1 mb-3 mb-lg-0">
-        <label for="yearClass" class="col-4">Class year:</label>
-        <InputNumber id="yearClass" class="form-control col-8" @bind-Value="classToAdd.Year" />
-        <ValidationMessage For="@(() => classToAdd.Year)" />
+    <div class="row mb-2">
+        <div class="col-12">
+            <label for="descriptionClass">Students</label>
+
+            <table class="col-12 add-students">
+                <thead>
+                    <tr>
+                        <th>Firstname</th>
+                        <th>Lastname</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (Student student in students)
+                    {
+                        <tr>
+                            <td>
+                                <label for="yearClass" class="sr-only">Firstname:</label>
+                                <InputText id="yearClass" class="form-control" placeholder="Enter firstname" @bind-Value="classToAdd.Name" />
+                                <ValidationMessage For="@(() => classToAdd.Year)" />
+                            </td>
+
+                            <td>
+                                <label for="yearClass" class="sr-only">Lastname:</label>
+                                <InputText id="yearClass" class="form-control" placeholder="Enter lastname" @bind-Value="classToAdd.Name" />
+                                <ValidationMessage For="@(() => classToAdd.Year)" />
+                            </td>
+
+                            <td class="delete" @onclick="@(() => students.Add(new Student()))">
+                                <span class="oi oi-minus d-none d-md-inline-block" aria-hidden="true"></span> Delete
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+                    <p class="col-12" @onclick="@(() => students.Add(new Student()))"><span class="oi oi-plus" aria-hidden="true"></span> Add student</p>
+                </table>
+        </div>
     </div>
 
-    <button type="submit" class="btn mx-auto offset-lg-1">Add this class</button>
+    <div class="row">
+        <button type="submit" class="btn mx-auto offset-lg-1">Add this class</button>
+    </div>
 </EditForm>
 
 @code {
     [Parameter]
     public EventCallback<string> OnSubmit { get; set; }
 
-    private ApplicationUser currentUser;
-    private Class classToAdd = new Class();
+    ApplicationUser currentUser;
+    Class classToAdd = new Class();
+
+    List<Student> students = new List<Student>() { new Student() };
 
     protected override async Task OnInitializedAsync()
     {
@@ -33,7 +86,7 @@
         classToAdd.Year = DateTime.Now.Year;
     }
 
-    private async Task HandleValidSubmitAddClass()
+    async Task HandleValidSubmitAddClass()
     {
         // Adding data
         classToAdd.User = currentUser;

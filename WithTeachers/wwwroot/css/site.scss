@@ -222,11 +222,10 @@ app {
 }
 
 .form-title {
-    background: #161D25;
+    background: #1E272F;
     font-weight: bold;
     color: #fff;
     border: 2px solid #000;
-    border-bottom: 2px solid #161D25;
     margin: 0;
     margin-bottom: -2px;
     padding: 5px 10px;
@@ -240,14 +239,81 @@ app {
 }
 
 .form-section {
-    background-color: #161D25;
+    background-color: #1E272F;
     padding: 20px;
     border: 2px solid black;
     border-radius: 3px;
     margin-bottom: 20px;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: start;
+
+    .add-class {
+        padding-bottom: 20px;
+    }
+
+    .add-students {
+        border-radius: 3px !important;
+        border: 2px solid #000;
+        background: #141D25 !important;
+        padding: 0;
+
+        thead {
+            background: #141D25;
+            border-bottom: 1px solid #000;
+
+            tr {
+                th {
+                    padding: 10px !important;
+                    border: 1px solid #000;
+                }
+            }
+        }
+
+        tbody {
+            transition: all .1s ease-in;
+
+            tr {
+                /*            background: #33414E;*/
+                background: #33414E !important;
+                border-bottom: 1px solid #000;
+
+                input {
+                    background: transparent;
+                    border: none;
+                    color: white;
+                }
+
+                td {
+/*                    padding: 0px !important;*/
+                    border: 1px solid #000;
+                }
+
+                .delete {
+                    padding: 0 10px;
+                    transition: all .1s ease-in;
+
+                    &:hover {
+                        cursor: pointer;
+                        background: #00ACFF;
+                    }
+                }
+            }
+        }
+    }
+
+    .textarea-container {
+        textarea {
+            height: 100%;
+            border: 2px solid #000;
+            background: #1E272F !important;
+            transition: all .1s ease-in;
+
+            &:hover, &:focus, &:active {
+                color: white;
+                background: #33414E !important;
+                box-shadow: 0;
+                border: 2px solid #00A2FF;
+            }
+        }
+    }
 
     .input-group {
         background: none;

@@ -168,11 +168,10 @@ app {
   top: 0.5rem; }
 
 .form-title {
-  background: #161D25;
+  background: #1E272F;
   font-weight: bold;
   color: #fff;
   border: 2px solid #000;
-  border-bottom: 2px solid #161D25;
   margin: 0;
   margin-bottom: -2px;
   padding: 5px 10px;
@@ -183,14 +182,53 @@ app {
     margin-right: 5px; }
 
 .form-section {
-  background-color: #161D25;
+  background-color: #1E272F;
   padding: 20px;
   border: 2px solid black;
   border-radius: 3px;
-  margin-bottom: 20px;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: start; }
+  margin-bottom: 20px; }
+  .form-section .add-class {
+    padding-bottom: 20px; }
+  .form-section .add-students {
+    border-radius: 3px !important;
+    border: 2px solid #000;
+    background: #141D25 !important;
+    padding: 0; }
+    .form-section .add-students thead {
+      background: #141D25;
+      border-bottom: 1px solid #000; }
+      .form-section .add-students thead tr th {
+        padding: 10px !important;
+        border: 1px solid #000; }
+    .form-section .add-students tbody {
+      transition: all .1s ease-in; }
+      .form-section .add-students tbody tr {
+        /*            background: #33414E;*/
+        background: #33414E !important;
+        border-bottom: 1px solid #000; }
+        .form-section .add-students tbody tr input {
+          background: transparent;
+          border: none;
+          color: white; }
+        .form-section .add-students tbody tr td {
+          /*                    padding: 0px !important;*/
+          border: 1px solid #000; }
+        .form-section .add-students tbody tr .delete {
+          padding: 0 10px;
+          transition: all .1s ease-in; }
+          .form-section .add-students tbody tr .delete:hover {
+            cursor: pointer;
+            background: #00ACFF; }
+  .form-section .textarea-container textarea {
+    height: 100%;
+    border: 2px solid #000;
+    background: #1E272F !important;
+    transition: all .1s ease-in; }
+    .form-section .textarea-container textarea:hover, .form-section .textarea-container textarea:focus, .form-section .textarea-container textarea:active {
+      color: white;
+      background: #33414E !important;
+      box-shadow: 0;
+      border: 2px solid #00A2FF; }
   .form-section .input-group {
     background: none;
     display: flex;

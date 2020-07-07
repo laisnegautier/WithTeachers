@@ -11,6 +11,9 @@ namespace WithTeachers.Data
         [Required(ErrorMessage = "The class name should not be left empty.")]
         public string Name { get; set; }
 
+        [DataType(DataType.MultilineText)]
+        public string Description { get; set; }
+
         [Required(ErrorMessage = "The class year should not be left empty.")]
         public int Year { get; set; }
 
