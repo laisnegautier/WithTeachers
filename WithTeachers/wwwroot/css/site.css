@@ -176,8 +176,7 @@ app {
   margin-bottom: -2px;
   padding: 5px 10px;
   display: inline-block !important;
-  border-radius: 3px 3px 0 0;
-  font-size: 0.8rem; }
+  border-radius: 3px 3px 0 0; }
   .form-title span {
     margin-right: 5px; }
 
@@ -189,36 +188,64 @@ app {
   margin-bottom: 20px; }
   .form-section .add-class {
     padding-bottom: 20px; }
-  .form-section .add-students {
+  .form-section .btn-add-element {
+    background: #141D25;
+    max-width: 115px;
+    font-weight: bold;
+    text-align: center;
+    padding: 7px 0;
+    border-radius: 3px;
+    transition: all .1s ease-in; }
+    .form-section .btn-add-element:hover {
+      cursor: pointer;
+      background: #00ACFF;
+      color: #000; }
+  .form-section .add-elements {
     border-radius: 3px !important;
     border: 2px solid #000;
     background: #141D25 !important;
     padding: 0; }
-    .form-section .add-students thead {
+    .form-section .add-elements thead {
       background: #141D25;
       border-bottom: 1px solid #000; }
-      .form-section .add-students thead tr th {
+      .form-section .add-elements thead tr th {
         padding: 10px !important;
         border: 1px solid #000; }
-    .form-section .add-students tbody {
+    .form-section .add-elements tbody {
       transition: all .1s ease-in; }
-      .form-section .add-students tbody tr {
+      .form-section .add-elements tbody tr {
         /*            background: #33414E;*/
         background: #33414E !important;
         border-bottom: 1px solid #000; }
-        .form-section .add-students tbody tr input {
-          background: transparent;
-          border: none;
-          color: white; }
-        .form-section .add-students tbody tr td {
+        .form-section .add-elements tbody tr td {
           /*                    padding: 0px !important;*/
-          border: 1px solid #000; }
-        .form-section .add-students tbody tr .delete {
-          padding: 0 10px;
+          border: 1px solid #000;
+          height: 40px; }
+          .form-section .add-elements tbody tr td textarea {
+            background: transparent;
+            border: 1px solid #33414E;
+            color: white;
+            height: 40px;
+            min-height: 40px;
+            border-radius: 0;
+            transition: all .1s ease-in; }
+            .form-section .add-elements tbody tr td textarea:hover {
+              border: 1px solid #00ACFF; }
+          .form-section .add-elements tbody tr td input {
+            background: transparent;
+            border: 1px solid #33414E;
+            color: white;
+            height: 100%;
+            border-radius: 0;
+            transition: all .1s ease-in; }
+            .form-section .add-elements tbody tr td input:hover {
+              border: 1px solid #00ACFF; }
+        .form-section .add-elements tbody tr .delete {
+          text-align: center;
           transition: all .1s ease-in; }
-          .form-section .add-students tbody tr .delete:hover {
+          .form-section .add-elements tbody tr .delete:hover {
             cursor: pointer;
-            background: #00ACFF; }
+            background: red; }
   .form-section .textarea-container textarea {
     height: 100%;
     border: 2px solid #000;

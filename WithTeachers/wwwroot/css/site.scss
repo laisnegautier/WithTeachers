@@ -231,7 +231,6 @@ app {
     padding: 5px 10px;
     display: inline-block !important;
     border-radius: 3px 3px 0 0;
-    font-size: 0.8rem;
 
     span {
         margin-right: 5px;
@@ -249,7 +248,23 @@ app {
         padding-bottom: 20px;
     }
 
-    .add-students {
+    .btn-add-element {
+        background: #141D25;
+        max-width: 115px;
+        font-weight: bold;
+        text-align: center;
+        padding: 7px 0;
+        border-radius: 3px;
+        transition: all .1s ease-in;
+
+        &:hover {
+            cursor: pointer;
+            background: #00ACFF;
+            color: #000;
+        }
+    }
+
+    .add-elements {
         border-radius: 3px !important;
         border: 2px solid #000;
         background: #141D25 !important;
@@ -275,24 +290,47 @@ app {
                 background: #33414E !important;
                 border-bottom: 1px solid #000;
 
-                input {
-                    background: transparent;
-                    border: none;
-                    color: white;
-                }
 
                 td {
-/*                    padding: 0px !important;*/
+                    /*                    padding: 0px !important;*/
                     border: 1px solid #000;
+                    height: 40px;
+
+                    textarea {
+                        background: transparent;
+                        border: 1px solid #33414E;
+                        color: white;
+                        height: 40px;
+                        min-height: 40px;
+                        border-radius: 0;
+                        transition: all .1s ease-in;
+
+                        &:hover {
+                            border: 1px solid #00ACFF;
+                        }
+                    }
+
+                    input {
+                        background: transparent;
+                        border: 1px solid #33414E;
+                        color: white;
+                        height: 100%;
+                        border-radius: 0;
+                        transition: all .1s ease-in;
+
+                        &:hover {
+                            border: 1px solid #00ACFF;
+                        }
+                    }
                 }
 
                 .delete {
-                    padding: 0 10px;
+                    text-align: center;
                     transition: all .1s ease-in;
 
                     &:hover {
                         cursor: pointer;
-                        background: #00ACFF;
+                        background: red;
                     }
                 }
             }

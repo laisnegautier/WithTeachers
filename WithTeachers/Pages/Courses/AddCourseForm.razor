@@ -4,47 +4,100 @@
 @inject CourseDocumentService CourseDocumentService
 @inject IFileUpload FileUploadService
 
-<section class="bg-light py-3 px-4 mb-3 rounded">
-    <h3 class="font-weight-light">Add a course</h3>
-    <EditForm Model="@model" OnValidSubmit="HandleValidSubmitAddCourse">
-        <ObjectGraphDataAnnotationsValidator />
+<h4 class="form-title small"><span class="oi oi-plus" aria-hidden="true"></span> Add a course with documents</h4>
+<EditForm class="form-section" Model="@model" OnValidSubmit="HandleValidSubmit">
+    <ObjectGraphDataAnnotationsValidator />
 
-        @* COURSE *@
-        <div class="form-group">
-            <label for="title">Course title*</label>
-            <InputText id="title" class="form-control" @bind-Value="model.Course.Title" />
-            <ValidationMessage For="@(() => model.Course.Title)" />
+    <div class="row add-class">
+        <div class="col-12 col-md-5">
+            <div class="input-group mb-2">
+                <label for="nameCourse" class="col-4">Course title:</label>
+                <InputText id="nameCourse" placeholder="Calculus Course 1..." class="form-control" @bind-Value="model.Course.Title" />
+            </div>
+
+            <div class="input-group mb-2 mb-md-0">
+                <label for="password" class="col-4">Password (optional):</label>
+                <InputText type="password" id="password" class="form-control" placeholder="Password" @bind-Value="model.Course.Password" />
+            </div>
         </div>
 
-        <div class="form-group">
-            <label for="courseDescription">Course description*</label>
-            <InputTextArea id="courseDescription" class="form-control" @bind-Value="model.Course.Description" />
-            <ValidationMessage For="@(() => model.Course.Description)" />
+        <div class="col-12 col-md-7 textarea-container">
+            <label for="courseDescription" class="sr-only">Description</label>
+            <InputTextArea id="courseDescription" class="form-control col-12" placeholder="Description" @bind-Value="model.Course.Description" />
         </div>
+    </div>
 
-        <div class="form-group">
-            <label for="password">Password (optional)</label>
-            <InputText type="password" placeholder="Password" id="password" class="form-control" @bind-Value="model.Course.Password" />
-            <ValidationMessage For="@(() => model.Course.Password)" />
+    <div class="row mb-2">
+        <div class="col-12">
+            <label>Documents</label>
+
+            <table class="col-12 add-elements">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Lastname</th>
+                        <th>Comments</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @*
+                                        @foreach (Student student in model.Students)
+                        {
+                            <tr>
+                                <td>
+                                    <label for="firstnameStudent" class="sr-only">Firstname:</label>
+                                    <InputText id="firstnameStudent" class="form-control" placeholder="Enter firstname" @bind-Value="student.Firstname" />
+                                </td>
+
+                                <td>
+                                    <label for="lastnameStudent" class="sr-only">Lastname:</label>
+                                    <InputText id="lastnameStudent" class="form-control" placeholder="Enter lastname" @bind-Value="student.Lastname" />
+                                </td>
+
+                                <td>
+                                    <label for="commentsStudent" class="sr-only">Comments:</label>
+                                    <InputTextArea id="commentsStudent" class="form-control" @bind-Value="student.Comments" />
+                                </td>
+
+                                @* There is at least one student in a class *@
+                    @*
+                                        @if (model.Students.Count > 1)
+                            {
+                            <td class="delete" @onclick="@(() => model.Students.Remove(student))">
+                                <span class="oi oi-x" aria-hidden="true"></span>
+                            </td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+                            </tr>
+                            }*@
+                </tbody>
+            </table>
+            @*<p class="mt-2 btn-add-element small" @onclick="@(() => model.Students.Add(new Student()))"><span class="oi oi-plus mr-1" aria-hidden="true"></span> Add student</p>*@
         </div>
+    </div>
 
-        @* DOCUMENT *@
-        <p><strong>Add a PDF document (optional)</strong></p>
-        <div class="form-group">
-            <label for="title">Document title*</label>
-            <InputText id="title" class="form-control" @bind-Value="model.CourseDocument.Title" />
-            <ValidationMessage For="@(() => model.CourseDocument.Title)" />
-        </div>
+    @* DOCUMENT *@
+    <p><strong>Add a PDF document (optional)</strong></p>
+    <div class="form-group">
+        <label for="title">Document title*</label>
+        <InputText id="title" class="form-control" @bind-Value="model.CourseDocument.Title" />
+        <ValidationMessage For="@(() => model.CourseDocument.Title)" />
+    </div>
 
-        <div class="form-group">
-            <label for="document">Document upload*</label>
-            <InputFile OnChange="HandleSelection" />
-        </div>
-        <p><strong>@fileStatus</strong></p>
+    <div class="form-group">
+        <label for="document">Document upload*</label>
+        <InputFile OnChange="HandleSelection" />
+    </div>
+    <p><strong>@fileStatus</strong></p>
 
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </EditForm>
-</section>
+    <div class="row">
+        <button type="submit" class="btn mx-auto offset-lg-1">Add this course</button>
+    </div>
+</EditForm>
 
 @code {
     ApplicationUser currentUser;
@@ -59,7 +112,7 @@
         currentUser = await ApplicationUserService.GetCurrentUser();
     }
 
-    private async Task HandleValidSubmitAddCourse()
+    private async Task HandleValidSubmit()
     {
         // Course
         model.Course.Slug = slugHelper.GenerateSlug(model.Course.Title);

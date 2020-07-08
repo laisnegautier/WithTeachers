@@ -1,68 +1,78 @@
 ﻿@inject ApplicationUserService ApplicationUserService
 @inject ClassService ClassService
+@inject StudentService StudentService
 
-<h4 class="form-title"><span class="oi oi-plus" aria-hidden="true"></span> Add a class</h4>
-<EditForm class="form-section" Model="@classToAdd" OnValidSubmit="HandleValidSubmitAddClass">
-    <DataAnnotationsValidator />
+<h4 class="form-title small"><span class="oi oi-plus" aria-hidden="true"></span> Add a class and insert students</h4>
+<EditForm class="form-section" Model="@model" OnValidSubmit="HandleValidSubmit">
+    <ObjectGraphDataAnnotationsValidator />
 
     <div class="row add-class">
         <div class="col-12 col-md-5">
             <div class="input-group mb-2">
                 <label for="nameClass" class="col-4">Class name:</label>
-                <InputText id="nameClass" placeholder="3C, 4A, 6B..." class="form-control" @bind-Value="classToAdd.Name" />
-                <ValidationMessage For="@(() => classToAdd.Name)" />
+                <InputText id="nameClass" placeholder="3C, 4A, 6B..." class="form-control" @bind-Value="model.Class.Name" />
             </div>
 
             <div class="input-group mb-2 mb-md-0">
                 <label for="yearClass" class="col-4">Class year:</label>
-                <InputNumber id="yearClass" class="form-control" @bind-Value="classToAdd.Year" />
-                <ValidationMessage For="@(() => classToAdd.Year)" />
+                <InputNumber id="yearClass" class="form-control" @bind-Value="model.Class.Year" />
             </div>
         </div>
 
         <div class="col-12 col-md-7 textarea-container">
             <label for="descriptionClass" class="sr-only">Description:</label>
-            <InputTextArea id="descriptionClass" class="form-control col-12" placeholder="Description" @bind-Value="classToAdd.Description" />
+            <InputTextArea id="descriptionClass" class="form-control col-12" placeholder="Description" @bind-Value="model.Class.Description" />
         </div>
     </div>
 
     <div class="row mb-2">
         <div class="col-12">
-            <label for="descriptionClass">Students</label>
+            <label>Students</label>
 
-            <table class="col-12 add-students">
+            <table class="col-12 add-elements">
                 <thead>
                     <tr>
                         <th>Firstname</th>
                         <th>Lastname</th>
-                        <th>Action</th>
+                        <th>Comments</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (Student student in students)
+                    @foreach (Student student in model.Students)
                     {
                         <tr>
                             <td>
-                                <label for="yearClass" class="sr-only">Firstname:</label>
-                                <InputText id="yearClass" class="form-control" placeholder="Enter firstname" @bind-Value="classToAdd.Name" />
-                                <ValidationMessage For="@(() => classToAdd.Year)" />
+                                <label for="firstnameStudent" class="sr-only">Firstname:</label>
+                                <InputText id="firstnameStudent" class="form-control" placeholder="Enter firstname" @bind-Value="student.Firstname" />
                             </td>
 
                             <td>
-                                <label for="yearClass" class="sr-only">Lastname:</label>
-                                <InputText id="yearClass" class="form-control" placeholder="Enter lastname" @bind-Value="classToAdd.Name" />
-                                <ValidationMessage For="@(() => classToAdd.Year)" />
+                                <label for="lastnameStudent" class="sr-only">Lastname:</label>
+                                <InputText id="lastnameStudent" class="form-control" placeholder="Enter lastname" @bind-Value="student.Lastname" />
                             </td>
 
-                            <td class="delete" @onclick="@(() => students.Add(new Student()))">
-                                <span class="oi oi-minus d-none d-md-inline-block" aria-hidden="true"></span> Delete
+                            <td>
+                                <label for="commentsStudent" class="sr-only">Comments:</label>
+                                <InputTextArea id="commentsStudent" class="form-control" @bind-Value="student.Comments" />
                             </td>
+
+                            @* There is at least one student in a class *@
+                            @if (model.Students.Count > 1)
+                            {
+                                <td class="delete" @onclick="@(() => model.Students.Remove(student))">
+                                    <span class="oi oi-x" aria-hidden="true"></span>
+                                </td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
                         </tr>
                     }
                 </tbody>
-
-                    <p class="col-12" @onclick="@(() => students.Add(new Student()))"><span class="oi oi-plus" aria-hidden="true"></span> Add student</p>
-                </table>
+            </table>
+            <p class="mt-2 btn-add-element small" @onclick="@(() => model.Students.Add(new Student()))"><span class="oi oi-plus mr-1" aria-hidden="true"></span> Add student</p>
         </div>
     </div>
 
@@ -76,26 +86,30 @@
     public EventCallback<string> OnSubmit { get; set; }
 
     ApplicationUser currentUser;
-    Class classToAdd = new Class();
-
-    List<Student> students = new List<Student>() { new Student() };
+    ClassStudents model = new ClassStudents();
 
     protected override async Task OnInitializedAsync()
     {
         currentUser = await ApplicationUserService.GetCurrentUser();
-        classToAdd.Year = DateTime.Now.Year;
+        model.Class.Year = DateTime.Now.Year;
     }
 
-    async Task HandleValidSubmitAddClass()
+    async Task HandleValidSubmit()
     {
         // Adding data
-        classToAdd.User = currentUser;
-        await ClassService.CreateAsync(classToAdd);
+        model.Class.User = currentUser;
+        await ClassService.CreateAsync(model.Class);
+
+        foreach (Student student in model.Students)
+        {
+            student.Class = model.Class;
+            await StudentService.CreateAsync(student);
+        }
 
         // Formatting form
-        classToAdd = new Class();
-        classToAdd.Year = DateTime.Now.Year;
+        model = new ClassStudents();
+        model.Class.Year = DateTime.Now.Year;
 
-        await OnSubmit.InvokeAsync("test");
+        await OnSubmit.InvokeAsync("");
     }
 }
