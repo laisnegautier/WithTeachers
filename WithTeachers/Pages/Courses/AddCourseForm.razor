@@ -34,68 +34,54 @@
             <table class="col-12 add-elements">
                 <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Lastname</th>
-                        <th>Comments</th>
+                        <th>Title</th>
+                        <th>Upload</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    @*
-                                        @foreach (Student student in model.Students)
-                        {
-                            <tr>
-                                <td>
-                                    <label for="firstnameStudent" class="sr-only">Firstname:</label>
-                                    <InputText id="firstnameStudent" class="form-control" placeholder="Enter firstname" @bind-Value="student.Firstname" />
-                                </td>
 
-                                <td>
-                                    <label for="lastnameStudent" class="sr-only">Lastname:</label>
-                                    <InputText id="lastnameStudent" class="form-control" placeholder="Enter lastname" @bind-Value="student.Lastname" />
-                                </td>
-
-                                <td>
-                                    <label for="commentsStudent" class="sr-only">Comments:</label>
-                                    <InputTextArea id="commentsStudent" class="form-control" @bind-Value="student.Comments" />
-                                </td>
-
-                                @* There is at least one student in a class *@
-                    @*
-                                        @if (model.Students.Count > 1)
-                            {
-                            <td class="delete" @onclick="@(() => model.Students.Remove(student))">
-                                <span class="oi oi-x" aria-hidden="true"></span>
+                    @foreach (CourseDocument document in model.CourseDocuments)
+                    {
+                        <tr>
+                            <td>
+                                <label for="titleDocument" class="sr-only">Title:</label>
+                                <InputText id="titleDocument" class="form-control" placeholder="Enter title" @bind-Value="document.Title" />
                             </td>
-                        }
-                        else
-                        {
-                            <td></td>
-                        }
-                            </tr>
-                            }*@
+
+                            <td>
+                                <label for="fileDocument" class="sr-only">Document upload</label>
+                                @* Normally we can choose many documents at the same time but we forbid it here *@
+                                <InputFile id="fileDocument" class="document-upload" OnChange="@((IFileListEntry[] files) => HandleSelection(files, document))" />
+
+                                <span>Loaded @((100.0 * position / size).ToString("0"))%</span>
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar" aria-valuenow="70"
+                                         aria-valuemin="0" aria-valuemax="100" style="width:70%">
+                                        <span>Loaded @((100.0 * position / size).ToString("0"))%</span>
+                                        <span class="sr-only">70% Complete</span>
+                                    </div>
+                                </div>
+                            </td>
+
+                            @if (model.CourseDocuments.Count > 1)
+                            {
+                                <td class="delete" @onclick="@(() => model.CourseDocuments.Remove(document))">
+                                    <span class="oi oi-x" aria-hidden="true"></span>
+                                </td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                        </tr>
+                    }
                 </tbody>
             </table>
-            @*<p class="mt-2 btn-add-element small" @onclick="@(() => model.Students.Add(new Student()))"><span class="oi oi-plus mr-1" aria-hidden="true"></span> Add student</p>*@
+
+            @* Disabling while something is already uploading *@
+            <p class="mt-2 btn btn-add-element small @(addBtnDisabled ? "disabled-add-btn" : "")" @onclick="@(() => { if (!addBtnDisabled) model.CourseDocuments.Add(new CourseDocument()); })"><span class="oi oi-plus mr-1" aria-hidden="true"></span> Add document</p>
         </div>
-    </div>
-
-    @* DOCUMENT *@
-    <p><strong>Add a PDF document (optional)</strong></p>
-    <div class="form-group">
-        <label for="title">Document title*</label>
-        <InputText id="title" class="form-control" @bind-Value="model.CourseDocument.Title" />
-        <ValidationMessage For="@(() => model.CourseDocument.Title)" />
-    </div>
-
-    <div class="form-group">
-        <label for="document">Document upload*</label>
-        <InputFile OnChange="HandleSelection" />
-    </div>
-    <p><strong>@fileStatus</strong></p>
-
-    <div class="row">
-        <button type="submit" class="btn mx-auto offset-lg-1">Add this course</button>
     </div>
 </EditForm>
 
@@ -103,6 +89,8 @@
     ApplicationUser currentUser;
     CourseCourseDocument model = new CourseCourseDocument();
     SlugHelper slugHelper = new SlugHelper();
+    bool addBtnDisabled = false;
+    bool uploading = false;
 
     [Parameter]
     public EventCallback<string> OnSubmitValidated { get; set; }
@@ -123,11 +111,13 @@
         await CourseService.CreateAsync(model.Course);
 
         // CourseDocument
-        model.CourseDocument.FileUrl = "test";
-        model.CourseDocument.UploadDate = DateTime.Now;
-        model.CourseDocument.Course = model.Course;
-
-        await CourseDocumentService.CreateAsync(model.CourseDocument);
+        foreach (CourseDocument document in model.CourseDocuments)
+        {
+            document.FileUrl = "test";
+            document.UploadDate = DateTime.Now;
+            document.Course = model.Course;
+            await CourseDocumentService.CreateAsync(document);
+        }
 
         // Reset
         model = new CourseCourseDocument();
@@ -137,15 +127,22 @@
     }
 
     private string fileStatus;
-
-    async Task HandleSelection(IFileListEntry[] files)
+    private long position;
+    private long size;
+    async Task HandleSelection(IFileListEntry[] files, CourseDocument document)
     {
-        var file = files.FirstOrDefault();
+        IFileListEntry file = files.FirstOrDefault();
+
+        position = file.Data.Position;
+        size = file.Size;
+
         if (file != null)
         {
-            await FileUploadService.UploadAsync(file);
+            // Update the associated CourseDocument object
+            document.File = file;
 
-            fileStatus = $"Finished loading {file.Size} bytes from {file.Name}";
+            // Uploading
+            await FileUploadService.UploadAsync(file);
         }
     }
 }

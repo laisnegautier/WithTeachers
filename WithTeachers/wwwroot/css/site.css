@@ -188,23 +188,40 @@ app {
   margin-bottom: 20px; }
   .form-section .add-class {
     padding-bottom: 20px; }
+  .form-section .document-upload {
+    border: 3px solid green !important;
+    height: 100% !important;
+    width: 100%; }
   .form-section .btn-add-element {
-    background: #141D25;
-    max-width: 115px;
-    font-weight: bold;
-    text-align: center;
-    padding: 7px 0;
-    border-radius: 3px;
-    transition: all .1s ease-in; }
+    background: #141D25 !important;
+    font-weight: bold !important;
+    text-align: center !important;
+    border: 0 !important;
+    font-size: 0.9rem !important;
+    border-radius: 3px !important;
+    transition: all .1s ease-in !important; }
     .form-section .btn-add-element:hover {
       cursor: pointer;
-      background: #00ACFF;
-      color: #000; }
+      background: #00ACFF !important;
+      color: #000 !important; }
+  .form-section .disabled-add-btn {
+    background: #141D25 !important;
+    font-weight: bold !important;
+    text-align: center !important;
+    border: 0 !important;
+    font-size: 0.9rem !important;
+    border-radius: 3px !important;
+    color: gray !important;
+    transition: all .1s ease-in !important; }
+    .form-section .disabled-add-btn:hover {
+      cursor: not-allowed;
+      background: #141D25 !important;
+      color: gray !important; }
   .form-section .add-elements {
     border-radius: 3px !important;
-    border: 2px solid #000;
+    border: 2px solid #000 !important;
     background: #141D25 !important;
-    padding: 0; }
+    padding: 0 !important; }
     .form-section .add-elements thead {
       background: #141D25;
       border-bottom: 1px solid #000; }

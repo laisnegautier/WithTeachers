@@ -14,6 +14,6 @@ namespace WithTeachers.Data.ViewModels
         public Course Course { get; set; } = new Course();
 
         [ValidateComplexType]
-        public CourseDocument CourseDocument { get; set; } = new CourseDocument();
+        public List<CourseDocument> CourseDocuments { get; set; } = new List<CourseDocument>() { new CourseDocument() };
     }
 }

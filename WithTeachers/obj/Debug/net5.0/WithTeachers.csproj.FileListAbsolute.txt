@@ -1,0 +1,7 @@
+C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\obj\Debug\net5.0\WithTeachers.csprojAssemblyReference.cache
+C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\obj\Debug\net5.0\WithTeachers.AssemblyInfoInputs.cache
+C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\obj\Debug\net5.0\WithTeachers.AssemblyInfo.cs
+C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\obj\Debug\net5.0\WithTeachers.csproj.CoreCompileInputs.cache
+C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\obj\Debug\net5.0\WithTeachers.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\obj\Debug\net5.0\WithTeachers.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\obj\Debug\net5.0\WithTeachers.RazorComponent.input.cache
