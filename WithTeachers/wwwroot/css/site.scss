@@ -249,9 +249,23 @@ app {
     }
 
     .document-upload {
-        border: 3px solid green !important;
         height: 100% !important;
-        width: 100%;
+    }
+
+    .progress {
+        background: #000 !important;
+        border: 0px solid #000 !important;
+        height: 100% !important;
+    }
+
+    .progress-bar {
+        color: black !important;
+        padding: 10px 0;
+        font-weight: bold;
+    }
+
+    .progress-niceblue {
+        background: #00ACFF !important;
     }
 
     .btn-add-element {
@@ -344,6 +358,11 @@ app {
                             border: 1px solid #00ACFF;
                         }
                     }
+                }
+
+
+                .file-upload {
+                    width: 35%;
                 }
 
                 .delete {

@@ -22,15 +22,14 @@ namespace WithTeachers.Data
 
         public async Task UploadAsync(IFileListEntry fileEntry)
         {
-            string path = Path.Combine(_environment.ContentRootPath, "wwwroot/uploads", fileEntry.Name);
+            string uniqueFileName = Guid.NewGuid().ToString() + "_" + fileEntry.Name;
+            string path = Path.Combine(_environment.ContentRootPath, "wwwroot/uploads", uniqueFileName);
 
             MemoryStream ms = new MemoryStream();
             await fileEntry.Data.CopyToAsync(ms);
 
-            using (FileStream file = new FileStream(path, FileMode.Create, FileAccess.Write))
-            {
-                ms.WriteTo(file);
-            }
+            using FileStream file = new FileStream(path, FileMode.Create, FileAccess.Write);
+            ms.WriteTo(file);
         }
     }
 }

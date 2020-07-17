@@ -2,7 +2,6 @@
 @inject ApplicationUserService ApplicationUserService
 @inject CourseService CourseService
 @inject CourseDocumentService CourseDocumentService
-@inject IFileUpload FileUploadService
 
 <h4 class="form-title small"><span class="oi oi-plus" aria-hidden="true"></span> Add a course with documents</h4>
 <EditForm class="form-section" Model="@model" OnValidSubmit="HandleValidSubmit">
@@ -49,19 +48,8 @@
                                 <InputText id="titleDocument" class="form-control" placeholder="Enter title" @bind-Value="document.Title" />
                             </td>
 
-                            <td>
-                                <label for="fileDocument" class="sr-only">Document upload</label>
-                                @* Normally we can choose many documents at the same time but we forbid it here *@
-                                <InputFile id="fileDocument" class="document-upload" OnChange="@((IFileListEntry[] files) => HandleSelection(files, document))" />
-
-                                <span>Loaded @((100.0 * position / size).ToString("0"))%</span>
-                                <div class="progress">
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="70"
-                                         aria-valuemin="0" aria-valuemax="100" style="width:70%">
-                                        <span>Loaded @((100.0 * position / size).ToString("0"))%</span>
-                                        <span class="sr-only">70% Complete</span>
-                                    </div>
-                                </div>
+                            <td class="file-upload">
+                                <FileUpload Document="@document" />
                             </td>
 
                             @if (model.CourseDocuments.Count > 1)
@@ -126,23 +114,4 @@
         await OnSubmitValidated.InvokeAsync("The course <strong>" + model.Course.Title + "</strong> has been added to your courses!");
     }
 
-    private string fileStatus;
-    private long position;
-    private long size;
-    async Task HandleSelection(IFileListEntry[] files, CourseDocument document)
-    {
-        IFileListEntry file = files.FirstOrDefault();
-
-        position = file.Data.Position;
-        size = file.Size;
-
-        if (file != null)
-        {
-            // Update the associated CourseDocument object
-            document.File = file;
-
-            // Uploading
-            await FileUploadService.UploadAsync(file);
-        }
-    }
 }
