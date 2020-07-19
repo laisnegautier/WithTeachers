@@ -3,8 +3,6 @@
 
 @inject ApplicationUserService ApplicationUserService
 
-<h1>Courses</h1>
-
 @if (!String.IsNullOrEmpty(CourseSlug))
 {
     <CourseDetails Slug="@CourseSlug" />
@@ -24,7 +22,6 @@ else
     public string CourseSlug { get; set; }
 
     System.Security.Claims.ClaimsPrincipal userClaim;
-
     protected override async void OnInitialized()
     {
         userClaim = await ApplicationUserService.GetUserClaim();

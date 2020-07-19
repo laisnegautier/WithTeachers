@@ -43,12 +43,22 @@ else
 
 }
 @code {
+    [Parameter]
+    public EventCallback<bool> CoursesExist { get; set; }
+
     ApplicationUser currentUser;
     private List<Course> courses = null;
-
-    protected override async void OnInitialized()
+    protected override async Task OnParametersSetAsync()
     {
         currentUser = await ApplicationUserService.GetCurrentUser();
         courses = await CourseService.ReadAllAsync(currentUser);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (courses != null && courses.Count > 0)
+            await CoursesExist.InvokeAsync(true);
+        else
+            await CoursesExist.InvokeAsync(false);
     }
 }

@@ -1,7 +1,5 @@
-﻿using BlazorInputFile;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WithTeachers.Data
 {
