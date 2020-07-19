@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <Content Remove="compilerconfig.json" />
+    <Content Remove="wwwroot\uploads\c71274c1-1bcb-40eb-b5db-8022baf8c680_Robert Martin Роберт Мартин - Clean Code A Handbook of Agile Software Craftsmanship Чистый код Создание, анализ и рефакторинг [2 [rutracker-4820891].torrent" />
   </ItemGroup>
 
   <ItemGroup>

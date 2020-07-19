@@ -102,7 +102,7 @@
         // CourseDocument
         foreach (CourseDocument document in model.CourseDocuments)
         {
-            document.FileUrl = "test";
+            document.Index = model.CourseDocuments.IndexOf(document);
             document.UploadDate = DateTime.Now;
             document.Course = model.Course;
             await CourseDocumentService.CreateAsync(document);

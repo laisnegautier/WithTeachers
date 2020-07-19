@@ -8,7 +8,7 @@ namespace WithTeachers.Data
 {
     public interface IFileUpload
     {
-        Task UploadAsync(IFileListEntry file);
+        Task UploadAsync(IFileListEntry file, string uniqueFileName);
     }
 
     public class FileUploadService : IFileUpload
@@ -20,9 +20,8 @@ namespace WithTeachers.Data
             _environment = env;
         }
 
-        public async Task UploadAsync(IFileListEntry fileEntry)
+        public async Task UploadAsync(IFileListEntry fileEntry, string uniqueFileName)
         {
-            string uniqueFileName = Guid.NewGuid().ToString() + "_" + fileEntry.Name;
             string path = Path.Combine(_environment.ContentRootPath, "wwwroot/uploads", uniqueFileName);
 
             MemoryStream ms = new MemoryStream();

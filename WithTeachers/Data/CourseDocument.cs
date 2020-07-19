@@ -11,15 +11,6 @@ namespace WithTeachers.Data
 
         public int Index { get; set; }
 
-        [NotMapped]
-        public IFileListEntry File { get; set; } = null;
-
-        [NotMapped]
-        public bool IsUploadOK { get; set; } = true;
-
-        [NotMapped]
-        public double Progress { get { if (File != null) return (File.Data.Position * 100.0) / File.Size; else return 0; } }
-
         [Required(ErrorMessage = "The document title should not be left empty.")]
         public string Title { get; set; }
 
