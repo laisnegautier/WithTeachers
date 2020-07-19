@@ -28,48 +28,49 @@
 
     <div class="row mb-2">
         <div class="col-12">
-            <label>Documents</label>
 
-            <table class="col-12 add-elements">
-                <thead>
-                    <tr>
-                        <th>Title</th>
-                        <th>Upload</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
+            @if (model.CourseDocuments.Count > 0)
+            {
+                <label>Documents</label>
 
-                    @foreach (CourseDocument document in model.CourseDocuments)
-                    {
+                <table class="col-12 add-elements">
+                    <thead>
                         <tr>
-                            <td>
-                                <label for="titleDocument" class="sr-only">Title:</label>
-                                <InputText id="titleDocument" class="form-control" placeholder="Enter title" @bind-Value="document.Title" />
-                            </td>
+                            <th>Title</th>
+                            <th>Upload</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
 
-                            <td class="file-upload">
-                                <FileUpload Document="@document" />
-                            </td>
+                        @foreach (CourseDocument document in model.CourseDocuments)
+                        {
+                            <tr>
+                                <td>
+                                    <label for="titleDocument" class="sr-only">Title:</label>
+                                    <InputText id="titleDocument" class="form-control" placeholder="Enter title" @bind-Value="document.Title" />
+                                </td>
 
-                            @if (model.CourseDocuments.Count > 1)
-                            {
+                                <td class="file-upload">
+                                    <FileUpload Document="@document" />
+                                </td>
+
                                 <td class="delete" @onclick="@(() => model.CourseDocuments.Remove(document))">
                                     <span class="oi oi-x" aria-hidden="true"></span>
                                 </td>
-                            }
-                            else
-                            {
-                                <td></td>
-                            }
-                        </tr>
-                    }
-                </tbody>
-            </table>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
 
             @* Disabling while something is already uploading *@
             <p class="mt-2 btn btn-add-element small @(addBtnDisabled ? "disabled-add-btn" : "")" @onclick="@(() => { if (!addBtnDisabled) model.CourseDocuments.Add(new CourseDocument()); })"><span class="oi oi-plus mr-1" aria-hidden="true"></span> Add document</p>
         </div>
+    </div>
+
+    <div class="row">
+        <button type="submit" class="btn mx-auto offset-lg-1">Add this course</button>
     </div>
 </EditForm>
 
