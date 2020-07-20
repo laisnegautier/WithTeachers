@@ -24,7 +24,7 @@ namespace WithTeachers.Data
         public async Task<List<Course>> ReadAllAsync(ApplicationUser user)
             => await _context.Courses.Where(x => x.User == user).OrderByDescending(x => x.UpdateDate).ToListAsync();
 
-        public async Task Delete(Course course)
+        public async Task DeleteAsync(Course course)
         {
             Course courseExists = await _context.Courses.SingleOrDefaultAsync(x => x.CourseId == course.CourseId);
             if (courseExists != null)

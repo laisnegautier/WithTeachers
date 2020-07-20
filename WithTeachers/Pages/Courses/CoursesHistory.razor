@@ -1,5 +1,6 @@
 ﻿@inject ApplicationUserService ApplicationUserService
 @inject CourseService CourseService
+@inject IFileUpload FileUploadService
 
 <h3>Your courses</h3>
 
@@ -23,6 +24,7 @@ else
                 <th scope="col">Link</th>
                 <th scope="col">Creation date</th>
                 <th scope="col">Last update</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -36,6 +38,9 @@ else
                     <td><a href="link.html" title="See this course in details" alt="See this course in details">withteachers.com/courses/@course.Slug</a></td>
                     <td>@course.CreationDate.ToShortDateString()</td>
                     <td>@(course.CreationDate.ToShortDateString() == course.UpdateDate.ToShortDateString() ? "Never updated" : course.CreationDate.ToShortDateString())</td>
+                    <td class="delete" @onclick="@(() => DeleteCourse(course))">
+                        <span class="oi oi-x" aria-hidden="true"></span>
+                    </td>
                 </tr>
             }
         </tbody>
@@ -48,6 +53,7 @@ else
 
     ApplicationUser currentUser;
     private List<Course> courses = null;
+
     protected override async Task OnParametersSetAsync()
     {
         currentUser = await ApplicationUserService.GetCurrentUser();
@@ -60,5 +66,13 @@ else
             await CoursesExist.InvokeAsync(true);
         else
             await CoursesExist.InvokeAsync(false);
+    }
+
+    private async Task DeleteCourse(Course course)
+    {
+        foreach (CourseDocument document in course.Documents)
+            FileUploadService.Delete(document.FileUrl);
+
+        await CourseService.DeleteAsync(course);
     }
 }
