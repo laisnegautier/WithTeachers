@@ -1,0 +1,11 @@
+﻿<div class="simple-form">
+ <h1>TESTSETSETES</h1>
+    <button class="btn btn-primary">Submit</button>
+    <button @onclick="BlazoredModal.Cancel" class="btn btn-secondary">Cancel</button>
+</div>
+
+@code {
+
+    [CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; }
+
+}

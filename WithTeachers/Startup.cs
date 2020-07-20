@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using WithTeachers.Areas.Identity;
 using WithTeachers.Data;
 using WithTeachers.Hubs;
+using Blazored.Modal;
 
 namespace WithTeachers
 {
@@ -37,6 +38,7 @@ namespace WithTeachers
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddSignalR();
+            services.AddBlazoredModal();
 
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<ApplicationUser>>();
             services.AddSingleton<WeatherForecastService>();

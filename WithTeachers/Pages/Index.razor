@@ -3,14 +3,20 @@
 @inject IJSRuntime JSRuntime
 @using Microsoft.AspNetCore.SignalR.Client
 @inject NavigationManager NavigationManager
+@inject IModalService Modal
 
+<h1>Hello, world!</h1>
+
+Welcome to Blazored Modal.
+
+<button @onclick="@(() => Modal.Show<ModalTest>("My Movies"))" class="btn btn-primary">View Movies</button>
 
 <input type="text" @bind="_userInput" placeholder="userInput" />
 <input type="text" @bind="_messageInput" placeholder="messageInput" />
 <button @onclick="Send" disabled="@(!IsConnected)">Send</button>
 
 <ul id="messageList">
-    @foreach(var message in _messages)
+    @foreach (var message in _messages)
     {
         <li>@message</li>
     }
