@@ -9,6 +9,7 @@ namespace WithTeachers.Data
     public interface IFileUpload
     {
         Task UploadAsync(IFileListEntry file, string uniqueFileName);
+        void Delete(string uniqueFileName);
     }
 
     public class FileUploadService : IFileUpload
@@ -29,6 +30,17 @@ namespace WithTeachers.Data
 
             using FileStream file = new FileStream(path, FileMode.Create, FileAccess.Write);
             ms.WriteTo(file);
+        }
+
+        public void Delete(string uniqueFileName)
+        {
+            string path = Path.Combine(_environment.ContentRootPath, "wwwroot/uploads", uniqueFileName);
+
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+                System.Threading.Thread.Sleep(20);
+            }
         }
     }
 }

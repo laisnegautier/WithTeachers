@@ -2,7 +2,9 @@
 @inject ApplicationUserService ApplicationUserService
 @inject CourseService CourseService
 @inject CourseDocumentService CourseDocumentService
+@inject IFileUpload FileUploadService
 
+<h4 class="form-title small"><span class="oi oi-plus" aria-hidden="true"></span> Add a course with documents</h4>
 <EditForm class="form-section" Model="@model" OnValidSubmit="HandleValidSubmit">
     <ObjectGraphDataAnnotationsValidator />
 
@@ -15,7 +17,7 @@
 
             <div class="input-group mb-2 mb-md-0">
                 <label for="password" class="col-4">Password (optional):</label>
-                <InputText type="password" id="password" class="form-control" placeholder="Password" @bind-Value="model.Course.Password" />
+                <InputText type="password" autocomplete="new-password" id="password" class="form-control" placeholder="Password" @bind-Value="model.Course.Password" />
             </div>
         </div>
 
@@ -54,7 +56,7 @@
                                     <FileUpload Document="@document" />
                                 </td>
 
-                                <td class="delete" @onclick="@(() => model.CourseDocuments.Remove(document))">
+                                <td class="delete" @onclick="@(()=>DeleteDocument(document))">
                                     <span class="oi oi-x" aria-hidden="true"></span>
                                 </td>
                             </tr>
@@ -114,4 +116,10 @@
         await OnSubmit.InvokeAsync("The course <strong>" + model.Course.Title + "</strong> has been added to your courses!");
     }
 
+    private void DeleteDocument(CourseDocument document)
+    {
+        FileUploadService.Delete(document.FileUrl);
+
+        model.CourseDocuments.Remove(document);
+    }
 }
