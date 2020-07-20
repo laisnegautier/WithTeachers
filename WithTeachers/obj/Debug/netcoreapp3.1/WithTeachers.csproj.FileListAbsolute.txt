@@ -99,7 +99,6 @@ C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\obj\Debug\n
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Courses\CoursesHistory.razor.g.cs
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\bin\Debug\netcoreapp3.1\Castle.Core.dll
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Proxies.dll
-C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\obj\Debug\netcoreapp3.1\RazorDeclaration\Shared\Notification.razor.g.cs
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\bin\Debug\netcoreapp3.1\Slugify.Core.dll
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Courses\CourseAdministration.razor.g.cs
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Courses\CourseDetails.razor.g.cs
@@ -168,7 +167,6 @@ C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\obj\Debug\n
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\obj\Debug\netcoreapp3.1\Razor\Shared\LoginDisplay.razor.g.cs
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\obj\Debug\netcoreapp3.1\Razor\Shared\MainLayout.razor.g.cs
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\obj\Debug\netcoreapp3.1\Razor\Shared\NavMenu.razor.g.cs
-C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\obj\Debug\netcoreapp3.1\Razor\Shared\Notification.razor.g.cs
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\obj\Debug\netcoreapp3.1\Razor\Shared\SurveyPrompt.razor.g.cs
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\obj\Debug\netcoreapp3.1\Razor\_Imports.razor.g.cs
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\ModalTest.razor.g.cs

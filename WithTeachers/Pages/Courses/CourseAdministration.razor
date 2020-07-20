@@ -1,39 +1,21 @@
 ﻿@attribute [Authorize]
 
-
 @if (!coursesExist)
 {
     <div class="alert alert-info" role="alert">
-        <strong>You don't have any course for now.</strong> Create one and add document in it for your students!
+        <strong>You don't have any course for now.</strong> Create one and add documents in it for your students!
     </div>
 }
 
-@if (!String.IsNullOrEmpty(validationMessage))
-{
-    <Notification Success="true" Message="@validationMessage" />
-}
-<AddCourseForm OnSubmit="OnSubmitAddCourseForm" />
-<CoursesHistory CoursesExist="CoursesExist" />
+<AddCourseForm OnSubmit="Refresh" />
+<CoursesHistory Refresh="@refresh" CoursesExist="CoursesExist" />
 
 @code {
     private string validationMessage = null;
-
-    private void OnSubmitAddCourseForm(string message)
-    {
-        validationMessage = message;
-    }
-
-    protected bool AddCourseSubmitted = false;
     private bool refresh = false;
     private bool coursesExist = false;
 
-    void Refresh()
-    {
-        refresh = !refresh;
-    }
+    void Refresh() => refresh = !refresh;
 
-    void CoursesExist(bool b)
-    {
-        coursesExist = b;
-    }
+    void CoursesExist(bool b) => coursesExist = b;
 }

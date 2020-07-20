@@ -10,7 +10,6 @@
 }
 else if (courses.Count == 0)
 {
-    <p>YA R</p>
 }
 else
 {
@@ -46,10 +45,43 @@ else
         </tbody>
     </table>
 
+    <div class="card-columns">
+        @foreach (Course course in courses)
+        {
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">@course.Title</h5>
+                    @if (!String.IsNullOrEmpty(course.Password))
+                    {
+                    <span>Password required.</span>
+                    }
+                    <p class="small text-muted">Created on @course.CreationDate @(course.UpdateDate.ToShortDateString() != course.CreationDate.ToShortDateString() ? "(updated " + @course.UpdateDate + ")": "")</p>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                </div>
+                @if (course.Documents != null && course.Documents.Count > 0)
+                {
+                    <ul class="list-group list-group-flush">
+                        @foreach (CourseDocument document in course.Documents)
+                        {
+                            <li class="list-group-item">@document.Title</li>
+                        }
+                    </ul>
+                }
+                <div class="card-body">
+                    <button class="btn">Edit</button>
+                    <button class="btn btn-danger">Delete</button>
+                </div>
+            </div>
+        }
+    </div>
 }
+
 @code {
     [Parameter]
     public EventCallback<bool> CoursesExist { get; set; }
+
+    [Parameter]
+    public bool Refresh { get; set; }
 
     ApplicationUser currentUser;
     private List<Course> courses = null;
