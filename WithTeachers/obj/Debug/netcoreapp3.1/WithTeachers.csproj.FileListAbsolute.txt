@@ -174,3 +174,5 @@ C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\obj\Debug\n
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\bin\Debug\netcoreapp3.1\Blazored.Modal.dll
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Components.Web.dll
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\bin\Debug\netcoreapp3.1\Microsoft.JSInterop.WebAssembly.dll
+C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Courses\CoursesList.razor.g.cs
+C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\WithTeachers\obj\Debug\netcoreapp3.1\Razor\Pages\Courses\CoursesList.razor.g.cs

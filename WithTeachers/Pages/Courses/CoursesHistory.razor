@@ -1,8 +1,6 @@
 ﻿@inject ApplicationUserService ApplicationUserService
 @inject CourseService CourseService
 @inject IFileUpload FileUploadService
-@inject IJSRuntime JSRuntime
-@inject NavigationManager NavigationManager
 
 <h3>Your courses</h3>
 
@@ -16,57 +14,16 @@ else if (courses.Count == 0)
 else
 {
     <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
-        <div class="btn-group btn-group-sm mr-2" role="group" aria-label="First group">
-            <button type="button" class="btn btn-secondary">Increasing</button>
-            <button type="button" class="btn btn-secondary">Decreasing</button>
+        <div class="btn-group btn-group-sm mr-2" role="group" aria-label="First group">CREATION DATE
+            <button type="button" class="btn btn-secondary" @onclick="SortByCreationDateAscending">Ascending</button>
+            <button type="button" class="btn btn-secondary" @onclick="SortByCreationDateDescending">Descending</button>
         </div>
         <div class="input-group">
             <input type="text" class="form-control" placeholder="Search by name" aria-label="Input group example" aria-describedby="btnGroupAddon">
         </div>
     </div>
 
-
-    <div class="card-columns">
-        @foreach (Course course in courses)
-        {
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">@course.Title</h5>
-                    @if (!String.IsNullOrEmpty(course.Password))
-                    {
-                        <span>Password required.</span>
-                    }
-                    <p class="small text-muted">Created on @course.CreationDate @(course.UpdateDate.ToShortDateString() != course.CreationDate.ToShortDateString() ? "(updated " + @course.UpdateDate + ")": "")</p>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                </div>
-                @if (course.Documents != null && course.Documents.Count > 0)
-                {
-                    <ul class="list-group list-group-flush">
-                        @foreach (CourseDocument document in course.Documents)
-                        {
-                            string link = "uploads/" + document.FileUrl;
-                            <li class="list-group-item"><NavLink href="@link" target="_blank" title="Open this document" alt="Open this document">@document.Title</NavLink></li>
-                        }
-                    </ul>
-                }
-                <div class="card-body d-flex justify-content-between">
-                    @if (copiedLink == NavigationManager.Uri + "/" + course.Slug)
-                    {
-                        <button class="btn btn-sm"><span class="oi oi-check" aria-hidden="true"></span> Link copied</button>
-                    }
-                    else
-                    {
-                        <button class="btn btn-sm" @onclick="@(() => CopyTextToClipboard(NavigationManager.Uri + "/" + course.Slug))">Share link</button>
-                    }
-
-                    <div>
-                        <button class="btn btn-sm">Edit</button>
-                        <button class="btn btn-danger btn-sm">Delete</button>
-                    </div>
-                </div>
-            </div>
-        }
-    </div>
+    <CoursesList Courses="courses" />
 }
 
 @code {
@@ -78,7 +35,6 @@ else
 
     ApplicationUser currentUser;
     private List<Course> courses = null;
-    private string copiedLink = null;
 
     protected override async Task OnParametersSetAsync()
     {
@@ -102,9 +58,9 @@ else
         await CourseService.DeleteAsync(course);
     }
 
-    private async Task CopyTextToClipboard(string link)
-    {
-        copiedLink = link;
-        await JSRuntime.InvokeVoidAsync("clipboardCopy.copyText", link);
-    }
+    private async Task SortByCreationDateAscending()
+    { courses = await CourseService.ReadAllOrderByCreationDateAscendingAsync(currentUser); }
+
+    private async Task SortByCreationDateDescending()
+    { courses = await CourseService.ReadAllOrderByCreationDateDescendingAsync(currentUser); }
 }
