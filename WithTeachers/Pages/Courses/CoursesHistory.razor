@@ -4,8 +4,6 @@
 @inject IJSRuntime JSRuntime
 @inject NavigationManager NavigationManager
 
-<h3>Your courses</h3>
-
 @if (courses == null)
 {
     <p><em>Loading...</em></p>
@@ -15,29 +13,29 @@ else if (courses.Count == 0)
 }
 else
 {
-<div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
-    <div class="btn-group btn-group-sm mr-2" role="group" aria-label="First group">
-        <div class="input-group-prepend">
-            <div class="input-group-text" id="btnGroupAddon">Sort by:</div>
+    <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
+        <div class="btn-group btn-group-sm mr-2" role="group" aria-label="Sorting group">
+            <div class="input-group-prepend">
+                <div class="input-group-text" id="btnGroupAddon">Sort by</div>
+            </div>
+            <button type="button" class="btn btn-secondary" @onclick="() => ChooseSortingFilter(SortingFilter.Title)">Course title</button>
+            <button type="button" class="btn btn-secondary" @onclick="() => ChooseSortingFilter(SortingFilter.UpdateDate)">Update date</button>
+            <button type="button" class="btn btn-secondary" @onclick="() => ChooseSortingFilter(SortingFilter.CreationDate)">Creation date</button>
         </div>
-        <button type="button" class="btn btn-secondary" @onclick="SortByCreationDateDescending">Name</button>
-        <button type="button" class="btn btn-secondary" @onclick="SortByCreationDateDescending">Update date</button>
-        <button type="button" class="btn btn-secondary" @onclick="SortByCreationDateDescending">Creation date</button>
-    </div>
-    <div class="btn-group btn-group-sm mr-2" role="group" aria-label="First group">
-        <div class="input-group-prepend">
-            <div class="input-group-text" id="btnGroupAddon">Order:</div>
+        <div class="btn-group btn-group-sm mr-2" role="group" aria-label="Order group">
+            <div class="input-group-prepend">
+                <div class="input-group-text" id="btnGroupAddon">Order</div>
+            </div>
+            <button type="button" class="btn btn-secondary" @onclick="() => ChooseOrderFilter(OrderFilter.Descending)"><span class="oi oi-arrow-thick-bottom" aria-hidden="true"></span></button>
+            <button type="button" class="btn btn-secondary" @onclick="() => ChooseOrderFilter(OrderFilter.Ascending)"><span class="oi oi-arrow-thick-top" aria-hidden="true"></span></button>
         </div>
-        <button type="button" class="btn btn-secondary" @onclick="SortByCreationDateDescending"><span class="oi oi-arrow-thick-bottom" aria-hidden="true"></span></button>
-        <button type="button" class="btn btn-secondary" @onclick="SortByCreationDateAscending"><span class="oi oi-arrow-thick-top" aria-hidden="true"></span></button>
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Search by name" aria-label="Input group example" aria-describedby="btnGroupAddon" @oninput="SearchCourseByTitle">
+        </div>
     </div>
-    <div class="input-group">
-        <input type="text" class="form-control" placeholder="Search by name" aria-label="Input group example" aria-describedby="btnGroupAddon">
-    </div>
-</div>
 
     <div class="card-columns">
-        @foreach (Course course in courses)
+        @foreach (Course course in coursesToDisplay)
         {
             <div class="card">
                 <div class="card-body">
@@ -88,28 +86,30 @@ else
 
     ApplicationUser currentUser;
     List<Course> courses = null;
+    List<Course> coursesToDisplay = null;
     string copiedLink = null;
+    enum SortingFilter { Title, CreationDate, UpdateDate };
+    enum OrderFilter { Ascending, Descending };
 
     protected override async Task OnParametersSetAsync()
     {
         currentUser = await ApplicationUserService.GetCurrentUser();
         courses = await CourseService.ReadAllAsync(currentUser);
+
+        // To keep track of the full first query
+        coursesToDisplay = courses.ToList();
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (courses != null && courses.Count > 0)
-            await CoursesExist.InvokeAsync(true);
-
-        if (firstRender && (courses == null || courses.Count == 0))
-            await CoursesExist.InvokeAsync(false);
+        if (firstRender)
+        {
+            if (courses != null && courses.Count > 0)
+                await CoursesExist.InvokeAsync(true);
+            else
+                await CoursesExist.InvokeAsync(false);
+        }
     }
-
-    private async Task SortByCreationDateAscending()
-        => courses = await CourseService.ReadAllOrderByCreationDateAscendingAsync(currentUser);
-
-    private async Task SortByCreationDateDescending()
-        => courses = await CourseService.ReadAllOrderByCreationDateDescendingAsync(currentUser);
 
     private async Task CopyTextToClipboard(string link)
     {
@@ -127,5 +127,41 @@ else
         courses.Remove(course);
 
         if (courses == null || courses.Count == 0) await CoursesExist.InvokeAsync(false);
+    }
+
+    // SORTING RESULTS
+
+    SortingFilter chosenSortingFilter = SortingFilter.UpdateDate;
+    OrderFilter chosenOrderFilter = OrderFilter.Descending;
+
+    IOrderedEnumerable<Course> sortedParams = null;
+
+    private void ChooseSortingFilter(SortingFilter sortingFilter)
+    {
+        chosenSortingFilter = sortingFilter;
+        coursesToDisplay = SortList(courses);
+    }
+
+    private void ChooseOrderFilter(OrderFilter orderFilter)
+    {
+        chosenOrderFilter = orderFilter;
+        coursesToDisplay = SortList(courses);
+    }
+
+    private List<Course> SortList(List<Course> _courses)
+    {
+        if (chosenSortingFilter == SortingFilter.Title)
+            return (chosenOrderFilter == OrderFilter.Ascending ? _courses.OrderBy(x => x.Title) : _courses.OrderByDescending(x => x.Title)).ToList();
+        else if (chosenSortingFilter == SortingFilter.UpdateDate)
+            return (chosenOrderFilter == OrderFilter.Ascending ? _courses.OrderBy(x => x.UpdateDate) : _courses.OrderByDescending(x => x.UpdateDate)).ToList();
+        else if (chosenSortingFilter == SortingFilter.CreationDate)
+            return (chosenOrderFilter == OrderFilter.Ascending ? _courses.OrderBy(x => x.CreationDate) : _courses.OrderByDescending(x => x.CreationDate)).ToList();
+        else return null;
+    }
+
+    private void SearchCourseByTitle(ChangeEventArgs inputText)
+    {
+        coursesToDisplay = courses.Where(x => x.Title.ToLower().Contains(inputText.Value.ToString().ToLower())).ToList();
+        coursesToDisplay = SortList(coursesToDisplay);
     }
 }
