@@ -1,6 +1,7 @@
 ﻿@inject ApplicationUserService ApplicationUserService
 @inject CourseService CourseService
 @inject IFileUpload FileUploadService
+@inject IJSRuntime JSRuntime
 
 <h3>Your courses</h3>
 
@@ -53,7 +54,7 @@ else
                     <h5 class="card-title">@course.Title</h5>
                     @if (!String.IsNullOrEmpty(course.Password))
                     {
-                    <span>Password required.</span>
+                        <span>Password required.</span>
                     }
                     <p class="small text-muted">Created on @course.CreationDate @(course.UpdateDate.ToShortDateString() != course.CreationDate.ToShortDateString() ? "(updated " + @course.UpdateDate + ")": "")</p>
                     <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
@@ -67,10 +68,21 @@ else
                         }
                     </ul>
                 }
-                <div class="card-body">
-                    <button class="btn">Edit</button>
-                    <button class="btn btn-danger">Delete</button>
+            <div class="card-body d-flex justify-content-between">
+                @if (copiedLink == course.Slug)
+                {
+                    <button class="btn btn-sm"><span class="oi oi-check" aria-hidden="true"></span> Link copied</button>
+                }
+                else
+                {
+                    <button class="btn btn-sm" @onclick="@(() => CopyTextToClipboard(course.Slug))">Share link</button>
+                }
+
+                <div>
+                    <button class="btn btn-sm">Edit</button>
+                    <button class="btn btn-danger btn-sm">Delete</button>
                 </div>
+            </div>
             </div>
         }
     </div>
@@ -85,6 +97,7 @@ else
 
     ApplicationUser currentUser;
     private List<Course> courses = null;
+    private string copiedLink = null;
 
     protected override async Task OnParametersSetAsync()
     {
@@ -106,5 +119,11 @@ else
             FileUploadService.Delete(document.FileUrl);
 
         await CourseService.DeleteAsync(course);
+    }
+
+    private async Task CopyTextToClipboard(string slug)
+    {
+        copiedLink = slug;
+        await JSRuntime.InvokeVoidAsync("clipboardCopy.copyText", slug);
     }
 }
