@@ -15,16 +15,26 @@ else if (courses.Count == 0)
 }
 else
 {
-    <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
-        <div class="btn-group btn-group-sm mr-2" role="group" aria-label="First group">
-            CREATION DATE
-            <button type="button" class="btn btn-secondary" @onclick="SortByCreationDateAscending">Ascending</button>
-            <button type="button" class="btn btn-secondary" @onclick="SortByCreationDateDescending">Descending</button>
+<div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
+    <div class="btn-group btn-group-sm mr-2" role="group" aria-label="First group">
+        <div class="input-group-prepend">
+            <div class="input-group-text" id="btnGroupAddon">Sort by:</div>
         </div>
-        <div class="input-group">
-            <input type="text" class="form-control" placeholder="Search by name" aria-label="Input group example" aria-describedby="btnGroupAddon">
-        </div>
+        <button type="button" class="btn btn-secondary" @onclick="SortByCreationDateDescending">Name</button>
+        <button type="button" class="btn btn-secondary" @onclick="SortByCreationDateDescending">Update date</button>
+        <button type="button" class="btn btn-secondary" @onclick="SortByCreationDateDescending">Creation date</button>
     </div>
+    <div class="btn-group btn-group-sm mr-2" role="group" aria-label="First group">
+        <div class="input-group-prepend">
+            <div class="input-group-text" id="btnGroupAddon">Order:</div>
+        </div>
+        <button type="button" class="btn btn-secondary" @onclick="SortByCreationDateDescending"><span class="oi oi-arrow-thick-bottom" aria-hidden="true"></span></button>
+        <button type="button" class="btn btn-secondary" @onclick="SortByCreationDateAscending"><span class="oi oi-arrow-thick-top" aria-hidden="true"></span></button>
+    </div>
+    <div class="input-group">
+        <input type="text" class="form-control" placeholder="Search by name" aria-label="Input group example" aria-describedby="btnGroupAddon">
+    </div>
+</div>
 
     <div class="card-columns">
         @foreach (Course course in courses)
@@ -78,6 +88,7 @@ else
 
     ApplicationUser currentUser;
     List<Course> courses = null;
+    string copiedLink = null;
 
     protected override async Task OnParametersSetAsync()
     {
@@ -100,8 +111,6 @@ else
     private async Task SortByCreationDateDescending()
         => courses = await CourseService.ReadAllOrderByCreationDateDescendingAsync(currentUser);
 
-    private string copiedLink = null;
-
     private async Task CopyTextToClipboard(string link)
     {
         copiedLink = link;
@@ -117,7 +126,6 @@ else
 
         courses.Remove(course);
 
-        if (courses == null || courses.Count == 0)
-            await CoursesExist.InvokeAsync(false);
+        if (courses == null || courses.Count == 0) await CoursesExist.InvokeAsync(false);
     }
 }
