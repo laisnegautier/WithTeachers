@@ -15,37 +15,16 @@ else if (courses.Count == 0)
 }
 else
 {
-    <table class="table table-striped table-hover table-sm">
-        <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Title</th>
-                <th scope="col">Description</th>
-                <th scope="col">Password</th>
-                <th scope="col">Link</th>
-                <th scope="col">Creation date</th>
-                <th scope="col">Last update</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var course in courses)
-            {
-                <tr>
-                    <th scope="row">@(courses.IndexOf(course) + 1)</th>
-                    <td>@course.Title</td>
-                    <td>@course.Description</td>
-                    <td>@((MarkupString)(String.IsNullOrEmpty(course.Password) ? "Not required" : "<strong>"+course.Password+"</strong>"))</td>
-                    <td><a href="link.html" title="See this course in details" alt="See this course in details">withteachers.com/courses/@course.Slug</a></td>
-                    <td>@course.CreationDate.ToShortDateString()</td>
-                    <td>@(course.CreationDate.ToShortDateString() == course.UpdateDate.ToShortDateString() ? "Never updated" : course.CreationDate.ToShortDateString())</td>
-                    <td class="delete" @onclick="@(() => DeleteCourse(course))">
-                        <span class="oi oi-x" aria-hidden="true"></span>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
+        <div class="btn-group btn-group-sm mr-2" role="group" aria-label="First group">
+            <button type="button" class="btn btn-secondary">Increasing</button>
+            <button type="button" class="btn btn-secondary">Decreasing</button>
+        </div>
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Search by name" aria-label="Input group example" aria-describedby="btnGroupAddon">
+        </div>
+    </div>
+
 
     <div class="card-columns">
         @foreach (Course course in courses)
