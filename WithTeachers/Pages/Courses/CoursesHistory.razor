@@ -3,6 +3,7 @@
 @inject IFileUpload FileUploadService
 @inject IJSRuntime JSRuntime
 @inject NavigationManager NavigationManager
+@inject IModalService Modal
 
 @if (courses == null)
 {
@@ -18,16 +19,16 @@ else
             <div class="input-group-prepend">
                 <div class="input-group-text" id="btnGroupAddon">Sort by</div>
             </div>
-            <button type="button" class="btn btn-secondary" @onclick="() => ChooseSortingFilter(SortingFilter.Title)">Course title</button>
-            <button type="button" class="btn btn-secondary" @onclick="() => ChooseSortingFilter(SortingFilter.UpdateDate)">Update date</button>
-            <button type="button" class="btn btn-secondary" @onclick="() => ChooseSortingFilter(SortingFilter.CreationDate)">Creation date</button>
+            <button type="button" class="btn btn-secondary" @onclick="() => ChooseSortingFilter(SortingFilter.Title)" disabled=@SelectedSortingFilter(SortingFilter.Title)>Course title</button>
+            <button type="button" class="btn btn-secondary" @onclick="() => ChooseSortingFilter(SortingFilter.UpdateDate)" disabled=@SelectedSortingFilter(SortingFilter.UpdateDate)>Update date</button>
+            <button type="button" class="btn btn-secondary" @onclick="() => ChooseSortingFilter(SortingFilter.CreationDate)" disabled=@SelectedSortingFilter(SortingFilter.CreationDate)>Creation date</button>
         </div>
         <div class="btn-group btn-group-sm mr-2" role="group" aria-label="Order group">
             <div class="input-group-prepend">
                 <div class="input-group-text" id="btnGroupAddon">Order</div>
             </div>
-            <button type="button" class="btn btn-secondary" @onclick="() => ChooseOrderFilter(OrderFilter.Descending)"><span class="oi oi-arrow-thick-bottom" aria-hidden="true"></span></button>
-            <button type="button" class="btn btn-secondary" @onclick="() => ChooseOrderFilter(OrderFilter.Ascending)"><span class="oi oi-arrow-thick-top" aria-hidden="true"></span></button>
+            <button type="button" class="btn btn-secondary" @onclick="() => ChooseOrderFilter(OrderFilter.Descending)" disabled=@SelectedOrderFilter(OrderFilter.Descending)><span class="oi oi-arrow-thick-bottom" aria-hidden="true"></span></button>
+            <button type="button" class="btn btn-secondary" @onclick="() => ChooseOrderFilter(OrderFilter.Ascending)" disabled=@SelectedOrderFilter(OrderFilter.Ascending)><span class="oi oi-arrow-thick-top" aria-hidden="true"></span></button>
         </div>
         <div class="input-group">
             <input type="text" class="form-control" placeholder="Search by name" aria-label="Input group example" aria-describedby="btnGroupAddon" @oninput="SearchCourseByTitle">
@@ -69,7 +70,7 @@ else
 
                     <div>
                         <button class="btn btn-sm">Edit</button>
-                        <button class="btn btn-danger btn-sm" @onclick="@(() => DeleteCourse(course))">Delete</button>
+                        <button class="btn btn-danger btn-sm" @onclick="() => DeleteCourse(course)">Delete</button>
                     </div>
                 </div>
             </div>
@@ -88,8 +89,6 @@ else
     List<Course> courses = null;
     List<Course> coursesToDisplay = null;
     string copiedLink = null;
-    enum SortingFilter { Title, CreationDate, UpdateDate };
-    enum OrderFilter { Ascending, Descending };
 
     protected override async Task OnParametersSetAsync()
     {
@@ -97,7 +96,7 @@ else
         courses = await CourseService.ReadAllAsync(currentUser);
 
         // To keep track of the full first query
-        coursesToDisplay = courses.ToList();
+        coursesToDisplay = SortList(courses);
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -119,22 +118,33 @@ else
 
     private async Task DeleteCourse(Course course)
     {
-        foreach (CourseDocument document in course.Documents)
-            FileUploadService.Delete(document.FileUrl);
+        var parameters = new ModalParameters();
+        parameters.Add("CourseTitle", course.Title);
 
-        await CourseService.DeleteAsync(course);
+        var modalOpened = Modal.Show<ModalDeleteCourse>("Delete course", parameters);
+        var result = await modalOpened.Result;
 
-        courses.Remove(course);
+        if (!result.Cancelled)
+        {
+            //var r = result.Data;
 
-        if (courses == null || courses.Count == 0) await CoursesExist.InvokeAsync(false);
+            foreach (CourseDocument document in course.Documents)
+                FileUploadService.Delete(document.FileUrl);
+
+            await CourseService.DeleteAsync(course);
+
+            courses.Remove(course);
+            coursesToDisplay.Remove(course);
+
+            if (courses == null || courses.Count == 0) await CoursesExist.InvokeAsync(false);
+        }
     }
 
     // SORTING RESULTS
-
+    enum SortingFilter { Title, CreationDate, UpdateDate };
+    enum OrderFilter { Ascending, Descending };
     SortingFilter chosenSortingFilter = SortingFilter.UpdateDate;
     OrderFilter chosenOrderFilter = OrderFilter.Descending;
-
-    IOrderedEnumerable<Course> sortedParams = null;
 
     private void ChooseSortingFilter(SortingFilter sortingFilter)
     {
@@ -164,4 +174,10 @@ else
         coursesToDisplay = courses.Where(x => x.Title.ToLower().Contains(inputText.Value.ToString().ToLower())).ToList();
         coursesToDisplay = SortList(coursesToDisplay);
     }
+
+    private bool SelectedSortingFilter(SortingFilter sortingFilter)
+        => sortingFilter == chosenSortingFilter;
+
+    private bool SelectedOrderFilter(OrderFilter orderFilter)
+        => orderFilter == chosenOrderFilter;
 }

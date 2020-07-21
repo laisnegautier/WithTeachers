@@ -1,0 +1,24 @@
+﻿<div class="simple-form">
+    Are you sure you want to delete the course @CourseTitle ?
+
+    <button @onclick="ConfirmDelete" class="btn btn-danger">Delete</button>
+    <button @onclick="Cancel" class="btn btn-secondary">Cancel</button>
+</div>
+
+@code {
+    [CascadingParameter] 
+    BlazoredModalInstance BlazoredModal { get; set; }
+
+    [Parameter] 
+    public string CourseTitle { get; set; }
+
+    void ConfirmDelete()
+    {
+        BlazoredModal.Close(ModalResult.Ok($"Delete confirmed"));
+    }
+
+    void Cancel()
+    {
+        BlazoredModal.Cancel();
+    }
+}
