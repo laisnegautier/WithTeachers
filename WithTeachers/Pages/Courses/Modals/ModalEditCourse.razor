@@ -76,6 +76,9 @@
 </EditForm>
 
 @code {
+    [CascadingParameter]
+    BlazoredModalInstance BlazoredModal { get; set; }
+
     [Parameter]
     public Course Course { get; set; }
 
@@ -116,11 +119,23 @@
         //await OnSubmit.InvokeAsync("The course <strong>" + model.Course.Title + "</strong> has been added to your courses!");
     }
 
-    private void DeleteDocument(CourseDocument document)
+    private async Task DeleteDocument(CourseDocument document)
     {
         if (!String.IsNullOrEmpty(document.FileUrl))
             FileUploadService.Delete(document.FileUrl);
 
+        await CourseDocumentService.DeleteAsync(document);
+
         model.CourseDocuments.Remove(document);
+    }
+
+    void ConfirmDelete()
+    {
+        BlazoredModal.Close(ModalResult.Ok($"Delete confirmed"));
+    }
+
+    void Cancel()
+    {
+        BlazoredModal.Cancel();
     }
 }
