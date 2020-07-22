@@ -115,6 +115,7 @@
             await CourseDocumentService.UpdateAsync(document);
         }
 
+        ConfirmEdit();
         // Notifier
         //await OnSubmit.InvokeAsync("The course <strong>" + model.Course.Title + "</strong> has been added to your courses!");
     }
@@ -129,13 +130,5 @@
         model.CourseDocuments.Remove(document);
     }
 
-    void ConfirmDelete()
-    {
-        BlazoredModal.Close(ModalResult.Ok($"Delete confirmed"));
-    }
-
-    void Cancel()
-    {
-        BlazoredModal.Cancel();
-    }
+    private void ConfirmEdit() => BlazoredModal.Close(ModalResult.Ok($"Edit confirmed"));
 }

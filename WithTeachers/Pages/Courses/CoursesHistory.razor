@@ -93,6 +93,11 @@ else
     protected override async Task OnParametersSetAsync()
     {
         currentUser = await ApplicationUserService.GetCurrentUser();
+        await LoadCoursesAsync();
+    }
+
+    private async Task LoadCoursesAsync()
+    {
         courses = await CourseService.ReadAllAsync(currentUser);
 
         // To keep track of the full first query
@@ -120,25 +125,12 @@ else
     {
         var parameters = new ModalParameters();
         parameters.Add("Course", course);
-        //NEED TO ADD THE COURSECOURSEDOCUMENT NOT COURSE
 
         var modalOpened = Modal.Show<ModalEditCourse>("Edit course", parameters);
         var result = await modalOpened.Result;
 
         if (!result.Cancelled)
-        {
-            //var r = result.Data;
-
-            foreach (CourseDocument document in course.Documents)
-                FileUploadService.Delete(document.FileUrl);
-
-            await CourseService.DeleteAsync(course);
-
-            courses.Remove(course);
-            coursesToDisplay.Remove(course);
-
-            if (courses == null || courses.Count == 0) await CoursesExist.InvokeAsync(false);
-        }
+            await LoadCoursesAsync();
     }
 
     private async Task DeleteCourse(Course course)
