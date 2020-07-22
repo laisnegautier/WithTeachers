@@ -69,7 +69,7 @@ else
                     }
 
                     <div>
-                        <button class="btn btn-sm">Edit</button>
+                        <button class="btn btn-sm" @onclick="() => EditCourse(course)">Edit</button>
                         <button class="btn btn-danger btn-sm" @onclick="() => DeleteCourse(course)">Delete</button>
                     </div>
                 </div>
@@ -114,6 +114,31 @@ else
     {
         copiedLink = link;
         await JSRuntime.InvokeVoidAsync("clipboardCopy.copyText", link);
+    }
+
+    private async Task EditCourse(Course course)
+    {
+        var parameters = new ModalParameters();
+        parameters.Add("Course", course);
+        //NEED TO ADD THE COURSECOURSEDOCUMENT NOT COURSE
+
+        var modalOpened = Modal.Show<ModalEditCourse>("Edit course", parameters);
+        var result = await modalOpened.Result;
+
+        if (!result.Cancelled)
+        {
+            //var r = result.Data;
+
+            foreach (CourseDocument document in course.Documents)
+                FileUploadService.Delete(document.FileUrl);
+
+            await CourseService.DeleteAsync(course);
+
+            courses.Remove(course);
+            coursesToDisplay.Remove(course);
+
+            if (courses == null || courses.Count == 0) await CoursesExist.InvokeAsync(false);
+        }
     }
 
     private async Task DeleteCourse(Course course)

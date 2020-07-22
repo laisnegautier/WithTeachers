@@ -24,11 +24,11 @@ namespace WithTeachers.Data
         public async Task<List<Course>> ReadAllAsync(ApplicationUser user)
             => await _context.Courses.Where(x => x.User == user).OrderByDescending(x => x.UpdateDate).ToListAsync();
 
-        public async Task<List<Course>> ReadAllOrderByCreationDateAscendingAsync(ApplicationUser user)
-            => await _context.Courses.Where(x => x.User == user).OrderBy(x => x.CreationDate).ToListAsync();
-
-        public async Task<List<Course>> ReadAllOrderByCreationDateDescendingAsync(ApplicationUser user)
-            => await _context.Courses.Where(x => x.User == user).OrderByDescending(x => x.CreationDate).ToListAsync();
+        public async Task UpdateAsync(Course course)
+        {
+            _context.Courses.Update(course);
+            await _context.SaveChangesAsync();
+        }
 
         public async Task DeleteAsync(Course course)
         {

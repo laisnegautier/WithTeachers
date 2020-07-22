@@ -1,0 +1,136 @@
+﻿@using Slugify;
+@inject ApplicationUserService ApplicationUserService
+@inject CourseService CourseService
+@inject CourseDocumentService CourseDocumentService
+@inject IFileUpload FileUploadService
+
+<h4 class="form-title small"><span class="oi oi-plus" aria-hidden="true"></span> Edit a course</h4>
+<EditForm class="form-section" Model="@model" OnValidSubmit="HandleValidSubmit">
+    <ObjectGraphDataAnnotationsValidator />
+
+    <div class="row add-class">
+        <div class="col-12 col-md-5">
+            <div class="input-group mb-2">
+                <label for="nameCourse" class="col-4">Course title:</label>
+                <InputText id="nameCourse" placeholder="Calculus Course 1..." class="form-control" @bind-Value="model.Course.Title" />
+            </div>
+
+            <div class="input-group mb-2 mb-md-0">
+                <label for="password" class="col-4">Password (optional):</label>
+                <InputText type="password" autocomplete="new-password" id="password" class="form-control" placeholder="Password" @bind-Value="model.Course.Password" />
+            </div>
+        </div>
+
+        <div class="col-12 col-md-7 textarea-container">
+            <label for="courseDescription" class="sr-only">Description</label>
+            <InputTextArea id="courseDescription" class="form-control col-12" placeholder="Description" @bind-Value="model.Course.Description" />
+        </div>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col-12">
+
+            @if (model.CourseDocuments.Count > 0)
+            {
+                <label>Documents</label>
+
+                <table class="col-12 add-elements">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Upload</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @foreach (CourseDocument document in model.CourseDocuments)
+                        {
+                            <tr>
+                                <td>
+                                    <label for="titleDocument" class="sr-only">Title:</label>
+                                    <InputText id="titleDocument" class="form-control" placeholder="Enter title" @bind-Value="document.Title" />
+                                </td>
+
+                                <td class="file-upload">
+                                    @if (!String.IsNullOrEmpty(document.FileUrl))
+                                    {
+                                        <span>Uploaded</span>
+                                    }
+                                    else
+                                    {
+                                        <FileUpload Document="@document" />
+                                    }
+                                </td>
+
+                                <td class="delete" @onclick="@(() => DeleteDocument(document))">
+                                    <span class="oi oi-x" aria-hidden="true"></span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+
+            @* Disabling while something is already uploading *@
+            <p class="mt-2 btn btn-add-element small @(addBtnDisabled ? "disabled-add-btn" : "")" @onclick="@(() => { if (!addBtnDisabled) model.CourseDocuments.Add(new CourseDocument()); })"><span class="oi oi-plus mr-1" aria-hidden="true"></span> Add document</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <button type="submit" class="btn mx-auto offset-lg-1">Edit this course</button>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter]
+    public Course Course { get; set; }
+
+    ApplicationUser currentUser;
+    CourseCourseDocument model = new CourseCourseDocument();
+    SlugHelper slugHelper = new SlugHelper();
+    bool addBtnDisabled = false;
+    bool uploading = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        currentUser = await ApplicationUserService.GetCurrentUser();
+
+        model.Course = Course;
+
+        foreach (CourseDocument document in Course.Documents)
+            model.CourseDocuments.Add(document);
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        // Course
+        model.Course.Slug = slugHelper.GenerateSlug(model.Course.Title);
+        model.Course.UpdateDate = DateTime.Now;
+
+        await CourseService.UpdateAsync(model.Course);
+
+        // CourseDocument
+        foreach (CourseDocument document in model.CourseDocuments)
+        {
+            document.Index = model.CourseDocuments.IndexOf(document);
+            document.UploadDate = DateTime.Now;
+            document.Course = model.Course;
+            await CourseDocumentService.CreateAsync(document);
+        }
+
+        // Reset
+        model = new CourseCourseDocument();
+
+        // Notifier
+        //await OnSubmit.InvokeAsync("The course <strong>" + model.Course.Title + "</strong> has been added to your courses!");
+    }
+
+    private void DeleteDocument(CourseDocument document)
+    {
+        if (!String.IsNullOrEmpty(document.FileUrl))
+            FileUploadService.Delete(document.FileUrl);
+
+        model.CourseDocuments.Remove(document);
+    }
+}
