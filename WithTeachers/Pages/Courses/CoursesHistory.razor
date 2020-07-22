@@ -5,33 +5,30 @@
 @inject NavigationManager NavigationManager
 @inject IModalService Modal
 
-@if (courses == null)
-{
-    <p><em>Loading...</em></p>
-}
-else if (courses.Count == 0)
-{
-}
-else
+@if(courses != null || courses.Count == 0)
 {
     <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
+        <div class="input-group mr-2" role="group" aria-label="Input group">
+            <div class="input-group-prepend">
+                <div class="input-group-text" id="btnGroupAddon">Search</div>
+            </div>
+            <input type="text" class="form-control" placeholder="Write a course name" aria-label="Input group example" aria-describedby="btnGroupAddon" @oninput="SearchCourseByTitle">
+        </div>
+
         <div class="btn-group btn-group-sm mr-2" role="group" aria-label="Sorting group">
             <div class="input-group-prepend">
                 <div class="input-group-text" id="btnGroupAddon">Sort by</div>
             </div>
-            <button type="button" class="btn btn-secondary" @onclick="() => ChooseSortingFilter(SortingFilter.Title)" disabled=@SelectedSortingFilter(SortingFilter.Title)>Course title</button>
-            <button type="button" class="btn btn-secondary" @onclick="() => ChooseSortingFilter(SortingFilter.UpdateDate)" disabled=@SelectedSortingFilter(SortingFilter.UpdateDate)>Update date</button>
-            <button type="button" class="btn btn-secondary" @onclick="() => ChooseSortingFilter(SortingFilter.CreationDate)" disabled=@SelectedSortingFilter(SortingFilter.CreationDate)>Creation date</button>
+            <button type="button" class="btn" @onclick="() => ChooseSortingFilter(SortingFilter.Title)" disabled=@SelectedSortingFilter(SortingFilter.Title)>Course title</button>
+            <button type="button" class="btn" @onclick="() => ChooseSortingFilter(SortingFilter.UpdateDate)" disabled=@SelectedSortingFilter(SortingFilter.UpdateDate)>Update date</button>
+            <button type="button" class="btn" @onclick="() => ChooseSortingFilter(SortingFilter.CreationDate)" disabled=@SelectedSortingFilter(SortingFilter.CreationDate)>Creation date</button>
         </div>
-        <div class="btn-group btn-group-sm mr-2" role="group" aria-label="Order group">
+        <div class="btn-group btn-group-sm" role="group" aria-label="Order group">
             <div class="input-group-prepend">
                 <div class="input-group-text" id="btnGroupAddon">Order</div>
             </div>
-            <button type="button" class="btn btn-secondary" @onclick="() => ChooseOrderFilter(OrderFilter.Descending)" disabled=@SelectedOrderFilter(OrderFilter.Descending)><span class="oi oi-arrow-thick-bottom" aria-hidden="true"></span></button>
-            <button type="button" class="btn btn-secondary" @onclick="() => ChooseOrderFilter(OrderFilter.Ascending)" disabled=@SelectedOrderFilter(OrderFilter.Ascending)><span class="oi oi-arrow-thick-top" aria-hidden="true"></span></button>
-        </div>
-        <div class="input-group">
-            <input type="text" class="form-control" placeholder="Search by name" aria-label="Input group example" aria-describedby="btnGroupAddon" @oninput="SearchCourseByTitle">
+            <button type="button" class="btn" @onclick="() => ChooseOrderFilter(OrderFilter.Descending)" disabled=@SelectedOrderFilter(OrderFilter.Descending)><span class="oi oi-arrow-thick-bottom" aria-hidden="true"></span></button>
+            <button type="button" class="btn" @onclick="() => ChooseOrderFilter(OrderFilter.Ascending)" disabled=@SelectedOrderFilter(OrderFilter.Ascending)><span class="oi oi-arrow-thick-top" aria-hidden="true"></span></button>
         </div>
     </div>
 
