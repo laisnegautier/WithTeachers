@@ -1,24 +1,26 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.AspNetCore.Components;
 using System.Threading.Tasks;
 
 namespace WithTeachers.Data
 {
     public class CourseDocumentService
     {
-        private readonly ApplicationDbContext _context;
+        [Inject]
+        private ApplicationDbContext Context { get; }
 
         public CourseDocumentService(ApplicationDbContext context)
-        {
-            _context = context;
-        }
+            => Context = context;
 
         public async Task CreateAsync(CourseDocument courseDocument)
         {
-            _context.CourseDocuments.Add(courseDocument);
-            await _context.SaveChangesAsync();
+            Context.CourseDocuments.Add(courseDocument);
+            await Context.SaveChangesAsync();
+        }
+
+        public async Task UpdateAsync(CourseDocument courseDocument)
+        {
+            Context.CourseDocuments.Update(courseDocument);
+            await Context.SaveChangesAsync();
         }
     }
 }

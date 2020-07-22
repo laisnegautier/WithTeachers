@@ -1,50 +1,63 @@
 ﻿@inject IFileUpload FileUploadService
 
+@if (!String.IsNullOrEmpty(Document.FileUrl))
+{
+    <div class="progress">
+        <div class="progress-bar bg-success" role="progressbar" aria-valuenow="40"
+             aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+            100% Upload completed
+        </div>
+    </div>
+}
+else
+{
+
     <div style="display: @(isUploading ? "none" : "block")">
         <label for="fileDocument" class="sr-only">Document upload</label>
         @* Normally we can choose many documents at the same time but we forbid it here *@
         <InputFile id="fileDocument" class="document-upload" OnChange="HandleSelection" />
     </div>
 
-@if (file != null)
-{
-    bool isLoading = file.Data.Position > 0;
-    double progress = (100.0 * file.Data.Position / file.Size);
+    @if (file != null)
+    {
+        bool isLoading = file.Data.Position > 0;
+        double progress = (100.0 * file.Data.Position / file.Size);
 
-    <div class="file-row">
-        <!-- File info -->
-        @*<div>
-                <h2>@file.Name</h2>
-                Size: <strong>@file.Size bytes</strong>;
-                Last modified: <strong>@file.LastModified.ToShortDateString()</strong>;
-                Type: <strong>@file.Type</strong>
-                Relative Path: <strong>@file.RelativePath</strong>
-            </div>*@
+        <div class="file-row">
+            <!-- File info -->
+            @*<div>
+                    <h2>@file.Name</h2>
+                    Size: <strong>@file.Size bytes</strong>;
+                    Last modified: <strong>@file.LastModified.ToShortDateString()</strong>;
+                    Type: <strong>@file.Type</strong>
+                    Relative Path: <strong>@file.RelativePath</strong>
+                </div>*@
 
-        <!-- Upload bar -->
-        @if (isLoading)
-        {
-            isUploading = true;
-            if (progress < 100)
+            <!-- Upload bar -->
+            @if (isLoading)
             {
-                <div class="progress">
-                    <div class="progress-bar progress-niceblue" role="progressbar" aria-valuenow="40"
-                         aria-valuemin="0" aria-valuemax="100" style="width: @(progress + "%")">
-                        @(Math.Floor(progress) + "%") uploaded
+                isUploading = true;
+                if (progress < 100)
+                {
+                    <div class="progress">
+                        <div class="progress-bar progress-niceblue" role="progressbar" aria-valuenow="40"
+                             aria-valuemin="0" aria-valuemax="100" style="width: @(progress + "%")">
+                            @(Math.Floor(progress) + "%") uploaded
+                        </div>
                     </div>
-                </div>
-            }
-            else if (progress == 100)
-            {
-                <div class="progress">
-                    <div class="progress-bar bg-success" role="progressbar" aria-valuenow="40"
-                         aria-valuemin="0" aria-valuemax="100" style="width: 100%">
-                        100% Upload completed
+                }
+                else if (progress == 100)
+                {
+                    <div class="progress">
+                        <div class="progress-bar bg-success" role="progressbar" aria-valuenow="40"
+                             aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                            100% Upload completed
+                        </div>
                     </div>
-                </div>
+                }
             }
-        }
-    </div>
+        </div>
+    }
 }
 
 @code {

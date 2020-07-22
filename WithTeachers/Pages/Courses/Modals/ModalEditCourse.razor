@@ -53,14 +53,7 @@
                                 </td>
 
                                 <td class="file-upload">
-                                    @if (!String.IsNullOrEmpty(document.FileUrl))
-                                    {
-                                        <span>Uploaded</span>
-                                    }
-                                    else
-                                    {
-                                        <FileUpload Document="@document" />
-                                    }
+                                    <FileUpload Document="@document" />
                                 </td>
 
                                 <td class="delete" @onclick="@(() => DeleteDocument(document))">
@@ -116,11 +109,8 @@
             document.Index = model.CourseDocuments.IndexOf(document);
             document.UploadDate = DateTime.Now;
             document.Course = model.Course;
-            await CourseDocumentService.CreateAsync(document);
+            await CourseDocumentService.UpdateAsync(document);
         }
-
-        // Reset
-        model = new CourseCourseDocument();
 
         // Notifier
         //await OnSubmit.InvokeAsync("The course <strong>" + model.Course.Title + "</strong> has been added to your courses!");
