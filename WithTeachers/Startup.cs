@@ -41,7 +41,6 @@ namespace WithTeachers
             services.AddBlazoredModal();
 
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<ApplicationUser>>();
-            services.AddSingleton<WeatherForecastService>();
             services.AddScoped<ClassService>();
             services.AddScoped<StudentService>();
             services.AddScoped<CourseService>();

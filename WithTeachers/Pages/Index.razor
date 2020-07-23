@@ -9,8 +9,6 @@
 
 Welcome to Blazored Modal.
 
-<button @onclick="@(() => Modal.Show<ModalTest>("My Movies"))" class="btn btn-primary">View Movies</button>
-
 <input type="text" @bind="_userInput" placeholder="userInput" />
 <input type="text" @bind="_messageInput" placeholder="messageInput" />
 <button @onclick="Send" disabled="@(!IsConnected)">Send</button>

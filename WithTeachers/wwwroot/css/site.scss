@@ -2,15 +2,12 @@
 @import 'variables';
 @import 'form';
 @import 'topMenu';
+@import 'blazored-modal';
 
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     background: $plate;
     color: $text-color-main;
-}
-
-.simple-form {
-    color: black !important;
 }
 
 /*
