@@ -1,7 +1,7 @@
 ﻿@page "/"
 @using WithTeachers.Data
 @inject IJSRuntime JSRuntime
-@using Microsoft.AspNetCore.SignalR.Client
+@*@using Microsoft.AspNetCore.SignalR.Client*@
 @inject NavigationManager NavigationManager
 @inject IModalService Modal
 
@@ -9,7 +9,7 @@
 
 Welcome to Blazored Modal.
 
-<input type="text" @bind="_userInput" placeholder="userInput" />
+@*<input type="text" @bind="_userInput" placeholder="userInput" />
 <input type="text" @bind="_messageInput" placeholder="messageInput" />
 <button @onclick="Send" disabled="@(!IsConnected)">Send</button>
 
@@ -19,7 +19,7 @@ Welcome to Blazored Modal.
         <li>@message</li>
     }
 </ul>
-@* TEST *@
+
 <div id="container">
     <h1>
         VIDEOCONFERENCE TEST
@@ -35,75 +35,72 @@ Welcome to Blazored Modal.
         <button id="hangupButton">Hang Up</button>
     </div>
 
-</div>
-
-@* END TEST *@
-
+</div>*@
 
 @code {
-    // SIGNALR
-    private HubConnection _hubConnection;
-    private string _userInput = "";
-    private string _messageInput = "";
-    private List<string> _messages = new List<string>();
+    //// SIGNALR
+    //private HubConnection _hubConnection;
+    //private string _userInput = "";
+    //private string _messageInput = "";
+    //private List<string> _messages = new List<string>();
 
-    protected override async Task OnInitializedAsync()
-    {
-        _hubConnection = new HubConnectionBuilder()
-            .WithUrl(NavigationManager.ToAbsoluteUri("/chatHub"))
-            .Build();
+    //protected override async Task OnInitializedAsync()
+    //{
+    //    _hubConnection = new HubConnectionBuilder()
+    //        .WithUrl(NavigationManager.ToAbsoluteUri("/chatHub"))
+    //        .Build();
 
-        _hubConnection.On<string, string>("ReceiveMessage", (user, message) =>
-        {
-            var encodedMsg = $"{user}:{message}";
-            _messages.Add(encodedMsg);
-            StateHasChanged();
-        });
+    //    _hubConnection.On<string, string>("ReceiveMessage", (user, message) =>
+    //    {
+    //        var encodedMsg = $"{user}:{message}";
+    //        _messages.Add(encodedMsg);
+    //        StateHasChanged();
+    //    });
 
-        await _hubConnection.StartAsync();
-    }
+    //    await _hubConnection.StartAsync();
+    //}
 
-    Task Send() =>
-        _hubConnection.SendAsync("SendMessage", _userInput, _messageInput);
+    //Task Send() =>
+    //    _hubConnection.SendAsync("SendMessage", _userInput, _messageInput);
 
-    public bool IsConnected =>
-        _hubConnection.State == HubConnectionState.Connected;
-
-
-
-    private string testValue = "click";
-    string message = "";
-
-    private async Task Test()
-    {
-        await JSRuntime.InvokeVoidAsync("init");
-    }
+    //public bool IsConnected =>
+    //    _hubConnection.State == HubConnectionState.Connected;
 
 
 
-    private async Task Start()
-    {
-        await JSRuntime.InvokeVoidAsync("start");
-    }
-    private async Task Call()
-    {
-        await JSRuntime.InvokeVoidAsync("call");
-    }
-    private async Task Upgrade()
-    {
-        await JSRuntime.InvokeVoidAsync("upgrade");
-    }
-    private async Task HangUp()
-    {
-        await JSRuntime.InvokeVoidAsync("hangup");
-    }
+    //private string testValue = "click";
+    //string message = "";
+
+    //private async Task Test()
+    //{
+    //    await JSRuntime.InvokeVoidAsync("init");
+    //}
+
+
+
+    //private async Task Start()
+    //{
+    //    await JSRuntime.InvokeVoidAsync("start");
+    //}
+    //private async Task Call()
+    //{
+    //    await JSRuntime.InvokeVoidAsync("call");
+    //}
+    //private async Task Upgrade()
+    //{
+    //    await JSRuntime.InvokeVoidAsync("upgrade");
+    //}
+    //private async Task HangUp()
+    //{
+    //    await JSRuntime.InvokeVoidAsync("hangup");
+    //}
 
 
 
 
-    protected override void OnAfterRender(bool firstRender)
-    {
-        JSRuntime.InvokeVoidAsync("attachHandlers");
-    }
+    //protected override void OnAfterRender(bool firstRender)
+    //{
+    //    JSRuntime.InvokeVoidAsync("attachHandlers");
+    //}
 
 }
