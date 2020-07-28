@@ -5,12 +5,13 @@
 @inject VideoconferenceService VideoconferenceService
 @inject ApplicationUserService ApplicationUserService
 
-@attribute [Authorize]
+@*@attribute [Authorize]*@
 
 @if (!String.IsNullOrEmpty(VideoconferenceId))
 {
-    <h1>Videoconference @VideoconferenceId</h1>
-    <VideoconferenceLaunch VideoconferenceId="@VideoconferenceId" />
+    @*<h1>Videoconference @VideoconferenceId</h1>
+    <VideoconferenceLaunch VideoconferenceId="@VideoconferenceId" />*@
+    <Test RoomId="@VideoconferenceId" />
 }
 else
 {

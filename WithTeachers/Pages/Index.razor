@@ -10,33 +10,33 @@
 Welcome to Blazored Modal.
 
 @*Will be for after !!!!
-    <input type="text" @bind="_userInput" placeholder="userInput" />
-<input type="text" @bind="_messageInput" placeholder="messageInput" />
-<button @onclick="Send" disabled="@(!IsConnected)">Send</button>
+        <input type="text" @bind="_userInput" placeholder="userInput" />
+    <input type="text" @bind="_messageInput" placeholder="messageInput" />
+    <button @onclick="Send" disabled="@(!IsConnected)">Send</button>
 
-<ul id="messageList">
-    @foreach (var message in _messages)
-    {
-        <li>@message</li>
-    }
-</ul>
+    <ul id="messageList">
+        @foreach (var message in _messages)
+        {
+            <li>@message</li>
+        }
+    </ul>
 
-<div id="container">
-    <h1>
-        VIDEOCONFERENCE TEST
-    </h1>
+    <div id="container">
+        <h1>
+            VIDEOCONFERENCE TEST
+        </h1>
 
-    <video id="localVideo" playsinline autoplay muted></video>
-    <video id="remoteVideo" playsinline autoplay></video>
+        <video id="localVideo" playsinline autoplay muted></video>
+        <video id="remoteVideo" playsinline autoplay></video>
 
-    <div>
-        <button id="startButton">Start</button>
-        <button id="callButton">Call</button>
-        <button id="upgradeButton">Turn on video</button>
-        <button id="hangupButton">Hang Up</button>
-    </div>
+        <div>
+            <button id="startButton">Start</button>
+            <button id="callButton">Call</button>
+            <button id="upgradeButton">Turn on video</button>
+            <button id="hangupButton">Hang Up</button>
+        </div>
 
-</div>*@
+    </div>*@
 
 @code {
     //// SIGNALR
@@ -76,8 +76,6 @@ Welcome to Blazored Modal.
     //{
     //    await JSRuntime.InvokeVoidAsync("init");
     //}
-
-
 
     //private async Task Start()
     //{

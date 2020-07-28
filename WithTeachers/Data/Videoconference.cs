@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace WithTeachers.Data
@@ -17,5 +18,24 @@ namespace WithTeachers.Data
 
         public string UserId { get; set; }
         public virtual ApplicationUser User { get; set; }
+    }
+
+    //Used for the hub
+    public class UserCall
+    {
+        public List<User> Users;
+    }
+
+    public class User
+    {
+        public string Username;
+        public string ConnectionId;
+        public bool InCall;
+    }
+
+    public class CallOffer
+    {
+        public User Caller;
+        public User Callee;
     }
 }

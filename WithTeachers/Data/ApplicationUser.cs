@@ -14,4 +14,14 @@ namespace WithTeachers.Data
         public virtual ICollection<Course> Courses { get; set; }
         public virtual ICollection<Videoconference> Videoconferences { get; set; }
     }
+
+    public class AnonymousUser
+    {
+        public string UserName { get; set; }
+
+        public AnonymousUser() { }
+
+        public AnonymousUser(string userName)
+            => UserName = userName;
+    }
 }

@@ -1,0 +1,146 @@
+﻿@using Microsoft.AspNetCore.SignalR.Client
+@inject IJSRuntime JSRuntime
+@inject IModalService Modal
+@inject NavigationManager NavigationManager
+
+@if (AnonymousUser != null)
+{
+    <h1>Test</h1>
+    <p><strong>@RoomId</strong> @toCallerOnly</p>
+    <b>@id</b>
+    <button @onclick="InsertRoom">Insert</button>
+    <button @onclick="RemoveRoom">Leave</button>
+    @if (!IsConnectedToHub)
+    {
+        <p><em>Connecting...</em></p>
+    }
+    else
+    {
+        <p>You are connected!</p>
+        <b>@joiners</b> <em>|</em> <b>@lefters</b>
+
+        <div id="container">
+            <video id="localVideo" playsinline autoplay muted></video>
+            <video id="remoteVideo" playsinline autoplay></video>
+
+            <h3>WebRTC Tests</h3>
+            <div>
+                <button @onclick="@(() => JSRuntime.InvokeVoidAsync("webRTC_queryMedia"))">Query media</button>
+                <button @onclick="@(() => JSRuntime.InvokeVoidAsync("webRTC_getAllMedia"))">Media infos</button>
+                @*<button @onclick="@(() => JSRuntime.InvokeVoidAsync("webRTC_getCameras"))">Get cameras</button>*@
+                <select id="availableCameras"></select>
+                <button @onclick="@(() => JSRuntime.InvokeVoidAsync("webRTC_playVideoFromCamera"))">Play video local</button>
+                <video id="localVideoPlayback" autoplay playsinline />
+                <button @onclick="@(() => JSRuntime.InvokeVoidAsync("webRTC_playScreen"))">Play screen local</button>
+                <video id="localSCreenPlayback" autoplay playsinline />
+            </div>
+
+            @*<div>
+                    <button id="startButton">Start</button>
+                    <button id="callButton">Call</button>
+                    <button id="upgradeButton">Turn on video</button>
+                    <button id="hangupButton">Hang Up</button>
+                </div>*@
+        </div>
+    }
+}
+
+@code {
+    [Parameter]
+    public string RoomId { get; set; }
+
+    AnonymousUser AnonymousUser;
+
+    HubConnection HubConnection;
+    string joiners = "";
+    string lefters = "";
+
+    string toCallerOnly = "";
+    string id = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await InitializeHubAsync();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            if(AnonymousUser == null)
+            {
+                await ShowAnonymousUserModal();
+            }
+        }
+        // Needed to attach id in DOM with JS elements
+        //await JSRuntime.InvokeVoidAsync("webRTC_handlers");
+    }
+
+    private async Task ShowAnonymousUserModal()
+    {
+        var parameters = new ModalParameters();
+        parameters.Add("RoomId", RoomId);
+
+        var modalOpened = Modal.Show<ModalAddAnonymousUser>("Videoconference", parameters);
+        var result = await modalOpened.Result;
+
+        if (!result.Cancelled) { }
+    }
+
+    async Task TryHubConnection() => await HubConnection.SendAsync("TestConnection", "string1", "string2");
+    async Task TryCallerFeedback() => await HubConnection.SendAsync("TestCaller");
+    async Task InsertRoom() => await HubConnection.SendAsync("InsertRoom", RoomId);
+    async Task RemoveRoom() => await HubConnection.SendAsync("RemoveFromRoom", RoomId);
+
+    async Task InitializeHubAsync()
+    {
+        // Connection creation
+        HubConnection = new HubConnectionBuilder()
+            .WithUrl(NavigationManager.ToAbsoluteUri("/webRtcHub"))
+            .WithAutomaticReconnect()
+            .Build();
+
+        // HANDLERS CALLED BY HUB
+        HubConnection.On("TestConnectionClient", () => NewConnection());
+        HubConnection.On<string>("TestCallerClient", (text) => CallerFeedback(text));
+        HubConnection.On<string>("JoinRoom", (param1) => JoinRoom(param1));
+        HubConnection.On("LeaveRoom", () => LeaveRoom());
+
+        HubConnection.On<string>("GetUserNameClient", (userName) => AnonymousUser.UserName = userName);
+
+        // Connection start
+        await HubConnection.StartAsync();
+        id = HubConnection.ConnectionId;
+
+    }
+
+    async Task JoinRoom(string param)
+    {
+        joiners = "Toi t'es nouveau : " + param;
+        StateHasChanged();
+    }
+
+    async Task LeaveRoom()
+    {
+
+    }
+
+    public bool IsConnectedToHub => HubConnection.State == HubConnectionState.Connected;
+
+    void NewConnection()
+    {
+        StateHasChanged();
+    }
+
+    void CallerFeedback(string response)
+    {
+        toCallerOnly = response;
+    }
+
+    public void Dispose()
+    {
+        _ = HubConnection.DisposeAsync();
+    }
+
+    // WebRTC
+}
