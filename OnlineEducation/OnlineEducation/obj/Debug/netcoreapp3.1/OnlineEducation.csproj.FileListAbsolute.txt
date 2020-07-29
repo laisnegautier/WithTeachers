@@ -126,3 +126,7 @@ C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\OnlineEducation\OnlineEd
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\OnlineEducation\OnlineEducation\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Videoconference\Dashboard.razor.g.cs
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\OnlineEducation\OnlineEducation\obj\Debug\netcoreapp3.1\Razor\Pages\Videoconference\AdministrationTools.razor.g.cs
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\OnlineEducation\OnlineEducation\obj\Debug\netcoreapp3.1\Razor\Pages\Videoconference\Dashboard.razor.g.cs
+C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\OnlineEducation\OnlineEducation\obj\Debug\netcoreapp3.1\RazorDeclaration\Shared\Videoboard.razor.g.cs
+C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\OnlineEducation\OnlineEducation\obj\Debug\netcoreapp3.1\Razor\Shared\Videoboard.razor.g.cs
+C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\OnlineEducation\OnlineEducation\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Videoconference\RoomIdCheck.razor.g.cs
+C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\OnlineEducation\OnlineEducation\obj\Debug\netcoreapp3.1\Razor\Pages\Videoconference\RoomIdCheck.razor.g.cs

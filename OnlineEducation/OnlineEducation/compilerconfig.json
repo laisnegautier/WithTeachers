@@ -18,5 +18,9 @@
   {
     "outputFile": "wwwroot/css/variables.css",
     "inputFile": "wwwroot/css/variables.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/videoboard.css",
+    "inputFile": "wwwroot/css/videoboard.scss"
   }
 ]

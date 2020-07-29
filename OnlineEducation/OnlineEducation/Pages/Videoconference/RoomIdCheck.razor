@@ -1,0 +1,114 @@
+﻿@page "/{RoomId}"
+@layout Videoboard
+
+@inject IModalService Modal
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
+@inject ApplicationUserService ApplicationUserService
+@inject VideoconferenceService VideoconferenceService
+
+    <div class="centered-div">
+        @if (!videoconferenceExists(RoomId))
+        {
+            <h1>Page not found</h1>
+            <p>There is nothing associated with the URL.</p>
+            <button class="btn">Go to home page</button>
+        }
+        else
+        {
+            @if (!userHasJoined)
+            {
+                <h1><strong>@videoconference.Title</strong> videoconference</h1>
+                <ul class="list-unstyled">
+                    <li>Hosted by <strong>@videoconference.User.UserName</strong></li>
+                    <li>Scheduled for <strong>@videoconference.ScheduledFor.ToShortTimeString(), @videoconference.ScheduledFor.ToShortDateString()</strong></li>
+                    <li>Length: @videoconference.TimeSpan.ToString(@"hh\:mm")</li>
+                    <li>Description: @videoconference.Description</li>
+                </ul>
+
+                @if (videoconference.IsCompleted)
+                {
+                    <div class="alert alert-info"><p>This videoconference has <strong>finished</strong>.</p></div>
+                }
+                else if (videoconference.HasToOccurLater)
+                {
+                    <div class="alert alert-info"><p>This videoconference has <strong>not begun yet</strong>.</p></div>
+                }
+                else if (videoconference.IsOngoing)
+                {
+                    @if (videoconference.HasPassword && !videoconference.PasswordIsCorrect(inputVideoconferencePassword))
+                    {
+                        <input type="password" class="form-control text-center" @bind="inputVideoconferencePassword" @bind:event="oninput" placeholder="Enter the password" />
+                    }
+                    else
+                    {
+                        @if (videoconference.IsTeacher(currentUser))
+                        {
+                            JoinVideoconferenceAsTeacher();
+                        }
+                        else
+                        {
+                            <p>Choose a name:</p>
+                            <input @bind="inputStudentName" />
+
+                            @if (!String.IsNullOrEmpty(inputStudentName))
+                            {
+                                JoinVideoconferenceAsStudent(inputStudentName);
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                @*<Videoboard />*@
+                if (videoconference.User == currentUser)
+                {
+                    <p><em>You are the creator</em></p>
+                    <AdministrationTools />
+                }
+                else
+                {
+                    <p><em>You are <strong>NOT</strong> the creator</em></p>
+                }
+            }
+
+        }
+    </div>
+
+@code {
+    [Parameter]
+    public string RoomId { get; set; }
+
+    ApplicationUser currentUser;
+    Videoconference videoconference;
+    string inputVideoconferencePassword;
+    string inputStudentName;
+
+    // Once connected to the videoconference
+    bool userHasJoined = false;
+    AnonymousUser anonymousUser;
+
+    protected override async Task OnInitializedAsync()
+    {
+        currentUser = await ApplicationUserService.GetCurrentUser();
+
+        if (!String.IsNullOrEmpty(RoomId))
+            videoconference = await VideoconferenceService.GetByRoomAsync(RoomId);
+    }
+
+    private bool videoconferenceExists(string roomId)
+        => videoconference != null;
+
+    private void JoinVideoconferenceAsTeacher()
+    {
+        userHasJoined = true;
+        StateHasChanged();
+    }
+
+    private void JoinVideoconferenceAsStudent(string studentName)
+    {
+        userHasJoined = true;
+        StateHasChanged();
+    }
+}

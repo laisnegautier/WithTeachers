@@ -46,8 +46,10 @@ namespace OnlineEducation.Data.Models
         [NotMapped]
         public bool HasPassword { get => !String.IsNullOrEmpty(Password); }
 
-        
         public bool PasswordIsCorrect(string passwordFromUser)
             => Password == passwordFromUser;
+
+        public bool IsTeacher(ApplicationUser user)
+            => User.Id == user.Id;
     }
 }

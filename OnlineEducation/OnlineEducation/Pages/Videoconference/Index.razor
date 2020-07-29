@@ -1,98 +1,14 @@
 ﻿@page "/videoconference"
-@page "/{RoomId}"
-@using Microsoft.AspNetCore.SignalR.Client
 
-@inject IModalService Modal
-@inject NavigationManager NavigationManager
-@inject IJSRuntime JSRuntime
-@inject ApplicationUserService ApplicationUserService
-@inject VideoconferenceService VideoconferenceService
-
-@if (String.IsNullOrEmpty(RoomId))
-{
-    <AuthorizeView>
-        <Authorized>
-            <Dashboard />
-        </Authorized>
-        <NotAuthorized>
-            Not authorized
-        </NotAuthorized>
-    </AuthorizeView>
-}
-else
-{
-    if (!videoconferenceExists(RoomId))
-    {
-        <p>There is nos videoconference associated with <strong>@RoomId</strong>.</p>
-    }
-    else
-    {
-        if (!userHasJoined)
-        {
-            <p>This is the videoconference <strong>@videoconference.Title</strong></p>
-            <b>FULL DESCRIPTION HERE</b>
-
-            if (videoconference.IsCompleted)
-            {
-                <p>This videoconference has finished and is not available anymore</p>
-            }
-            else if (videoconference.HasToOccurLater)
-            {
-                <p>This is for later</p>
-            }
-            else if (videoconference.IsOngoing)
-            {
-                <strong>You can connect</strong>
-                if (videoconference.HasPassword && !videoconference.PasswordIsCorrect(inputPassword))
-                {
-                    <p>it needs a password:</p>
-                    <input @bind="inputPassword" />
-                }
-                else
-                {
-                    JoinVideoconference();
-                }
-            }
-        }
-        else
-        {
-            if (videoconference.User == currentUser)
-            {
-                <p><em>You are the creator</em></p>
-                <AdministrationTools />
-            }
-            else
-            {
-                <p><em>You are <strong>NOT</strong> the creator</em></p>
-            }
-        }
-
-    }
-}
+<AuthorizeView>
+    <Authorized>
+        <Dashboard />
+    </Authorized>
+    <NotAuthorized>
+        Not authorized
+    </NotAuthorized>
+</AuthorizeView>
 
 @code {
-    [Parameter]
-    public string RoomId { get; set; }
 
-    ApplicationUser currentUser;
-    Videoconference videoconference;
-    string inputPassword;
-    bool userHasJoined = false;
-
-    protected override async Task OnInitializedAsync()
-    {
-        currentUser = await ApplicationUserService.GetCurrentUser();
-
-        if (!String.IsNullOrEmpty(RoomId))
-            videoconference = await VideoconferenceService.GetByRoomAsync(RoomId);
-    }
-
-    private bool videoconferenceExists(string roomId)
-        => videoconference != null;
-
-    private void JoinVideoconference()
-    {
-        userHasJoined = true;
-        StateHasChanged();
-    }
 }

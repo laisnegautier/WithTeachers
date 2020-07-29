@@ -1,8 +1,9 @@
 ﻿@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
-@import 'variables';
-@import 'form';
-@import 'topMenu';
-@import 'blazored-modal';
+@import 'variables.scss';
+@import 'form.scss';
+@import 'topMenu.scss';
+@import 'videoboard.scss';
+@import 'blazored-modal.scss';
 
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
