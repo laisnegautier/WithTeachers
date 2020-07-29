@@ -107,7 +107,6 @@ C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\OnlineEducation\OnlineEd
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\OnlineEducation\OnlineEducation\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Proxies.dll
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\OnlineEducation\OnlineEducation\bin\Debug\netcoreapp3.1\Slugify.Core.dll
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\OnlineEducation\OnlineEducation\obj\Debug\netcoreapp3.1\OnlineEducation.csprojAssemblyReference.cache
-C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\OnlineEducation\OnlineEducation\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Videoconference\Modals\ModalAddAnonymousUser.razor.g.cs
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\OnlineEducation\OnlineEducation\obj\Debug\netcoreapp3.1\OnlineEducation.csproj.CoreCompileInputs.cache
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\OnlineEducation\OnlineEducation\obj\Debug\netcoreapp3.1\OnlineEducation.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\OnlineEducation\OnlineEducation\obj\Debug\netcoreapp3.1\OnlineEducation.MvcApplicationPartsAssemblyInfo.cache
@@ -116,7 +115,6 @@ C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\OnlineEducation\OnlineEd
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\OnlineEducation\OnlineEducation\obj\Debug\netcoreapp3.1\Razor\App.razor.g.cs
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\OnlineEducation\OnlineEducation\obj\Debug\netcoreapp3.1\Razor\Pages\Index.razor.g.cs
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\OnlineEducation\OnlineEducation\obj\Debug\netcoreapp3.1\Razor\Pages\Videoconference\Index.razor.g.cs
-C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\OnlineEducation\OnlineEducation\obj\Debug\netcoreapp3.1\Razor\Pages\Videoconference\Modals\ModalAddAnonymousUser.razor.g.cs
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\OnlineEducation\OnlineEducation\obj\Debug\netcoreapp3.1\Razor\Shared\LoginDisplay.razor.g.cs
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\OnlineEducation\OnlineEducation\obj\Debug\netcoreapp3.1\Razor\Shared\MainLayout.razor.g.cs
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\OnlineEducation\OnlineEducation\obj\Debug\netcoreapp3.1\Razor\Shared\NavMenu.razor.g.cs
@@ -130,3 +128,5 @@ C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\OnlineEducation\OnlineEd
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\OnlineEducation\OnlineEducation\obj\Debug\netcoreapp3.1\Razor\Shared\Videoboard.razor.g.cs
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\OnlineEducation\OnlineEducation\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Videoconference\RoomIdCheck.razor.g.cs
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\OnlineEducation\OnlineEducation\obj\Debug\netcoreapp3.1\Razor\Pages\Videoconference\RoomIdCheck.razor.g.cs
+C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\OnlineEducation\OnlineEducation\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Videoconference\Videos.razor.g.cs
+C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\OnlineEducation\OnlineEducation\obj\Debug\netcoreapp3.1\Razor\Pages\Videoconference\Videos.razor.g.cs

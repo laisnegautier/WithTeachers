@@ -7,6 +7,12 @@
 @inject ApplicationUserService ApplicationUserService
 @inject VideoconferenceService VideoconferenceService
 
+@if (userHasJoinedVideoconference)
+{
+    <Videos Videoconference="@videoconference" User="@userJoiningTheVideoconference" />
+}
+else
+{
     <div class="centered-div">
         @if (!videoconferenceExists(RoomId))
         {
@@ -16,7 +22,26 @@
         }
         else
         {
-            @if (!userHasJoined)
+            @if (videoconference.IsHost(currentUser))
+            {
+                <h1><strong>@videoconference.Title</strong> videoconference</h1>
+                <ul class="list-unstyled">
+                    <li>Hosted by <strong>@videoconference.User.UserName</strong></li>
+                    <li>Scheduled for <strong>@videoconference.ScheduledFor.ToShortTimeString(), @videoconference.ScheduledFor.ToShortDateString()</strong></li>
+                    <li>Length: @videoconference.TimeSpan.ToString(@"hh\:mm")</li>
+                    <li>Description: @videoconference.Description</li>
+                </ul>
+
+                @if (videoconference.IsOngoing)
+                {
+                    JoinVideoconferenceAsHost();
+                }
+                else
+                {
+                    <button class="btn" @onclick="JoinVideoconferenceAsHostAsync">Start the videoconference</button>
+                }
+            }
+            else
             {
                 <h1><strong>@videoconference.Title</strong> videoconference</h1>
                 <ul class="list-unstyled">
@@ -38,43 +63,38 @@
                 {
                     @if (videoconference.HasPassword && !videoconference.PasswordIsCorrect(inputVideoconferencePassword))
                     {
-                        <input type="password" class="form-control text-center" @bind="inputVideoconferencePassword" @bind:event="oninput" placeholder="Enter the password" />
+                        <div class="alert alert-info mb-3"><p>A <strong>password</strong> is needed to access the videoconference.</p></div>
+
+                        <div class="form-inline">
+                            <input type="password" class="form-control text-center mb-3 mb-sm-0 mr-2" @bind="inputVideoconferencePassword" placeholder="Enter the password to join" autofocus />
+                            <button class="btn">Submit</button>
+                        </div>
                     }
                     else
                     {
-                        @if (videoconference.IsTeacher(currentUser))
+                        //here it's just another user of the platform but not the one who created the videoconf so we don't ask for other name
+                        @if (currentUser != null)
                         {
-                            JoinVideoconferenceAsTeacher();
+                            <button class="btn" @onclick="@(() => JoinVideoconferenceAsGuest(currentUser))">Join as @currentUser.UserName</button>
                         }
                         else
                         {
-                            <p>Choose a name:</p>
-                            <input @bind="inputStudentName" />
+                            <div class="form-inline">
+                                <input type="text" class="form-control text-center mb-3 mb-sm-0 mr-2" @bind="inputGuestName" placeholder="Write your name" autofocus />
+                                <button class="btn">Join</button>
+                            </div>
 
-                            @if (!String.IsNullOrEmpty(inputStudentName))
+                            @if (!String.IsNullOrEmpty(inputGuestName))
                             {
-                                JoinVideoconferenceAsStudent(inputStudentName);
+                                JoinVideoconferenceAsGuest(inputGuestName);
                             }
                         }
                     }
                 }
             }
-            else
-            {
-                @*<Videoboard />*@
-                if (videoconference.User == currentUser)
-                {
-                    <p><em>You are the creator</em></p>
-                    <AdministrationTools />
-                }
-                else
-                {
-                    <p><em>You are <strong>NOT</strong> the creator</em></p>
-                }
-            }
-
         }
     </div>
+}
 
 @code {
     [Parameter]
@@ -83,11 +103,11 @@
     ApplicationUser currentUser;
     Videoconference videoconference;
     string inputVideoconferencePassword;
-    string inputStudentName;
+    string inputGuestName;
 
     // Once connected to the videoconference
-    bool userHasJoined = false;
-    AnonymousUser anonymousUser;
+    bool userHasJoinedVideoconference = false;
+    dynamic userJoiningTheVideoconference; //can be the host, a connected guest or an anonymous guest
 
     protected override async Task OnInitializedAsync()
     {
@@ -100,15 +120,33 @@
     private bool videoconferenceExists(string roomId)
         => videoconference != null;
 
-    private void JoinVideoconferenceAsTeacher()
+    private void JoinVideoconferenceAsHost()
     {
-        userHasJoined = true;
+        userHasJoinedVideoconference = true;
+        userJoiningTheVideoconference = currentUser;
         StateHasChanged();
     }
 
-    private void JoinVideoconferenceAsStudent(string studentName)
+    private async Task JoinVideoconferenceAsHostAsync()
     {
-        userHasJoined = true;
+        userHasJoinedVideoconference = true;
+        userJoiningTheVideoconference = currentUser;
+        videoconference.IsOngoing = true;
+        await VideoconferenceService.UpdateAsync(videoconference);
+        StateHasChanged();
+    }
+
+    private void JoinVideoconferenceAsGuest(string guestName)
+    {
+        userJoiningTheVideoconference = new Guest(guestName);
+        userHasJoinedVideoconference = true;
+        StateHasChanged();
+    }
+
+    private void JoinVideoconferenceAsGuest(ApplicationUser userButNotHost)
+    {
+        userJoiningTheVideoconference = userButNotHost;
+        userHasJoinedVideoconference = true;
         StateHasChanged();
     }
 }

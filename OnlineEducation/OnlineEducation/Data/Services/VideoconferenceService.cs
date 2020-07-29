@@ -29,5 +29,11 @@ namespace OnlineEducation.Data.Services
 
         public async Task<Videoconference> GetByRoomAsync(string roomId)
             => await _context.Videoconferences.SingleOrDefaultAsync(x => x.RoomId == roomId);
+
+        public async Task UpdateAsync(Videoconference vc)
+        {
+            _context.Entry(vc).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+        }
     }
 }

@@ -49,7 +49,9 @@ namespace OnlineEducation.Data.Models
         public bool PasswordIsCorrect(string passwordFromUser)
             => Password == passwordFromUser;
 
-        public bool IsTeacher(ApplicationUser user)
-            => User.Id == user.Id;
+        public bool IsHost(ApplicationUser user)
+            => user != null ? User.Id == user.Id : false;
+
+        public bool IsHost(Guest user) => false;
     }
 }

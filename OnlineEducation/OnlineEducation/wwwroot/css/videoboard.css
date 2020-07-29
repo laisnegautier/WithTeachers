@@ -39,6 +39,11 @@
   box-shadow: 0 3px 20px #141D25 !important;
   -moz-box-shadow: 0 3px 20px #141D25 !important;
   -webkit-box-shadow: 0 3px 20px #141D25 !important; }
+  .centered-div input {
+    height: 40px !important; }
+  .centered-div .form-inline {
+    display: flex;
+    justify-content: center; }
   .centered-div h1 {
     font-size: 1.5rem;
     border-bottom: 2px solid #3F4D5A;
@@ -58,7 +63,8 @@
     -moz-transition: .1s linear all !important;
     box-shadow: 0 3px 10px #141D25 !important;
     -moz-box-shadow: 0 3px 10px #141D25 !important;
-    -webkit-box-shadow: 0 3px 10px #141D25 !important; }
+    -webkit-box-shadow: 0 3px 10px #141D25 !important;
+    height: 40px; }
     .centered-div .btn:last-of-type {
       border-right-width: 2px; }
     .centered-div .btn:disabled {

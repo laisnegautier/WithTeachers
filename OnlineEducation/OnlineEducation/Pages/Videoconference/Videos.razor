@@ -1,0 +1,23 @@
+﻿<h3>Videos</h3>
+
+@if (Videoconference.IsHost(User))
+{
+    <p><strong>YOU'RE THE HOST</strong></p>
+}
+else if (!Videoconference.IsHost(User) && User is Guest)
+{
+    <p><strong>YOU'RE AN ANONYMOUS GUEST</strong></p>
+}
+else if (!Videoconference.IsHost(User) && User is ApplicationUser)
+{
+    <p><strong>YOU'RE CONNECTED BUT ONLY A GUEST</strong></p>
+}
+
+@code {
+    [Parameter]
+    public Videoconference Videoconference { get; set; }
+
+    [Parameter]
+    public dynamic User { get; set; }
+}
+

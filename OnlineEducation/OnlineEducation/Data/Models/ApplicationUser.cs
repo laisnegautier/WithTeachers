@@ -13,13 +13,13 @@ namespace OnlineEducation.Data.Models
         public virtual ICollection<Activity> Activities { get; set; }
     }
 
-    public class AnonymousUser
+    public class Guest
     {
         public string UserName { get; set; }
 
-        public AnonymousUser() { }
+        public Guest() { }
 
-        public AnonymousUser(string userName)
+        public Guest(string userName)
             => UserName = userName;
     }
 }
