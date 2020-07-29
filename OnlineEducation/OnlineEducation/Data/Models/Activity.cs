@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -32,6 +31,9 @@ namespace OnlineEducation.Data.Models
 
         public string UserId { get; set; }
         public virtual ApplicationUser User { get; set; }
+
+        [NotMapped]
+        public bool HasToOccurLater { get => ScheduledFor > DateTime.Now; }
     }
 
     public class Videoconference : Activity
@@ -42,6 +44,10 @@ namespace OnlineEducation.Data.Models
         public string Password { get; set; }
 
         [NotMapped]
-        public bool HasPassword { get => String.IsNullOrEmpty(Password); }
+        public bool HasPassword { get => !String.IsNullOrEmpty(Password); }
+
+        
+        public bool PasswordIsCorrect(string passwordFromUser)
+            => Password == passwordFromUser;
     }
 }

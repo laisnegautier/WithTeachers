@@ -7,23 +7,12 @@
 @inject IJSRuntime JSRuntime
 @inject ApplicationUserService ApplicationUserService
 @inject VideoconferenceService VideoconferenceService
-@* 1: check if user is going through a room or not
-      1.1: if no, check if it's the person who created the room
-      1.2: if ye, check if videoconference exists
-            1.2.1 if doesnt exist, error message
-            1.2.2 if exists
-                1.2.2.1 if needs password, ask for password then display details and all
-                1.2.2.2 if doesnt need display details
 
-    DETAILS:
-    2. Check date of videoconference and give feedback accordingly
-
-    3. If you can enter the room, ask input name to rejoin the room *@
 @if (String.IsNullOrEmpty(RoomId))
 {
     <AuthorizeView>
         <Authorized>
-            <VideoconferenceDashboard />
+            <Dashboard />
         </Authorized>
         <NotAuthorized>
             Not authorized
@@ -32,36 +21,52 @@
 }
 else
 {
-    if (!roomExists)
+    if (!videoconferenceExists(RoomId))
     {
-        <p>The room <strong>@RoomId</strong> doesn't exist</p>
+        <p>There is nos videoconference associated with <strong>@RoomId</strong>.</p>
     }
     else
     {
-        <p>This is the videoconference <strong>@videoconference.Title</strong></p>
-
-        if (videoconference.HasPassword && !PasswordIsCorrect(inputPassword, videoconference))
+        if (!userHasJoined)
         {
-            <p>it needs a password:</p>
-            <input @bind="inputPassword" />
+            <p>This is the videoconference <strong>@videoconference.Title</strong></p>
+            <b>FULL DESCRIPTION HERE</b>
+
+            if (videoconference.IsCompleted)
+            {
+                <p>This videoconference has finished and is not available anymore</p>
+            }
+            else if (videoconference.HasToOccurLater)
+            {
+                <p>This is for later</p>
+            }
+            else if (videoconference.IsOngoing)
+            {
+                <strong>You can connect</strong>
+                if (videoconference.HasPassword && !videoconference.PasswordIsCorrect(inputPassword))
+                {
+                    <p>it needs a password:</p>
+                    <input @bind="inputPassword" />
+                }
+                else
+                {
+                    JoinVideoconference();
+                }
+            }
         }
         else
         {
-            if (videoconference.IsOngoing)
+            if (videoconference.User == currentUser)
             {
-                <p>Welcome :)</p>
-                //videoconf from anonymous 
-                // or vc with dashboard (teacher pov)
+                <p><em>You are the creator</em></p>
+                <AdministrationTools />
             }
             else
             {
-                if (videoconference.IsCompleted)
-                {
-
-                }
-                <p></p>
+                <p><em>You are <strong>NOT</strong> the creator</em></p>
             }
         }
+
     }
 }
 
@@ -70,24 +75,24 @@ else
     public string RoomId { get; set; }
 
     ApplicationUser currentUser;
-    bool roomExists;
     Videoconference videoconference;
     string inputPassword;
+    bool userHasJoined = false;
 
     protected override async Task OnInitializedAsync()
     {
         currentUser = await ApplicationUserService.GetCurrentUser();
 
         if (!String.IsNullOrEmpty(RoomId))
-        {
             videoconference = await VideoconferenceService.GetByRoomAsync(RoomId);
-            roomExists = videoconference != null;
-        }
     }
 
-    private bool HasPassword(Videoconference vc)
-        => !String.IsNullOrEmpty(vc.Password);
+    private bool videoconferenceExists(string roomId)
+        => videoconference != null;
 
-    private bool PasswordIsCorrect(string passwordFromUser, Videoconference vc)
-        => vc.Password == passwordFromUser;
+    private void JoinVideoconference()
+    {
+        userHasJoined = true;
+        StateHasChanged();
+    }
 }
