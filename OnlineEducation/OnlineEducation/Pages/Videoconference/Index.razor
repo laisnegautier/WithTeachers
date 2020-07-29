@@ -38,22 +38,29 @@ else
     }
     else
     {
-        <p>IT EXISTS</p>
-        if (HasPassword(videoconference))
+        <p>This is the videoconference <strong>@videoconference.Title</strong></p>
+
+        if (videoconference.HasPassword && !PasswordIsCorrect(inputPassword, videoconference))
         {
-            if (!PasswordIsCorrect(inputPassword, videoconference))
-            {
-                <p>it needs a password:</p>
-                <input @bind="inputPassword" />
-            }
-            else
-            {
-                <p>Canard</p>
-            }
+            <p>it needs a password:</p>
+            <input @bind="inputPassword" />
         }
         else
         {
-            <p>no need for a password</p>
+            if (videoconference.IsOngoing)
+            {
+                <p>Welcome :)</p>
+                //videoconf from anonymous 
+                // or vc with dashboard (teacher pov)
+            }
+            else
+            {
+                if (videoconference.IsCompleted)
+                {
+
+                }
+                <p></p>
+            }
         }
     }
 }

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnlineEducation.Data;
 
 namespace OnlineEducation.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200729085416_Delete-seed")]
+    partial class Deleteseed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -232,6 +234,9 @@ namespace OnlineEducation.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<bool>("Completed")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
 
@@ -243,10 +248,7 @@ namespace OnlineEducation.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsCompleted")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsOngoing")
+                    b.Property<bool>("Ongoing")
                         .HasColumnType("bit");
 
                     b.Property<DateTime>("ScheduledFor")
@@ -292,63 +294,6 @@ namespace OnlineEducation.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasDiscriminator().HasValue("Videoconference");
-
-                    b.HasData(
-                        new
-                        {
-                            ActivityId = 1,
-                            CreationDate = new DateTime(2020, 3, 24, 4, 45, 19, 0, DateTimeKind.Unspecified),
-                            Description = "You have to follow now",
-                            IsCompleted = false,
-                            IsOngoing = true,
-                            ScheduledFor = new DateTime(2020, 7, 29, 10, 58, 28, 831, DateTimeKind.Local).AddTicks(3940),
-                            TimeSpan = new TimeSpan(0, 2, 30, 0, 0),
-                            Title = "Course of Mathematics",
-                            UserId = "5925d79e-5ed1-4e19-ae1f-8ef0e4474cad",
-                            Password = "SOIT",
-                            RoomId = "course-of-mathXBZ"
-                        },
-                        new
-                        {
-                            ActivityId = 2,
-                            CreationDate = new DateTime(2019, 3, 24, 4, 45, 19, 0, DateTimeKind.Unspecified),
-                            Description = "Goodbye Ornald",
-                            IsCompleted = true,
-                            IsOngoing = false,
-                            ScheduledFor = new DateTime(2020, 3, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            TimeSpan = new TimeSpan(0, 1, 0, 0, 0),
-                            Title = "Video already passed",
-                            UserId = "5925d79e-5ed1-4e19-ae1f-8ef0e4474cad",
-                            Password = "4XUBG",
-                            RoomId = "this-is-me"
-                        },
-                        new
-                        {
-                            ActivityId = 3,
-                            CreationDate = new DateTime(2018, 3, 24, 4, 45, 19, 0, DateTimeKind.Unspecified),
-                            Description = "Hy Iceland",
-                            IsCompleted = false,
-                            IsOngoing = false,
-                            ScheduledFor = new DateTime(2020, 10, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            TimeSpan = new TimeSpan(0, 5, 0, 0, 0),
-                            Title = "Video to come",
-                            UserId = "5925d79e-5ed1-4e19-ae1f-8ef0e4474cad",
-                            Password = "YEAH",
-                            RoomId = "to-come"
-                        },
-                        new
-                        {
-                            ActivityId = 4,
-                            CreationDate = new DateTime(2020, 3, 24, 4, 45, 19, 0, DateTimeKind.Unspecified),
-                            Description = "You",
-                            IsCompleted = false,
-                            IsOngoing = true,
-                            ScheduledFor = new DateTime(2020, 7, 29, 10, 58, 28, 834, DateTimeKind.Local).AddTicks(6603),
-                            TimeSpan = new TimeSpan(0, 0, 30, 0, 0),
-                            Title = "Without Password",
-                            UserId = "5925d79e-5ed1-4e19-ae1f-8ef0e4474cad",
-                            RoomId = "without-password"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

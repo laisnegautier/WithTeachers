@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OnlineEducation.Data.Models
 {
@@ -22,12 +23,12 @@ namespace OnlineEducation.Data.Models
         [DataType(DataType.Duration)]
         public TimeSpan TimeSpan { get; set; }
 
-        public bool Completed { get; set; } = false;
+        public bool IsCompleted { get; set; } = false;
 
         [DataType(DataType.DateTime)]
         public DateTime CreationDate { get; set; }
 
-        public bool Ongoing { get; set; }
+        public bool IsOngoing { get; set; }
 
         public string UserId { get; set; }
         public virtual ApplicationUser User { get; set; }
@@ -39,5 +40,8 @@ namespace OnlineEducation.Data.Models
 
         [DataType(DataType.Password)]
         public string Password { get; set; }
+
+        [NotMapped]
+        public bool HasPassword { get => String.IsNullOrEmpty(Password); }
     }
 }
