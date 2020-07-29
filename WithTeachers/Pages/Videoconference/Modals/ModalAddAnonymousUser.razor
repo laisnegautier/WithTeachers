@@ -1,12 +1,11 @@
-﻿<h4 class="form-title small"><span class="oi oi-plus" aria-hidden="true"></span> Join the videoconference</h4>
-<EditForm class="form-section" Model="@model" OnValidSubmit="HandleValidSubmit">
+﻿<EditForm class="form-section form-blank" Model="@model" OnValidSubmit="HandleValidSubmit">
     <ObjectGraphDataAnnotationsValidator />
-
+    <p class="text-center">You are going to join the videoconference <strong>Name of the course</strong>, hosted by <strong>Emilie Ricaux</strong>.</p>
     <div class="row add-class">
-        <div class="col-12 col-md-5">
+        <div class="col-12">
             <div class="input-group mb-2">
-                <label for="userName" class="col-12">Your name:</label>
-                <InputText id="userName" placeholder="write here..." class="form-control" @bind-Value="model.UserName" />
+                <label for="userName" class="sr-only">Write your name:</label>
+                <InputText id="userName" placeholder="Write your name" class="form-control col-12 text-center" @bind-Value="model.UserName" />
             </div>
         </div>
     </div>

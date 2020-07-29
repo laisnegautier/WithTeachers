@@ -1,0 +1,86 @@
+﻿@page "/videoconference"
+@page "/{RoomId}"
+@using Microsoft.AspNetCore.SignalR.Client
+
+@inject IModalService Modal
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
+@inject ApplicationUserService ApplicationUserService
+@inject VideoconferenceService VideoconferenceService
+@* 1: check if user is going through a room or not
+      1.1: if no, check if it's the person who created the room
+      1.2: if ye, check if videoconference exists
+            1.2.1 if doesnt exist, error message
+            1.2.2 if exists
+                1.2.2.1 if needs password, ask for password then display details and all
+                1.2.2.2 if doesnt need display details
+
+    DETAILS:
+    2. Check date of videoconference and give feedback accordingly
+
+    3. If you can enter the room, ask input name to rejoin the room *@
+@if (String.IsNullOrEmpty(RoomId))
+{
+    <AuthorizeView>
+        <Authorized>
+            <VideoconferenceDashboard />
+        </Authorized>
+        <NotAuthorized>
+            Not authorized
+        </NotAuthorized>
+    </AuthorizeView>
+}
+else
+{
+    if (!roomExists)
+    {
+        <p>The room <strong>@RoomId</strong> doesn't exist</p>
+    }
+    else
+    {
+        <p>IT EXISTS</p>
+        if (HasPassword(videoconference))
+        {
+            if (!PasswordIsCorrect(inputPassword, videoconference))
+            {
+                <p>it needs a password:</p>
+                <input @bind="inputPassword" />
+            }
+            else
+            {
+                <p>Canard</p>
+            }
+        }
+        else
+        {
+            <p>no need for a password</p>
+        }
+    }
+}
+
+@code {
+    [Parameter]
+    public string RoomId { get; set; }
+
+    ApplicationUser currentUser;
+    bool roomExists;
+    Videoconference videoconference;
+    string inputPassword;
+
+    protected override async Task OnInitializedAsync()
+    {
+        currentUser = await ApplicationUserService.GetCurrentUser();
+
+        if (!String.IsNullOrEmpty(RoomId))
+        {
+            videoconference = await VideoconferenceService.GetByRoomAsync(RoomId);
+            roomExists = videoconference != null;
+        }
+    }
+
+    private bool HasPassword(Videoconference vc)
+        => !String.IsNullOrEmpty(vc.Password);
+
+    private bool PasswordIsCorrect(string passwordFromUser, Videoconference vc)
+        => vc.Password == passwordFromUser;
+}

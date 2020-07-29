@@ -83,7 +83,7 @@ else
         string guid = Guid.NewGuid().ToString("N").ToUpper();
         videoconferenceToAdd.VideoconferenceId = guid;
         videoconferenceToAdd.Ongoing = true;
-        videoconferenceToAdd.CreationDate = DateTime.Now;
+        //videoconferenceToAdd.CreationDate = DateTime.Now;
         videoconferenceToAdd.User = currentUser;
 
         await VideoconferenceService.CreateAsync(videoconferenceToAdd);

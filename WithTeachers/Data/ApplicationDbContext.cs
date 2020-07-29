@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -28,7 +29,8 @@ namespace WithTeachers.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Class>().HasData(GetClasses());
+            //modelBuilder.Entity<Class>().HasData(GetClasses());
+            //modelBuilder.Entity<Videoconference>().HasData(GetVideoconferences());
             base.OnModelCreating(modelBuilder);
         }
 
@@ -45,6 +47,14 @@ namespace WithTeachers.Data
                 new Class { ClassId = 5, Name = "4A", Year = 1700 }
             };
         }
+
+        //private List<Videoconference> GetVideoconferences()
+        //{
+        //    return new List<Videoconference>
+        //    {
+        //        new Videoconference { VideoconferenceId = 1, Title = "3A", Password = "", Ongoing = true, CreationDate = new DateTime("28/07/2020), UserId = "f4e22dd9-48f0-4dcd-8ccf-c5e6d83635ae" },
+        //    };
+        //}
 
         #endregion Seed
     }

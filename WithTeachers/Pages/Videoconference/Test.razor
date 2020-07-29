@@ -2,6 +2,7 @@
 @inject IJSRuntime JSRuntime
 @inject IModalService Modal
 @inject NavigationManager NavigationManager
+@inject VideoconferenceService VideoconferenceService
 
 @if (AnonymousUser != null)
 {
@@ -49,6 +50,7 @@
     [Parameter]
     public string RoomId { get; set; }
 
+    Videoconference Videoconference;
     AnonymousUser AnonymousUser;
 
     HubConnection HubConnection;
@@ -60,6 +62,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+        //Videoconference = await VideoconferenceService.ReadAsync(RoomId);
         await InitializeHubAsync();
     }
 

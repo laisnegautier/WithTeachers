@@ -21,7 +21,7 @@ namespace WithTeachers.Data
             return videoconference;
         }
 
-        public async Task<Videoconference> ReadAsync(string id)
-            => await _context.Videoconferences.SingleOrDefaultAsync(x => x.VideoconferenceId == id);
+        public async Task<Videoconference> ReadAsync(int id)
+            => await _context.Videoconferences.SingleOrDefaultAsync(x => x.Id == id);
     }
 }

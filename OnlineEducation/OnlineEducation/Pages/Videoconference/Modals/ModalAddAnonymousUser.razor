@@ -1,0 +1,35 @@
+﻿<EditForm class="form-section form-blank" Model="@model" OnValidSubmit="HandleValidSubmit">
+    <ObjectGraphDataAnnotationsValidator />
+    <p class="text-center">You are going to join the videoconference <strong>Name of the course</strong>, hosted by <strong>Emilie Ricaux</strong>.</p>
+    <div class="row add-class">
+        <div class="col-12">
+            <div class="input-group mb-2">
+                <label for="userName" class="sr-only">Write your name:</label>
+                <InputText id="userName" placeholder="Write your name" class="form-control col-12 text-center" @bind-Value="model.UserName" />
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <button type="submit" class="btn mx-auto offset-lg-1">Join</button>
+    </div>
+</EditForm>
+
+@code {
+    [CascadingParameter]
+    BlazoredModalInstance BlazoredModal { get; set; }
+
+    [Parameter]
+    public string RoomId { get; set; }
+
+    AnonymousUser model = new AnonymousUser();
+
+    private void HandleValidSubmit()
+    {
+        ConfirmEdit();
+        // Notifier
+        //await OnSubmit.InvokeAsync("The course <strong>" + model.Course.Title + "</strong> has been added to your courses!");
+    }
+
+    private void ConfirmEdit() => BlazoredModal.Close(ModalResult.Ok($"Edit confirmed"));
+}

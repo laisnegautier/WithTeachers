@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace WithTeachers.Data
 {
-    public class Activity
+    public abstract class Activity
     {
-        public int ActivityId { get; set; }
+        public int Id { get; set; }
 
         [Required(ErrorMessage = "The activity title should not be left empty.")]
         public string Title { get; set; }
@@ -19,21 +20,49 @@ namespace WithTeachers.Data
         public DateTime ScheduledFor { get; set; }
 
         [DataType(DataType.Duration)]
-        public TimeSpan TimeSpan { get; set; } = new TimeSpan(2, 0, 0);
+        public TimeSpan TimeSpan { get; set; }
 
         public bool Completed { get; set; } = false;
 
         [DataType(DataType.DateTime)]
         public DateTime CreationDate { get; set; }
 
+        public bool Ongoing { get; set; }
 
-        //public int VideoconferenceId { get; set; }
-        //public virtual Videoconference Videoconference { get; set; }
+        public string UserId { get; set; }
+        public virtual ApplicationUser User { get; set; }
+    }
 
-        //public int CourseId { get; set; }
-        //public virtual Course Course { get; set; }
+    public class Videoconference : Activity
+    {
+        public string Slug { get; set; }
 
-        //public int ClassId { get; set; }
-        //public virtual Class Class { get; set; }
+        [DataType(DataType.Password)]
+        public string Password { get; set; }
+    }
+
+    public class ClassActivity : Activity
+    {
+        public string ClassId { get; set; }
+        public virtual Class Class { get; set; }
+    }
+
+    //Used for the hub
+    public class UserCall
+    {
+        public List<User> Users;
+    }
+
+    public class User
+    {
+        public string Username;
+        public string ConnectionId;
+        public bool InCall;
+    }
+
+    public class CallOffer
+    {
+        public User Caller;
+        public User Callee;
     }
 }

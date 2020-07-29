@@ -1,0 +1,22 @@
+﻿[
+  {
+    "outputFile": "wwwroot/css/site.css",
+    "inputFile": "wwwroot/css/site.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/blazored-modal.css",
+    "inputFile": "wwwroot/css/blazored-modal.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/form.css",
+    "inputFile": "wwwroot/css/form.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/topMenu.css",
+    "inputFile": "wwwroot/css/topMenu.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/variables.css",
+    "inputFile": "wwwroot/css/variables.scss"
+  }
+]
