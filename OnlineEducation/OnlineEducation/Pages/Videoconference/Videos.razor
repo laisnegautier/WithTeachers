@@ -5,7 +5,12 @@
 @inject VideoconferenceService VideoconferenceService
 
 <div class="connected-users">
-
+    <ul class="list-unstyled">
+        @foreach (string message in groupMessages)
+        {
+            <li>@message</li>
+        }
+    </ul>
 </div>
 
 <div class="toolbar-connectivity">
@@ -49,6 +54,7 @@
     public dynamic User { get; set; }
 
     HubConnection HubConnection;
+    List<string> groupMessages = new List<string>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -63,9 +69,12 @@
             .WithAutomaticReconnect()
             .Build();
 
-        //HubConnection.On<string>("GetUserNameClient", (userName) => AnonymousUser.UserName = userName);
+        HubConnection.On<string>("UpdateGroupState", (message) => { groupMessages.Add(message); StateHasChanged(); });
 
         // Connection start
         await HubConnection.StartAsync();
+
+        // Put into group
+        await HubConnection.SendAsync("AddToGroup", Videoconference.RoomId);
     }
 }
