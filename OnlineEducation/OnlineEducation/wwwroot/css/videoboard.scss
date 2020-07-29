@@ -104,3 +104,95 @@
         }
     }
 }
+
+//MAIN
+.connected-users {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    border-radius: 5px;
+    background: $mainColor;
+    width: 250px;
+    height: 400px;
+    text-align: right;
+    @include border;
+    @include box-shadow;
+}
+
+.toolbar-connectivity {
+    position: absolute;
+    margin: 0 auto;
+    bottom: 100px;
+    border-radius: 5px;
+    background: rgba(0,0,0,.3);
+    text-align: center;
+    /*    @include border;*/
+    @include box-shadow;
+
+    ul {
+        list-style: none;
+        display: flex;
+        padding: 15px 5px;
+        justify-content: center;
+        align-items: center;
+        margin: 0;
+
+        li {
+            display: inline;
+
+            .btn {
+                font-weight: bold;
+                border: none !important;
+                @include transition;
+                box-shadow: 0;
+                background: transparent;
+                margin: auto 10px;
+                height: 40px;
+                color: white;
+
+                &:hover, &:active, &:focus {
+                    color: $text-color-secondary;
+                    background: $mainColor;
+                }
+            }
+        }
+    }
+}
+
+.videos {
+    background: $background !important;
+    width: 100%;
+    height: 100vh;
+
+    .toolbarSignalR {
+        display: flex;
+        justify-content: flex-start;
+
+        h3 {
+            margin: 0;
+            margin-right: 20px;
+        }
+
+        ul {
+            border-left: 1px solid $foreground;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+
+            li {
+                display: inline;
+                /*                background: $background;*/
+                padding: 10px;
+                margin: 0;
+
+                span {
+                    background: $mainColor;
+                    border-radius: 3px;
+                    padding: 5px;
+                    color: $background;
+                    font-weight: bold;
+                }
+            }
+        }
+    }
+}

@@ -1,17 +1,45 @@
-﻿<h3>Videos</h3>
+﻿@using Microsoft.AspNetCore.SignalR.Client
+@inject IJSRuntime JSRuntime
+@inject IModalService Modal
+@inject NavigationManager NavigationManager
+@inject VideoconferenceService VideoconferenceService
 
-@if (Videoconference.IsHost(User))
-{
-    <p><strong>YOU'RE THE HOST</strong></p>
-}
-else if (!Videoconference.IsHost(User) && User is Guest)
-{
-    <p><strong>YOU'RE AN ANONYMOUS GUEST</strong></p>
-}
-else if (!Videoconference.IsHost(User) && User is ApplicationUser)
-{
-    <p><strong>YOU'RE CONNECTED BUT ONLY A GUEST</strong></p>
-}
+<div class="connected-users">
+
+</div>
+
+<div class="toolbar-connectivity">
+    <ul>
+        <li><button class="btn"><span class="oi oi-monitor" aria-hidden="true"></span> Share your screen</button></li>
+        <li><button class="btn"><span class="oi oi-camera-slr" aria-hidden="true"></span> Disable camera</button></li>
+        <li><button class="btn"><span class="oi oi-microphone" aria-hidden="true"></span> Disable microphone</button></li>
+        <li><button class="btn"><span class="oi oi-phone" aria-hidden="true"></span> Quit the videoconference</button></li>
+    </ul>
+</div>
+
+<div class="videos">
+    @if (Videoconference.IsHost(User))
+    {
+        <p><strong>YOU'RE THE HOST</strong></p>
+    }
+    else if (!Videoconference.IsHost(User) && User is Guest)
+    {
+        <p><strong>YOU'RE AN ANONYMOUS GUEST</strong></p>
+    }
+    else if (!Videoconference.IsHost(User) && User is ApplicationUser)
+    {
+        <p><strong>YOU'RE CONNECTED BUT ONLY A GUEST</strong></p>
+    }
+
+<nav class="navbar fixed-bottom navbar-dark bg-dark toolbarSignalR">
+    <h3 class="navbar-brand">SignalR State</h3>
+    <ul>
+        <li>Connection State: <span>@HubConnection.State</span></li>
+        <li>Connection ID: <span>@HubConnection.ConnectionId</span></li>
+        <li>Group name: <span></span></li>
+    </ul>
+</nav>
+</div>
 
 @code {
     [Parameter]
@@ -19,5 +47,25 @@ else if (!Videoconference.IsHost(User) && User is ApplicationUser)
 
     [Parameter]
     public dynamic User { get; set; }
-}
 
+    HubConnection HubConnection;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await InitializeHubAsync();
+    }
+
+    async Task InitializeHubAsync()
+    {
+        // Connection creation
+        HubConnection = new HubConnectionBuilder()
+            .WithUrl(NavigationManager.ToAbsoluteUri("/webRTCHub"))
+            .WithAutomaticReconnect()
+            .Build();
+
+        //HubConnection.On<string>("GetUserNameClient", (userName) => AnonymousUser.UserName = userName);
+
+        // Connection start
+        await HubConnection.StartAsync();
+    }
+}
