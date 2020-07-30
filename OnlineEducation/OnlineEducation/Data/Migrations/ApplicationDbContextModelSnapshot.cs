@@ -271,6 +271,79 @@ namespace OnlineEducation.Data.Migrations
                     b.HasDiscriminator<string>("Discriminator").HasValue("Activity");
                 });
 
+            modelBuilder.Entity("OnlineEducation.Data.Models.Connection", b =>
+                {
+                    b.Property<string>("ConnectionId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("Connected")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserAgent")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("VideoconferenceUserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ConnectionId");
+
+                    b.HasIndex("VideoconferenceUserId");
+
+                    b.ToTable("Connections");
+                });
+
+            modelBuilder.Entity("OnlineEducation.Data.Models.Room", b =>
+                {
+                    b.Property<int>("RoomId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("RoomName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("RoomId");
+
+                    b.ToTable("Rooms");
+                });
+
+            modelBuilder.Entity("OnlineEducation.Data.Models.UserRoom", b =>
+                {
+                    b.Property<int>("UserRoomId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("RoomId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("VideoconferenceUserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserRoomId");
+
+                    b.HasIndex("RoomId");
+
+                    b.HasIndex("VideoconferenceUserId");
+
+                    b.ToTable("UserRooms");
+                });
+
+            modelBuilder.Entity("OnlineEducation.Data.Models.VideoconferenceUser", b =>
+                {
+                    b.Property<int>("VideoconferenceUserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("VideoconferenceUserId");
+
+                    b.ToTable("VideoconferenceUsers");
+                });
+
             modelBuilder.Entity("OnlineEducation.Data.Models.ApplicationUser", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
@@ -301,7 +374,7 @@ namespace OnlineEducation.Data.Migrations
                             Description = "You have to follow now",
                             IsCompleted = false,
                             IsOngoing = true,
-                            ScheduledFor = new DateTime(2020, 7, 29, 11, 35, 7, 673, DateTimeKind.Local).AddTicks(9826),
+                            ScheduledFor = new DateTime(2020, 7, 30, 7, 19, 10, 2, DateTimeKind.Local).AddTicks(2095),
                             TimeSpan = new TimeSpan(0, 2, 30, 0, 0),
                             Title = "Course of Mathematics",
                             UserId = "5925d79e-5ed1-4e19-ae1f-8ef0e4474cad",
@@ -343,7 +416,7 @@ namespace OnlineEducation.Data.Migrations
                             Description = "You",
                             IsCompleted = false,
                             IsOngoing = true,
-                            ScheduledFor = new DateTime(2020, 7, 29, 11, 35, 7, 680, DateTimeKind.Local).AddTicks(9163),
+                            ScheduledFor = new DateTime(2020, 7, 30, 7, 19, 10, 5, DateTimeKind.Local).AddTicks(4976),
                             TimeSpan = new TimeSpan(0, 0, 30, 0, 0),
                             Title = "Without Password",
                             UserId = "5925d79e-5ed1-4e19-ae1f-8ef0e4474cad",
@@ -407,6 +480,28 @@ namespace OnlineEducation.Data.Migrations
                     b.HasOne("OnlineEducation.Data.Models.ApplicationUser", "User")
                         .WithMany("Activities")
                         .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("OnlineEducation.Data.Models.Connection", b =>
+                {
+                    b.HasOne("OnlineEducation.Data.Models.VideoconferenceUser", null)
+                        .WithMany("Connections")
+                        .HasForeignKey("VideoconferenceUserId");
+                });
+
+            modelBuilder.Entity("OnlineEducation.Data.Models.UserRoom", b =>
+                {
+                    b.HasOne("OnlineEducation.Data.Models.Room", "Room")
+                        .WithMany("UserRooms")
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("OnlineEducation.Data.Models.VideoconferenceUser", "VideoconferenceUser")
+                        .WithMany("UserRooms")
+                        .HasForeignKey("VideoconferenceUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

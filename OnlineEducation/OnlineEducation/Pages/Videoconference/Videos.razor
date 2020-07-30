@@ -75,6 +75,6 @@
         await HubConnection.StartAsync();
 
         // Put into group
-        await HubConnection.SendAsync("AddToGroup", Videoconference.RoomId);
+        await HubConnection.SendAsync("AddToRoom", Videoconference.RoomId);
     }
 }

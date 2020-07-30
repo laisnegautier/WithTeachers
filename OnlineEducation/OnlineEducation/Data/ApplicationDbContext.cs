@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using OnlineEducation.Data;
 using OnlineEducation.Data.Models;
+using System;
+using System.Collections.Generic;
 
 namespace OnlineEducation.Data
 {
@@ -12,6 +10,10 @@ namespace OnlineEducation.Data
     {
         public DbSet<Activity> Activities { get; set; }
         public DbSet<Videoconference> Videoconferences { get; set; }
+        public DbSet<VideoconferenceUser> VideoconferenceUsers { get; set; }
+        public DbSet<Connection> Connections { get; set; }
+        public DbSet<Room> Rooms { get; set; }
+        public DbSet<UserRoom> UserRooms { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

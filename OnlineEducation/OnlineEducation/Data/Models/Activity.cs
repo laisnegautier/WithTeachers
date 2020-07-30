@@ -50,7 +50,7 @@ namespace OnlineEducation.Data.Models
             => Password == passwordFromUser;
 
         public bool IsHost(ApplicationUser user)
-            => user != null ? User.Id == user.Id : false;
+            => user != null && User.Id == user.Id;
 
         public bool IsHost(Guest user) => false;
     }
