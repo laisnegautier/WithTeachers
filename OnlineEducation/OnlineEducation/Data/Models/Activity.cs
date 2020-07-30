@@ -1,10 +1,12 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using OnlineEducation.Data.Services;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace OnlineEducation.Data.Models
 {
@@ -58,7 +60,7 @@ namespace OnlineEducation.Data.Models
 
         public bool IsHost(ApplicationUser user)
             => user != null && User == user;
-        
+
         //return true if the user is in list of users in the room
         public bool HasJoinedRoom(ApplicationUser user)
             => VideoconferenceUsers.Where(vcUser => vcUser.User == user) != null;

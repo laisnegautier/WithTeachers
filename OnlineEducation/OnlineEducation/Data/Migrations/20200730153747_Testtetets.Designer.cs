@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnlineEducation.Data;
 
 namespace OnlineEducation.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200730153747_Testtetets")]
+    partial class Testtetets
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -304,15 +306,18 @@ namespace OnlineEducation.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("UserId")
+                    b.Property<int>("ActivityId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("VideoconferenceActivityId")
+                    b.Property<int?>("VideoconferenceActivityId")
                         .HasColumnType("int");
 
                     b.HasKey("VideoconferenceUserId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("VideoconferenceActivityId");
 
@@ -355,7 +360,7 @@ namespace OnlineEducation.Data.Migrations
                             Description = "You have to follow now",
                             IsCompleted = false,
                             IsOngoing = true,
-                            ScheduledFor = new DateTime(2020, 7, 30, 18, 5, 51, 13, DateTimeKind.Local).AddTicks(5651),
+                            ScheduledFor = new DateTime(2020, 7, 30, 17, 37, 46, 234, DateTimeKind.Local).AddTicks(6919),
                             TimeSpan = new TimeSpan(0, 2, 30, 0, 0),
                             Title = "Course of Mathematics",
                             UserId = "5925d79e-5ed1-4e19-ae1f-8ef0e4474cad",
@@ -397,7 +402,7 @@ namespace OnlineEducation.Data.Migrations
                             Description = "You",
                             IsCompleted = false,
                             IsOngoing = true,
-                            ScheduledFor = new DateTime(2020, 7, 30, 18, 5, 51, 17, DateTimeKind.Local).AddTicks(4868),
+                            ScheduledFor = new DateTime(2020, 7, 30, 17, 37, 46, 238, DateTimeKind.Local).AddTicks(1346),
                             TimeSpan = new TimeSpan(0, 0, 30, 0, 0),
                             Title = "Without Password",
                             UserId = "5925d79e-5ed1-4e19-ae1f-8ef0e4474cad",
@@ -465,22 +470,20 @@ namespace OnlineEducation.Data.Migrations
 
             modelBuilder.Entity("OnlineEducation.Data.Models.SignalRConnection", b =>
                 {
-                    b.HasOne("OnlineEducation.Data.Models.VideoconferenceUser", "VideoconferenceUser")
+                    b.HasOne("OnlineEducation.Data.Models.VideoconferenceUser", null)
                         .WithMany("Connections")
                         .HasForeignKey("VideoconferenceUserId");
                 });
 
             modelBuilder.Entity("OnlineEducation.Data.Models.VideoconferenceUser", b =>
                 {
-                    b.HasOne("OnlineEducation.Data.Models.ApplicationUser", "User")
+                    b.HasOne("OnlineEducation.Data.Models.ApplicationUser", null)
                         .WithMany("VideoconferenceUsers")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("ApplicationUserId");
 
                     b.HasOne("OnlineEducation.Data.Models.Videoconference", "Videoconference")
                         .WithMany("VideoconferenceUsers")
-                        .HasForeignKey("VideoconferenceActivityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("VideoconferenceActivityId");
                 });
 #pragma warning restore 612, 618
         }

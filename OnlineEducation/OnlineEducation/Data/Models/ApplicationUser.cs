@@ -21,10 +21,10 @@ namespace OnlineEducation.Data.Models
     {
         public int VideoconferenceUserId { get; set; }
 
-        public int ActivityId { get; set; }
+        public int VideoconferenceActivityId { get; set; }
         public virtual Videoconference Videoconference { get; set; }
 
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public virtual ApplicationUser User { get; set; }
 
         public virtual ICollection<SignalRConnection> Connections { get; set; }
@@ -36,5 +36,7 @@ namespace OnlineEducation.Data.Models
         public string ConnectionId { get; set; }
         public string UserAgent { get; set; } //browser
         public bool Connected { get; set; }
+
+        public virtual VideoconferenceUser VideoconferenceUser { get; set; }
     }
 }

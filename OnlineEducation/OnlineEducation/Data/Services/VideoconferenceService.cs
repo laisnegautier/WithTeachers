@@ -41,5 +41,18 @@ namespace OnlineEducation.Data.Services
             _context.Entry(vc).State = EntityState.Modified;
             await _context.SaveChangesAsync();
         }
+
+        public async Task<VideoconferenceUser> AddToRoom(Videoconference videoconference, ApplicationUser user)
+        {
+            VideoconferenceUser vuToAdd = new VideoconferenceUser()
+            {
+                UserId = user.Id,
+                VideoconferenceActivityId = videoconference.ActivityId
+            };
+
+            _context.VideoconferenceUsers.Add(vuToAdd);
+            await _context.SaveChangesAsync();
+            return vuToAdd;
+        }
     }
 }

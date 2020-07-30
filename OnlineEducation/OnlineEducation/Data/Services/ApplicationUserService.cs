@@ -48,7 +48,7 @@ namespace OnlineEducation.Data.Services
             Videoconference vc = await VideoconferenceService.GetByRoomAsync(roomId);
 
             foreach (VideoconferenceUser vcUser in vc.VideoconferenceUsers)
-                if(vcUser.User.Pseudo == pseudo)
+                if (vcUser.User.Pseudo == pseudo)
                     return vcUser.User;
 
             return null;
@@ -73,18 +73,19 @@ namespace OnlineEducation.Data.Services
                 }
                 else
                 {
-                    await CreateUserByPseudAsync(pseudo);
+                    await CreateUserByPseudoAsync(pseudo);
                 }
             }
         }
 
-        private async Task CreateUserByPseudAsync(string pseudo)
+        private async Task CreateUserByPseudoAsync(string pseudo)
         {
-            ApplicationUser user = new ApplicationUser 
-            { 
-                UserName = Guid.NewGuid().ToString(), 
-                Email = null, 
+            ApplicationUser user = new ApplicationUser
+            {
+                UserName = Guid.NewGuid().ToString(),
+                Email = null,
                 Pseudo = pseudo,
+                IsAnonymous = true,
                 EmailConfirmed = true 
             };
 

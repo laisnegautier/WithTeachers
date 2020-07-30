@@ -59,6 +59,7 @@
     {
         currentUser = await ApplicationUserService.GetCurrentUser();
         await InitializeHubAsync();
+        await VideoconferenceService.AddToRoom(Videoconference, currentUser);
     }
 
     async Task InitializeHubAsync()
