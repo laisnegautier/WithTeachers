@@ -50,9 +50,15 @@ namespace OnlineEducation.Data.Services
                 VideoconferenceActivityId = videoconference.ActivityId
             };
 
-            _context.VideoconferenceUsers.Add(vuToAdd);
-            await _context.SaveChangesAsync();
-            return vuToAdd;
+            VideoconferenceUser vuExists = await _context.VideoconferenceUsers.SingleOrDefaultAsync(x => x.UserId == user.Id && x.VideoconferenceActivityId == videoconference.ActivityId);
+            if(vuExists == null)
+            {
+                _context.VideoconferenceUsers.Add(vuToAdd);
+                await _context.SaveChangesAsync();
+                return vuToAdd;
+            }
+
+            return vuExists;
         }
     }
 }

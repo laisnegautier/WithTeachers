@@ -52,6 +52,8 @@
     [Parameter]
     public Videoconference Videoconference { get; set; }
 
+    VideoconferenceUser vu;
+
     HubConnection HubConnection;
     List<string> groupMessages = new List<string>();
 
@@ -59,7 +61,7 @@
     {
         currentUser = await ApplicationUserService.GetCurrentUser();
         await InitializeHubAsync();
-        await VideoconferenceService.AddToRoom(Videoconference, currentUser);
+        vu = await VideoconferenceService.AddToRoom(Videoconference, currentUser);
     }
 
     async Task InitializeHubAsync()
