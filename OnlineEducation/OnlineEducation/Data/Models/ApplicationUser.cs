@@ -9,6 +9,7 @@ namespace OnlineEducation.Data.Models
     public class ApplicationUser : IdentityUser
     {
         public string Lastname { get; set; }
+        public string Pseudo { get; set; }
 
         public bool IsAnonymous { get; set; }
         public virtual ICollection<Activity> Activities { get; set; }

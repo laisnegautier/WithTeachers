@@ -1,5 +1,19 @@
 ﻿@page "/"
 
-<h1>Hello, world!</h1>
+@inject ApplicationUserService ApplicationUserService
+@inject VideoconferenceService VideoconferenceService
+@inject NavigationManager NavigationManager
 
+<h1>Hello, world!</h1>
+@videoconference.User.UserName
 Welcome to your new app.
+
+@code {
+    OnlineEducation.Data.Models.Videoconference videoconference;
+
+    protected override async Task OnInitializedAsync()
+    {
+        //videoconference = await VideoconferenceService.GetByRoomAsync("without-password");
+        videoconference = await VideoconferenceService.ReadAsync(1);
+    }
+    }

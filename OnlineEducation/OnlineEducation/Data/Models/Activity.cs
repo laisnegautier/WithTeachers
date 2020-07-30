@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace OnlineEducation.Data.Models
 {
@@ -31,6 +33,7 @@ namespace OnlineEducation.Data.Models
 
         public bool IsOngoing { get; set; }
 
+        //Host
         public string UserId { get; set; }
         public virtual ApplicationUser User { get; set; }
 
@@ -54,6 +57,10 @@ namespace OnlineEducation.Data.Models
             => Password == passwordFromUser;
 
         public bool IsHost(ApplicationUser user)
-            => user != null && User.Id == user.Id; 
+            => user != null && User == user;
+        
+        //return true if the user is in list of users in the room
+        public bool HasJoinedRoom(ApplicationUser user)
+            => VideoconferenceUsers.Where(vcUser => vcUser.User == user) != null;
     }
 }

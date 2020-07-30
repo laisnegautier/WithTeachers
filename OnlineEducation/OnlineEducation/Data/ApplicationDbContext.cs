@@ -8,10 +8,10 @@ namespace OnlineEducation.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {
-        public DbSet<Activity> Activities { get; set; }
-        public DbSet<Videoconference> Videoconferences { get; set; }
-        public DbSet<VideoconferenceUser> VideoconferenceUsers { get; set; }
-        public DbSet<SignalRConnection> SignalRConnections { get; set; }
+        public virtual DbSet<Activity> Activities { get; set; }
+        public virtual DbSet<Videoconference> Videoconferences { get; set; }
+        public virtual DbSet<VideoconferenceUser> VideoconferenceUsers { get; set; }
+        public virtual DbSet<SignalRConnection> SignalRConnections { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

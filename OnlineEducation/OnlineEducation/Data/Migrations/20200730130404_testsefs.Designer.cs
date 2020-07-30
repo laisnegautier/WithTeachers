@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnlineEducation.Data;
 
 namespace OnlineEducation.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200730130404_testsefs")]
+    partial class testsefs
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -361,7 +363,7 @@ namespace OnlineEducation.Data.Migrations
                             Description = "You have to follow now",
                             IsCompleted = false,
                             IsOngoing = true,
-                            ScheduledFor = new DateTime(2020, 7, 30, 16, 1, 56, 173, DateTimeKind.Local).AddTicks(9415),
+                            ScheduledFor = new DateTime(2020, 7, 30, 15, 4, 3, 497, DateTimeKind.Local).AddTicks(6194),
                             TimeSpan = new TimeSpan(0, 2, 30, 0, 0),
                             Title = "Course of Mathematics",
                             UserId = "5925d79e-5ed1-4e19-ae1f-8ef0e4474cad",
@@ -403,7 +405,7 @@ namespace OnlineEducation.Data.Migrations
                             Description = "You",
                             IsCompleted = false,
                             IsOngoing = true,
-                            ScheduledFor = new DateTime(2020, 7, 30, 16, 1, 56, 182, DateTimeKind.Local).AddTicks(2777),
+                            ScheduledFor = new DateTime(2020, 7, 30, 15, 4, 3, 502, DateTimeKind.Local).AddTicks(9900),
                             TimeSpan = new TimeSpan(0, 0, 30, 0, 0),
                             Title = "Without Password",
                             UserId = "5925d79e-5ed1-4e19-ae1f-8ef0e4474cad",

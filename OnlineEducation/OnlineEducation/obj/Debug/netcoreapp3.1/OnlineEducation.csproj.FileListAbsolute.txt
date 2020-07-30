@@ -23,7 +23,6 @@ C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\OnlineEducation\OnlineEd
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\OnlineEducation\OnlineEducation\obj\Debug\netcoreapp3.1\OnlineEducation.RazorCoreGenerate.cache
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\OnlineEducation\OnlineEducation\obj\Debug\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\LogOut.cshtml.g.cs
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\OnlineEducation\OnlineEducation\obj\Debug\netcoreapp3.1\Razor\Areas\Identity\Pages\Shared\_LoginPartial.cshtml.g.cs
-C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\OnlineEducation\OnlineEducation\obj\Debug\netcoreapp3.1\Razor\Pages\Error.cshtml.g.cs
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\OnlineEducation\OnlineEducation\obj\Debug\netcoreapp3.1\Razor\Pages\_Host.cshtml.g.cs
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\OnlineEducation\OnlineEducation\obj\Debug\netcoreapp3.1\OnlineEducation.RazorTargetAssemblyInfo.cache
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\OnlineEducation\OnlineEducation\obj\Debug\netcoreapp3.1\OnlineEducation.RazorTargetAssemblyInfo.cs
@@ -219,3 +218,5 @@ C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\OnlineEducation\OnlineEd
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\OnlineEducation\OnlineEducation\obj\Debug\netcoreapp3.1\Razor\Shared\Videoboard.razor.g.cs
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\OnlineEducation\OnlineEducation\obj\Debug\netcoreapp3.1\Razor\_Imports.razor.g.cs
 C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\OnlineEducation\OnlineEducation\obj\Debug\netcoreapp3.1\OnlineEducation.csprojAssemblyReference.cache
+C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\OnlineEducation\OnlineEducation\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\_404.razor.g.cs
+C:\Users\Gautier\source\repos\KarmaFlights\WithTeachers\OnlineEducation\OnlineEducation\obj\Debug\netcoreapp3.1\Razor\Pages\_404.razor.g.cs

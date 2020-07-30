@@ -5,17 +5,21 @@ using System.Linq;
 using System.Threading.Tasks;
 using OnlineEducation.Data;
 using OnlineEducation.Data.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace OnlineEducation.Data.Services
 {
     public class VideoconferenceService
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public VideoconferenceService(ApplicationDbContext context)
+        public VideoconferenceService(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
+
         public async Task<Videoconference> CreateAsync(Videoconference videoconference)
         {
             _context.Videoconferences.Add(videoconference);
@@ -24,7 +28,9 @@ namespace OnlineEducation.Data.Services
         }
 
         public async Task<Videoconference> ReadAsync(int id)
-            => await _context.Videoconferences.SingleOrDefaultAsync(x => x.ActivityId == id);
+        { 
+            return await _context.Videoconferences.SingleOrDefaultAsync(x => x.ActivityId == id); 
+        }
 
 
         public async Task<Videoconference> GetByRoomAsync(string roomId)
