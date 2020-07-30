@@ -75,15 +75,15 @@ else
                         //here it's just another user of the platform but not the one who created the videoconf so we don't ask for other name
                         @if (currentUser != null)
                         {
-                            <button class="btn" @onclick="@(() => JoinVideoconferenceAsGuestAsync(currentUser))">Join as @currentUser.UserName</button>
+                            <button class="btn" @onclick="JoinVideoconferenceAsGuest">Join as @currentUser.UserName</button>
                         }
                         else
                         {
-    <div class="form-inline">
-        <input type="text" class="form-control text-center mb-3 mb-sm-0 mr-2" @oninput="InputGuestName" placeholder="Write your name" autofocus />
-        <button class="btn" @onclick="@(() => JoinVideoconferenceAsGuestAsync(inputGuestName))" disabled="@(String.IsNullOrEmpty(inputGuestName))">Join</button>
-        <a href="Identity/Account/LoginShort?userName=@inputGuestName" class="mr-3">JoinTest</a>
-    </div>
+                            <div class="form-inline">
+                                <input type="text" class="form-control text-center mb-3 mb-sm-0 mr-2" @oninput="InputGuestName" placeholder="Write your name" autofocus />
+                                @*<button class="btn" @onclick="@(() => JoinVideoconferenceAsGuestAsync(inputGuestName))" disabled="@(String.IsNullOrEmpty(inputGuestName))">Join</button>*@
+                                <a href="Identity/Account/LoginShort?userName=@inputGuestName&returnUrl=/@RoomId" class="mr-3">JoinTest</a>
+                            </div>
 
                             @if (!String.IsNullOrEmpty(inputGuestName))
                             {
@@ -116,7 +116,7 @@ else
 
     // Once connected to the videoconference
     bool userHasJoinedVideoconference = false;
-    dynamic userJoiningTheVideoconference; //can be the host, a connected guest or an anonymous guest
+    ApplicationUser userJoiningTheVideoconference; //can be the host, a connected guest or an anonymous guest
 
     protected override async Task OnInitializedAsync()
     {
@@ -145,10 +145,8 @@ else
         StateHasChanged();
     }
 
-    private async Task JoinVideoconferenceAsGuestAsync(string guestName)
+    private void JoinVideoconferenceAsGuest()
     {
-        userJoiningTheVideoconference = new Guest(guestName);
-
         userHasJoinedVideoconference = true;
         StateHasChanged();
     }
@@ -164,12 +162,4 @@ else
         ApplicationUser user = await ApplicationUserService.GetUserByName(userName);
         userExists = user != null;
     }
-
-    private void JoinVideoconferenceAsGuestAsync(ApplicationUser userButNotHost)
-    {
-        userJoiningTheVideoconference = userButNotHost;
-        userHasJoinedVideoconference = true;
-        StateHasChanged();
-    }
-
 }

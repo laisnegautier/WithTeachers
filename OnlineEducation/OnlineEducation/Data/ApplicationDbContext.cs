@@ -11,9 +11,7 @@ namespace OnlineEducation.Data
         public DbSet<Activity> Activities { get; set; }
         public DbSet<Videoconference> Videoconferences { get; set; }
         public DbSet<VideoconferenceUser> VideoconferenceUsers { get; set; }
-        public DbSet<Connection> Connections { get; set; }
-        public DbSet<Room> Rooms { get; set; }
-        public DbSet<UserRoom> UserRooms { get; set; }
+        public DbSet<SignalRConnection> SignalRConnections { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

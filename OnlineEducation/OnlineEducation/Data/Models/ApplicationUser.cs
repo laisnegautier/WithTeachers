@@ -10,16 +10,30 @@ namespace OnlineEducation.Data.Models
     {
         public string Lastname { get; set; }
 
+        public bool IsAnonymous { get; set; }
         public virtual ICollection<Activity> Activities { get; set; }
+        public virtual ICollection<VideoconferenceUser> VideoconferenceUsers { get; set; }
     }
 
-    public class Guest
+    //Join table
+    public class VideoconferenceUser
     {
-        public string UserName { get; set; }
+        public int VideoconferenceUserId { get; set; }
 
-        public Guest() { }
+        public int ActivityId { get; set; }
+        public virtual Videoconference Videoconference { get; set; }
 
-        public Guest(string userName)
-            => UserName = userName;
+        public int UserId { get; set; }
+        public virtual ApplicationUser User { get; set; }
+
+        public virtual ICollection<SignalRConnection> Connections { get; set; }
+    }
+
+    public class SignalRConnection
+    {
+        public int SignalRConnectionId { get; set; }
+        public string ConnectionId { get; set; }
+        public string UserAgent { get; set; } //browser
+        public bool Connected { get; set; }
     }
 }

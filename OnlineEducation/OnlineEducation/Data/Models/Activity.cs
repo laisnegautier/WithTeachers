@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -46,12 +48,12 @@ namespace OnlineEducation.Data.Models
         [NotMapped]
         public bool HasPassword { get => !String.IsNullOrEmpty(Password); }
 
+        public virtual ICollection<VideoconferenceUser> VideoconferenceUsers { get; set; }
+
         public bool PasswordIsCorrect(string passwordFromUser)
             => Password == passwordFromUser;
 
         public bool IsHost(ApplicationUser user)
-            => user != null && User.Id == user.Id;
-
-        public bool IsHost(Guest user) => false;
+            => user != null && User.Id == user.Id; 
     }
 }

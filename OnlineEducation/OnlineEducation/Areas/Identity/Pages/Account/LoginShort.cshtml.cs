@@ -19,18 +19,12 @@ namespace OnlineEducation.Areas.Identity.Pages.Account
     [AllowAnonymous]
     public class LoginShortModel : PageModel
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ApplicationUserService _applicationUserService;
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginShortModel(SignInManager<ApplicationUser> signInManager,
-            ILogger<LoginModel> logger,
-            UserManager<ApplicationUser> userManager,
+        public LoginShortModel(ILogger<LoginModel> logger,
             ApplicationUserService applicationUserService)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
             _logger = logger;
             _applicationUserService = applicationUserService;
         }

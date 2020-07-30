@@ -3,6 +3,7 @@
 @inject IModalService Modal
 @inject NavigationManager NavigationManager
 @inject VideoconferenceService VideoconferenceService
+@inject ApplicationUserService ApplicationUserService
 
 <div class="connected-users">
     <ul class="list-unstyled">
@@ -27,37 +28,39 @@
     {
         <p><strong>YOU'RE THE HOST</strong></p>
     }
-    else if (!Videoconference.IsHost(User) && User is Guest)
+    else if (!Videoconference.IsHost(User) && User.IsAnonymous)
     {
         <p><strong>YOU'RE AN ANONYMOUS GUEST</strong></p>
     }
-    else if (!Videoconference.IsHost(User) && User is ApplicationUser)
+    else if (!Videoconference.IsHost(User) && !User.IsAnonymous)
     {
         <p><strong>YOU'RE CONNECTED BUT ONLY A GUEST</strong></p>
     }
 
-<nav class="navbar fixed-bottom navbar-dark bg-dark toolbarSignalR">
-    <h3 class="navbar-brand">SignalR State</h3>
-    <ul>
-        <li>Connection State: <span>@HubConnection.State</span></li>
-        <li>Connection ID: <span>@HubConnection.ConnectionId</span></li>
-        <li>Group name: <span></span></li>
-    </ul>
-</nav>
+    <nav class="navbar fixed-bottom navbar-dark bg-dark toolbarSignalR">
+        <h3 class="navbar-brand">SignalR State</h3>
+        <ul>
+            <li>Connection State: <span>@HubConnection.State</span></li>
+            <li>Connection ID: <span>@HubConnection.ConnectionId</span></li>
+        </ul>
+    </nav>
 </div>
 
 @code {
+    ApplicationUser currentUser;
+
     [Parameter]
     public Videoconference Videoconference { get; set; }
 
     [Parameter]
-    public dynamic User { get; set; }
+    public ApplicationUser User { get; set; }
 
     HubConnection HubConnection;
     List<string> groupMessages = new List<string>();
 
     protected override async Task OnInitializedAsync()
     {
+        currentUser = await ApplicationUserService.GetCurrentUser();
         await InitializeHubAsync();
     }
 
@@ -65,9 +68,9 @@
     {
         // Connection creation
         HubConnection = new HubConnectionBuilder()
-            .WithUrl(NavigationManager.ToAbsoluteUri("/webRTCHub"))
-            .WithAutomaticReconnect()
-            .Build();
+        .WithUrl(NavigationManager.ToAbsoluteUri("/webRTCHub"))
+        .WithAutomaticReconnect()
+        .Build();
 
         HubConnection.On<string>("UpdateGroupState", (message) => { groupMessages.Add(message); StateHasChanged(); });
 
@@ -75,6 +78,8 @@
         await HubConnection.StartAsync();
 
         // Put into group
-        await HubConnection.SendAsync("AddToRoom", Videoconference.RoomId);
+        await HubConnection.SendAsync("AddToGroup", currentUser.UserName, Videoconference.RoomId);
+        await HubConnection.SendAsync("MessageToYou", currentUser.UserName, "laisne.gautier@gmail.com", Videoconference.RoomId, "salut putoi");
+        await HubConnection.SendAsync("MessageTest", currentUser.UserName, Videoconference.RoomId, "hihihihi");
     }
 }
