@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using OnlineEducation.Data.Models;
+using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
@@ -58,28 +59,32 @@ namespace OnlineEducation.Data.Services
         /// </summary>
         /// <param name="userName"></param>
         /// <returns></returns>
-        public async Task<ApplicationUser> ConnectUserByName(string userName)
+        public async Task ConnectUserByPseudoAndRoom(string pseudo, string roomId)
         {
-            ApplicationUser user = await _userManager.FindByNameAsync(userName);
+            Videoconference vc = await VideoconferenceService.GetByRoomAsync(roomId);
 
-            if (user != null)
+            if(vc != null)
             {
-                await _signInManager.SignInAsync(user, true);
-            }
-            else
-            {
-                await CreateUserAsync(userName);
-            }
+                ApplicationUser user = await GetByPseudoAndRoom(pseudo, roomId);
 
-            return user;
+                if (user != null)
+                {
+                    await _signInManager.SignInAsync(user, true);
+                }
+                else
+                {
+                    await CreateUserByPseudAsync(pseudo);
+                }
+            }
         }
 
-        private async Task CreateUserAsync(string userName)
+        private async Task CreateUserByPseudAsync(string pseudo)
         {
             ApplicationUser user = new ApplicationUser 
             { 
-                UserName = userName, 
+                UserName = Guid.NewGuid().ToString(), 
                 Email = null, 
+                Pseudo = pseudo,
                 EmailConfirmed = true 
             };
 

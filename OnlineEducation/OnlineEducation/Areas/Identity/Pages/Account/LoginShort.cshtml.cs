@@ -29,15 +29,14 @@ namespace OnlineEducation.Areas.Identity.Pages.Account
             _applicationUserService = applicationUserService;
         }
 
-        public async Task<IActionResult> OnGetAsync(string userName, string returnUrl = null)
+        public async Task<IActionResult> OnGetAsync(string pseudo, string roomId, string returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
 
             // Clear the existing external cookie to ensure a clean login process
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
-            await _applicationUserService.ConnectUserByName(userName);
-
+            await _applicationUserService.ConnectUserByPseudoAndRoom(pseudo, roomId);
 
             _logger.LogInformation("User logged in.");
             return LocalRedirect(returnUrl);
