@@ -53,6 +53,7 @@
     public Videoconference Videoconference { get; set; }
 
     VideoconferenceUser vu;
+    SignalRConnection signalRconnection;
 
     HubConnection HubConnection;
     List<string> groupMessages = new List<string>();
@@ -62,6 +63,9 @@
         currentUser = await ApplicationUserService.GetCurrentUser();
         await InitializeHubAsync();
         vu = await VideoconferenceService.AddToRoom(Videoconference, currentUser);
+
+        string userAgent = await JSRuntime.InvokeAsync<string>("getUserAgent");
+        signalRconnection = await VideoconferenceService.AddConnectionToJoinTable(vu, HubConnection.ConnectionId, userAgent);
     }
 
     async Task InitializeHubAsync()

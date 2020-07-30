@@ -60,5 +60,21 @@ namespace OnlineEducation.Data.Services
 
             return vuExists;
         }
+
+        public async Task<SignalRConnection> AddConnectionToJoinTable(VideoconferenceUser vu, string connectionId, string userAgent)
+        {
+            SignalRConnection signalRConnection = new SignalRConnection()
+            {
+                Connected = true,
+                ConnectionId = connectionId,
+                UserAgent = userAgent,
+                VideoconferenceUser = vu
+            };
+
+            _context.SignalRConnections.Add(signalRConnection);
+            await _context.SaveChangesAsync();
+
+            return signalRConnection;
+        }
     }
 }
