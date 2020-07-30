@@ -1,15 +1,19 @@
 ﻿@page "/{RoomId}"
 @layout Videoboard
 
-@inject IModalService Modal
-@inject NavigationManager NavigationManager
-@inject IJSRuntime JSRuntime
 @inject ApplicationUserService ApplicationUserService
 @inject VideoconferenceService VideoconferenceService
 
+@* STRUCTURE (c = condition)
+    c1. userHasJoin?
+        Yes: display videoconference
+        No: c2. roomId in Uri is correct?
+            No: Page not found
+            Yes: 
+    *@
 @if (userHasJoinedVideoconference)
 {
-    <Videos Videoconference="@videoconference" User="@userJoiningTheVideoconference" />
+    <Videos Videoconference="@videoconference" />
 }
 else
 {

@@ -24,15 +24,15 @@
 </div>
 
 <div class="videos">
-    @if (Videoconference.IsHost(User))
+    @if (Videoconference.IsHost(currentUser))
     {
         <p><strong>YOU'RE THE HOST</strong></p>
     }
-    else if (!Videoconference.IsHost(User) && User.IsAnonymous)
+    else if (!Videoconference.IsHost(currentUser) && currentUser.IsAnonymous)
     {
         <p><strong>YOU'RE AN ANONYMOUS GUEST</strong></p>
     }
-    else if (!Videoconference.IsHost(User) && !User.IsAnonymous)
+    else if (!Videoconference.IsHost(currentUser) && !currentUser.IsAnonymous)
     {
         <p><strong>YOU'RE CONNECTED BUT ONLY A GUEST</strong></p>
     }
@@ -51,9 +51,6 @@
 
     [Parameter]
     public Videoconference Videoconference { get; set; }
-
-    [Parameter]
-    public ApplicationUser User { get; set; }
 
     HubConnection HubConnection;
     List<string> groupMessages = new List<string>();
