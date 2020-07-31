@@ -24,7 +24,7 @@
         <li><button class="btn"><span class="oi oi-monitor" aria-hidden="true"></span> Share your screen</button></li>
         <li><button class="btn"><span class="oi oi-camera-slr" aria-hidden="true"></span> Disable camera</button></li>
         <li><button class="btn"><span class="oi oi-microphone" aria-hidden="true"></span> Disable microphone</button></li>
-        <li><button class="btn"><span class="oi oi-phone" aria-hidden="true"></span> Quit the videoconference</button></li>
+        <li><button class="btn" @onclick="Disconnect"><span class="oi oi-phone" aria-hidden="true"></span> Quit the videoconference</button></li>
     </ul>
 </div>
 
@@ -92,5 +92,16 @@
         await HubConnection.SendAsync("AddToGroup", currentUser.UserName, Videoconference.RoomId);
         await HubConnection.SendAsync("MessageToYou", currentUser.UserName, "laisne.gautier@gmail.com", Videoconference.RoomId, "salut putoi");
         await HubConnection.SendAsync("MessageTest", currentUser.UserName, Videoconference.RoomId, "hihihihi");
+    }
+
+    async Task Disconnect()
+    {
+        //remove from room in the database
+        //prevent the others
+        //disconnect from hub
+        //delete anonymous account
+
+
+        await VideoconferenceService.Disconnect(currentUser, Videoconference);
     }
 }

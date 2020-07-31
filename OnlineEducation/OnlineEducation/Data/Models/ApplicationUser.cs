@@ -34,7 +34,10 @@ namespace OnlineEducation.Data.Models
         public bool IsConnected
         {
             // check if there's at least one active connection
-            get => Connections.FirstOrDefault(co => co.Connected) != null;
+            get {
+                    if (Connections == null) return false;
+                    return Connections.FirstOrDefault(co => co.Connected) != null; 
+                }
         }
     }
 

@@ -94,5 +94,12 @@ namespace OnlineEducation.Data.Services
             _context.SignalRConnections.UpdateRange(connectionsToDisable);
             await _context.SaveChangesAsync();
         }
+
+        public async Task Disconnect(ApplicationUser user, Videoconference videoconference)
+        {
+            List<VideoconferenceUser> vusToRemove = videoconference.VideoconferenceUsers.Where(x => x.UserId == user.Id).ToList();
+            _context.RemoveRange(vusToRemove);
+            await _context.SaveChangesAsync();
+        }
     }
 }

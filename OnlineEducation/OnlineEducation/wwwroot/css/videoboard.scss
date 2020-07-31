@@ -121,18 +121,16 @@
     color: $background;
 
     h3 {
-        padding-bottom: 7px;
         font-size: 1.2rem;
         font-weight: bold;
         display: inline-block;
         color: $plate;
         /*        background: $plate;*/
-        border-bottom: 2px solid $plate;
     }
 
     .little {
         list-style: none;
-        margin: 0;
+        margin: 0 0 7px 0;
         padding: 0;
 
         li {

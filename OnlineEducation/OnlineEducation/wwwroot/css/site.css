@@ -246,16 +246,14 @@ input[type=text], input[type=password] {
   padding: 20px;
   color: #182127; }
   .connected-users h3 {
-    padding-bottom: 7px;
     font-size: 1.2rem;
     font-weight: bold;
     display: inline-block;
     color: #293843;
-    /*        background: $plate;*/
-    border-bottom: 2px solid #293843; }
+    /*        background: $plate;*/ }
   .connected-users .little {
     list-style: none;
-    margin: 0;
+    margin: 0 0 7px 0;
     padding: 0; }
     .connected-users .little li {
       display: inline;
