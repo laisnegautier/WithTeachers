@@ -33,23 +33,14 @@ namespace OnlineEducation.Hubs
             await base.OnConnectedAsync();
         }
 
-        public Task AddToGroup(string user, string roomId)
+        public async Task AddToGroup(string userPseudo, string roomId)
         {
-            return Groups.AddToGroupAsync(Context.ConnectionId, roomId);
+            await Groups.AddToGroupAsync(Context.ConnectionId, roomId);
+            await Clients.Group(roomId).SendAsync("MessageToGroupClient", $"{userPseudo} joined the room.");
         }
-
-        public Task MessageTest(string user, string roomId, string message)
-        {
-            return Clients.Group(roomId).SendAsync("UpdateGroupState", $"{user} said: {message}, {Context.ConnectionId}, {Context.UserIdentifier}, {Context.User.Identity.IsAuthenticated}");
-        }
-
-
-        public async Task MessageToYou(string userA, string userB, string roomId, string message)
-        {
-            //VideoconferenceUser userReceiver = await _video.GetUserByName(userB);
-            //foreach(string connectionId in userReceiver.UserRoom)
-            //await Clients.Client(userReceiver.Id).SendAsync("UpdateGroupState", $"{userA} said to yo: {message}, {Context.ConnectionId}, {Context.UserIdentifier}, {Context.User.Identity.IsAuthenticated}");
-        }
+        
+        public async Task MessageToGroup(string message, string roomId)
+            => await Clients.Group(roomId).SendAsync("MessageToGroupClient", message);
 
         public async Task RemoveFromRoom(string roomName)
         {
@@ -67,7 +58,17 @@ namespace OnlineEducation.Hubs
             //    await Groups.RemoveFromGroupAsync(Context.ConnectionId, roomName);
             //}
 
-            await Clients.Group(roomName).SendAsync("UpdateGroupState", $"{Context.User.Identity.Name}, {Context.ConnectionId} has left the group {roomName}.");
+            await Clients.Group(roomName).SendAsync("MessageToGroup", $"{Context.User.Identity.Name}, {Context.ConnectionId} has left the group {roomName}.");
+        }
+
+        public async Task DisconnectAsync(string userPseudo, string roomId)
+        {
+            //ApplicationUser user = await _applicationUserService.GetByPseudoAndRoom(pseudo, roomId);
+            //await Clients.OthersInGroup(roomId).SendAsync("DisconnectFromRoom", pseudo);
+
+            await Clients.OthersInGroup(roomId).SendAsync("MessageToGroup", $"{userPseudo} left the room");
+            //abort the current connexion
+            Context.Abort();
         }
 
         public override async Task OnDisconnectedAsync(Exception exception)
