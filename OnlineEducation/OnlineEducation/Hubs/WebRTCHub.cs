@@ -4,19 +4,12 @@ using Microsoft.EntityFrameworkCore;
 using OnlineEducation.Data;
 using OnlineEducation.Data.Models;
 using OnlineEducation.Data.Services;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace OnlineEducation.Hubs
 {
-    public class NameUserIdProvider : IUserIdProvider
-    {
-        public string GetUserId(HubConnectionContext connection)
-        {
-            return connection.User?.Identity?.Name;
-        }
-    }
-
     public class WebRTCHub : Hub
     {
         private readonly ApplicationDbContext _context;
@@ -39,27 +32,6 @@ namespace OnlineEducation.Hubs
 
             await base.OnConnectedAsync();
         }
-
-        //public async Task AddToRoom(string userName, string roomName)
-        //{
-        //    Room room = await _context.Rooms.SingleOrDefaultAsync(x => x.RoomName == roomName);
-
-        //    if (room != null)
-        //    {
-        //        VideoconferenceUser user = await _applicationUserService.GetUserByName(userName);
-        //        _context.VideoconferenceUsers.Attach(user);
-
-        //        UserRoom userRoom = new UserRoom() { RoomId = room.RoomId, VideoconferenceUserId = user.VideoconferenceUserId };
-        //        _context.UserRooms.Add(userRoom);
-        //        //room.Users.Add(user);
-        //        await _context.SaveChangesAsync();
-        //        await Groups.AddToGroupAsync(Context.ConnectionId, roomName);
-        //    }
-
-        //    await Clients.All.SendAsync("UpdateGroupState", $"{Context.User.Identity.Name}, {Context.ConnectionId} has joined the group {roomName}.");
-
-        //    await Clients.Group(roomName).SendAsync("UpdateGroupState", $"{Context.User.Identity.Name}, {Context.ConnectionId} has joined the group {roomName}.");
-        //}
 
         public Task AddToGroup(string user, string roomId)
         {
@@ -96,6 +68,12 @@ namespace OnlineEducation.Hubs
             //}
 
             await Clients.Group(roomName).SendAsync("UpdateGroupState", $"{Context.User.Identity.Name}, {Context.ConnectionId} has left the group {roomName}.");
+        }
+
+        public override async Task OnDisconnectedAsync(Exception exception)
+        {
+
+            await base.OnDisconnectedAsync(exception);
         }
     }
 }

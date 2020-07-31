@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using OnlineEducation.Data;
 using OnlineEducation.Data.Models;
 using Microsoft.AspNetCore.Identity;
+using Castle.Components.DictionaryAdapter;
 
 namespace OnlineEducation.Data.Services
 {
@@ -61,9 +62,10 @@ namespace OnlineEducation.Data.Services
             return vuExists;
         }
 
+        // create a new connection and disable all other ones
         public async Task<SignalRConnection> AddConnectionToJoinTable(VideoconferenceUser vu, string connectionId, string userAgent)
         {
-            SignalRConnection signalRConnection = new SignalRConnection()
+            SignalRConnection currentConnection = new SignalRConnection()
             {
                 Connected = true,
                 ConnectionId = connectionId,
@@ -71,10 +73,26 @@ namespace OnlineEducation.Data.Services
                 VideoconferenceUser = vu
             };
 
-            _context.SignalRConnections.Add(signalRConnection);
+            _context.SignalRConnections.Add(currentConnection);
             await _context.SaveChangesAsync();
 
-            return signalRConnection;
+            List<SignalRConnection> connectionsToDisable = new List<SignalRConnection>();
+            foreach (SignalRConnection connection in vu.Connections)
+                if (connection != currentConnection)
+                {
+                    connection.Connected = false;
+                    connectionsToDisable.Add(connection);
+                }
+            
+            await DisableConnections(connectionsToDisable);
+
+            return currentConnection;
+        }
+
+        public async Task DisableConnections(List<SignalRConnection> connectionsToDisable)
+        {
+            _context.SignalRConnections.UpdateRange(connectionsToDisable);
+            await _context.SaveChangesAsync();
         }
     }
 }
