@@ -53,6 +53,9 @@ namespace OnlineEducation.Data.Models
         [NotMapped]
         public bool HasPassword { get => !String.IsNullOrEmpty(Password); }
 
+        [NotMapped]
+        public int CountConnectedMembers { get => VideoconferenceUsers.Where(x => x.IsConnected).ToList().Count; }
+
         public virtual ICollection<VideoconferenceUser> VideoconferenceUsers { get; set; }
 
         public bool PasswordIsCorrect(string passwordFromUser)

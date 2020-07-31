@@ -112,11 +112,44 @@
     top: 10px;
     border-radius: 5px;
     background: $mainColor;
-    width: 250px;
-    height: 400px;
+    max-width: 25%;
+    /*    height: 400px;*/
     text-align: right;
     @include border;
     @include box-shadow;
+    padding: 20px;
+    color: $background;
+
+    h3 {
+        padding-bottom: 7px;
+        font-size: 1.2rem;
+        font-weight: bold;
+        display: inline-block;
+        color: $plate;
+        /*        background: $plate;*/
+        border-bottom: 2px solid $plate;
+    }
+
+    .little {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+
+        li {
+            display: inline;
+            /*                background: $background;*/
+/*            padding: 10px;*/
+            margin: 0;
+
+            span {
+                background: $plate;
+                border-radius: 3px;
+                padding: 5px;
+                color: $text-color-main;
+                font-weight: bold;
+            }
+        }
+    }
 }
 
 .toolbar-connectivity {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
@@ -28,6 +29,13 @@ namespace OnlineEducation.Data.Models
         public virtual ApplicationUser User { get; set; }
 
         public virtual ICollection<SignalRConnection> Connections { get; set; }
+
+        [NotMapped]
+        public bool IsConnected
+        {
+            // check if there's at least one active connection
+            get => Connections.FirstOrDefault(co => co.Connected) != null;
+        }
     }
 
     public class SignalRConnection

@@ -5,14 +5,19 @@
 @inject VideoconferenceService VideoconferenceService
 @inject ApplicationUserService ApplicationUserService
 
-<div class="connected-users">
-    <ul class="list-unstyled">
-        @foreach (string message in groupMessages)
-        {
-            <li>@message</li>
-        }
-    </ul>
-</div>
+    <div class="connected-users">
+        <h3>Group state</h3>
+        <ul class="little">
+            <li><span>@Videoconference.CountConnectedMembers persons</span></li>
+            <li><span>Password @(Videoconference.HasPassword ? "needed" : "not needed")</span></li>
+        </ul>
+        <ul class="list-unstyled">
+            @foreach (string message in groupMessages)
+            {
+                <li>@message</li>
+            }
+        </ul>
+    </div>
 
 <div class="toolbar-connectivity">
     <ul>
@@ -24,22 +29,24 @@
 </div>
 
 <div class="videos">
-    @if (Videoconference.IsHost(currentUser))
-    {
-        <p><strong>YOU'RE THE HOST</strong></p>
-    }
-    else if (!Videoconference.IsHost(currentUser) && currentUser.IsAnonymous)
-    {
-        <p><strong>YOU'RE AN ANONYMOUS GUEST</strong></p>
-    }
-    else if (!Videoconference.IsHost(currentUser) && !currentUser.IsAnonymous)
-    {
-        <p><strong>YOU'RE CONNECTED BUT ONLY A GUEST</strong></p>
-    }
 
     <nav class="navbar fixed-bottom navbar-dark bg-dark toolbarSignalR">
-        <h3 class="navbar-brand">SignalR State</h3>
+        <h3 class="navbar-brand">State</h3>
         <ul>
+            <li>User: 
+                @if (Videoconference.IsHost(currentUser))
+                {
+                    <span>Host</span>
+                }
+                else if (!Videoconference.IsHost(currentUser) && currentUser.IsAnonymous)
+                {
+                    <span>@currentUser.Pseudo (anonymous guest)</span>
+                }
+                else if (!Videoconference.IsHost(currentUser) && !currentUser.IsAnonymous)
+                {
+                    <span>@currentUser.Pseudo (registered guest)</span>
+                }
+            </li>
             <li>Connection State: <span>@HubConnection.State</span></li>
             <li>Connection ID: <span>@HubConnection.ConnectionId</span></li>
         </ul>
