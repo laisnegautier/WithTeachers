@@ -24,12 +24,17 @@
         <li><button class="btn"><span class="oi oi-monitor" aria-hidden="true"></span> Share your screen</button></li>
         <li><button class="btn"><span class="oi oi-camera-slr" aria-hidden="true"></span> Disable camera</button></li>
         <li><button class="btn"><span class="oi oi-microphone" aria-hidden="true"></span> Disable microphone</button></li>
-        <li><button class="btn" @onclick="Disconnect"><span class="oi oi-phone" aria-hidden="true"></span> Quit the videoconference</button></li>
+        <li><button class="btn" @onclick="Disconnect"><span class="oi oi-circle-x" aria-hidden="true"></span> Quit the videoconference</button></li>
     </ul>
 </div>
 
 <div class="videos">
+    @for(int i = 0; i < nbUsers; i++)
+    {
+        <div class="video-user">
 
+        </div>
+    }
     <nav class="navbar fixed-bottom navbar-dark bg-dark toolbarSignalR">
         <h3 class="navbar-brand">State</h3>
         <ul>
@@ -83,7 +88,8 @@
         string userAgent = await JSRuntime.InvokeAsync<string>("getUserAgent");
         signalRconnection = await VideoconferenceService.AddConnectionToJoinTable(vu, HubConnection.ConnectionId, userAgent);
 
-        nbUsers = await VideoconferenceService.GetNumberOfConnectedUserInRoom(RoomId);
+        //VERY IMPORTANT TO PUT IT AT THE END
+        await HubConnection.SendAsync("GetNumberOfUsers", RoomId);
     }
 
     async Task InitializeHubAsync()
@@ -95,7 +101,7 @@
         .Build();
 
         HubConnection.On<string>("MessageToGroupClient", message => UpdateMessageGroup(message));
-        HubConnection.On("UpdateNumberOfConnectedUser", async () => await UpdateNumberOfConnectedUser());
+        HubConnection.On<int>("UpdateNumberOfConnectedUser", (nb) => UpdateNumberOfConnectedUser(nb));
 
         // Connection start
         await HubConnection.StartAsync();
@@ -104,9 +110,9 @@
         await HubConnection.SendAsync("AddToGroup", currentUser.Pseudo, RoomId);
     }
 
-    async Task UpdateNumberOfConnectedUser()
+    void UpdateNumberOfConnectedUser(int nb)
     {
-        nbUsers = await VideoconferenceService.GetNumberOfConnectedUserInRoom(RoomId);
+        nbUsers = nb;
         StateHasChanged();
     }
 
@@ -120,6 +126,7 @@
     {
         //remove from room in the database
         await VideoconferenceService.Disconnect(currentUser, videoconference);
+        await HubConnection.SendAsync("GetNumberOfUsers", RoomId);
 
         //prevent the others and
         //disconnect from hub

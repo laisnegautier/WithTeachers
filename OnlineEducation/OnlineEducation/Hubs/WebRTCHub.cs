@@ -14,11 +14,13 @@ namespace OnlineEducation.Hubs
     {
         private readonly ApplicationDbContext _context;
         private readonly ApplicationUserService _applicationUserService;
+        private readonly VideoconferenceService _videoconferenceService;
 
-        public WebRTCHub(ApplicationDbContext context, ApplicationUserService applicationUserService)
+        public WebRTCHub(ApplicationDbContext context, ApplicationUserService applicationUserService, VideoconferenceService videoconferenceService)
         {
             _context = context;
             _applicationUserService = applicationUserService;
+            _videoconferenceService = videoconferenceService;
         }
 
         public override async Task OnConnectedAsync()
@@ -37,7 +39,13 @@ namespace OnlineEducation.Hubs
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, roomId);
             await Clients.Group(roomId).SendAsync("MessageToGroupClient", $"{userPseudo} joined the room.");
-            await Clients.Group(roomId).SendAsync("UpdateNumberOfConnectedUser");
+
+        }
+
+        public async Task GetNumberOfUsers(string roomId)
+        {
+            int nb = await _videoconferenceService.GetNumberOfConnectedUserInRoom(roomId);
+            await Clients.Group(roomId).SendAsync("UpdateNumberOfConnectedUser", nb);
         }
         
         public async Task MessageToGroup(string message, string roomId)
@@ -65,7 +73,6 @@ namespace OnlineEducation.Hubs
         public async Task DisconnectAsync(string userPseudo, string roomId)
         {
             await Clients.Group(roomId).SendAsync("MessageToGroupClient", $"{userPseudo} left the room.");
-            await Clients.Group(roomId).SendAsync("UpdateNumberOfConnectedUser");
 
             //abort the current connexion
             Context.Abort();

@@ -330,6 +330,11 @@ input[type=text], input[type=password] {
           color: #182127;
           font-weight: bold; }
 
+.video-user {
+  border: 2px solid #00A2FF;
+  width: 720px;
+  height: 350px; }
+
 /*THEME*/
 .blazored-modal-container {
   display: flex;
