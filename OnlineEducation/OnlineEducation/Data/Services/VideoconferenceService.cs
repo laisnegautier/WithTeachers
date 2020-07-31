@@ -101,5 +101,12 @@ namespace OnlineEducation.Data.Services
             _context.RemoveRange(vusToRemove);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<int> GetNumberOfConnectedUserInRoom(string roomId)
+        {
+            Videoconference vc = await GetByRoomAsync(roomId);
+
+            return vc.VideoconferenceUsers.Where(x => x.IsConnected).ToList().Count;
+        }
     }
 }

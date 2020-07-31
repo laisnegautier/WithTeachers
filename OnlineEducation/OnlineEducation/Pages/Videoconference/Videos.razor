@@ -5,19 +5,19 @@
 @inject VideoconferenceService VideoconferenceService
 @inject ApplicationUserService ApplicationUserService
 
-    <div class="connected-users">
-        <h3>Group state</h3>
-        <ul class="little">
-            <li><span>@videoconference.CountConnectedMembers persons</span></li>
-            <li><span>Password @(videoconference.HasPassword ? "needed" : "not needed")</span></li>
-        </ul>
-        <ul class="list-unstyled">
-            @foreach (string message in groupMessages)
-            {
-                <li>@message</li>
-            }
-        </ul>
-    </div>
+<div class="connected-users">
+    <h3>Group state</h3>
+    <ul class="little">
+        <li><span>@nbUsers persons</span></li>
+        <li><span>Password @(videoconference.HasPassword ? "needed" : "not needed")</span></li>
+    </ul>
+    <ul class="list-unstyled">
+        @foreach (string message in groupMessages)
+        {
+            <li>@message</li>
+        }
+    </ul>
+</div>
 
 <div class="toolbar-connectivity">
     <ul>
@@ -33,7 +33,8 @@
     <nav class="navbar fixed-bottom navbar-dark bg-dark toolbarSignalR">
         <h3 class="navbar-brand">State</h3>
         <ul>
-            <li>User: 
+            <li>
+                User:
                 @if (videoconference.IsHost(currentUser))
                 {
                     <span>Host</span>
@@ -66,7 +67,7 @@
 
     HubConnection HubConnection;
     List<string> groupMessages = new List<string>();
-
+    int nbUsers;
 
     //get the user
     //connect to the hub
@@ -79,11 +80,10 @@
 
         videoconference = await VideoconferenceService.GetByRoomAsync(RoomId);
         vu = await VideoconferenceService.AddToRoom(videoconference, currentUser);
-
         string userAgent = await JSRuntime.InvokeAsync<string>("getUserAgent");
         signalRconnection = await VideoconferenceService.AddConnectionToJoinTable(vu, HubConnection.ConnectionId, userAgent);
 
-        //await HubConnection.SendAsync("MessageToGroup", $"{currentUser.Pseudo} joined the room.", RoomId);
+        nbUsers = await VideoconferenceService.GetNumberOfConnectedUserInRoom(RoomId);
     }
 
     async Task InitializeHubAsync()
@@ -95,15 +95,19 @@
         .Build();
 
         HubConnection.On<string>("MessageToGroupClient", message => UpdateMessageGroup(message));
-        HubConnection.On<string>("JoinTheRoom", userPseudoWhoJoined => JoinedTheRoomHandler(userPseudoWhoJoined));
-        HubConnection.On<string>("DisconnectFromRoom", userPseudoWhoLeft => DisconnectFromRoomHandler(userPseudoWhoLeft));
+        HubConnection.On("UpdateNumberOfConnectedUser", async () => await UpdateNumberOfConnectedUser());
 
         // Connection start
         await HubConnection.StartAsync();
 
-
         // Put into group
         await HubConnection.SendAsync("AddToGroup", currentUser.Pseudo, RoomId);
+    }
+
+    async Task UpdateNumberOfConnectedUser()
+    {
+        nbUsers = await VideoconferenceService.GetNumberOfConnectedUserInRoom(RoomId);
+        StateHasChanged();
     }
 
     void UpdateMessageGroup(string message)
@@ -114,7 +118,6 @@
 
     async Task Disconnect()
     {
-        await HubConnection.SendAsync("MessageToGroup", $"{currentUser.Pseudo} left the room.", RoomId);
         //remove from room in the database
         await VideoconferenceService.Disconnect(currentUser, videoconference);
 
@@ -127,23 +130,5 @@
 
         //redirect
         NavigationManager.NavigateTo("/");
-    }
-
-    void JoinedTheRoomHandler(string userPseudo)
-    {
-        //videoconference = await VideoconferenceService.GetByRoomAsync(RoomId);
-
-        // Updating the UI
-        //numberPeopleInGroup = videoconference.CountConnectedMembers;
-        StateHasChanged();
-    }
-
-    void DisconnectFromRoomHandler(string userPseudo)
-    {
-
-        //videoconference = await VideoconferenceService.GetByRoomAsync(RoomId);
-
-        // Updating the UI
-        StateHasChanged();
     }
 }

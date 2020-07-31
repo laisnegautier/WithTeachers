@@ -37,6 +37,7 @@ namespace OnlineEducation.Hubs
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, roomId);
             await Clients.Group(roomId).SendAsync("MessageToGroupClient", $"{userPseudo} joined the room.");
+            await Clients.Group(roomId).SendAsync("UpdateNumberOfConnectedUser");
         }
         
         public async Task MessageToGroup(string message, string roomId)
@@ -63,10 +64,9 @@ namespace OnlineEducation.Hubs
 
         public async Task DisconnectAsync(string userPseudo, string roomId)
         {
-            //ApplicationUser user = await _applicationUserService.GetByPseudoAndRoom(pseudo, roomId);
-            //await Clients.OthersInGroup(roomId).SendAsync("DisconnectFromRoom", pseudo);
+            await Clients.Group(roomId).SendAsync("MessageToGroupClient", $"{userPseudo} left the room.");
+            await Clients.Group(roomId).SendAsync("UpdateNumberOfConnectedUser");
 
-            await Clients.OthersInGroup(roomId).SendAsync("MessageToGroup", $"{userPseudo} left the room");
             //abort the current connexion
             Context.Abort();
         }
