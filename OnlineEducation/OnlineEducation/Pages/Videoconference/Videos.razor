@@ -7,8 +7,9 @@
 @inject ApplicationUserService ApplicationUserService
 
 <div class="connected-users">
+    <em>@receivedRTCOffer</em>
     <button @onclick="JSmakeCall">Make call</button>
-    <strong>@makeCallAnswer</strong>
+    <strong>@RTCOffer</strong>
     <h3>Group state</h3>
     <ul class="little">
         <li><span>@nbUsers persons</span></li>
@@ -100,11 +101,11 @@
     //    await base.OnAfterRenderAsync(firstRender);
     //}
 
-    private string makeCallAnswer = "";
+    private string RTCOffer = "";
     async Task JSmakeCall()
     {
-        makeCallAnswer = await JSRuntime.InvokeAsync<string>("makeCall");
-        
+        RTCOffer = await JSRuntime.InvokeAsync<string>("makeCall");
+        await HubConnection.SendAsync("ShareRTCOffer", RTCOffer, RoomId);
     }
 
     async Task InitializeHubAsync()
@@ -117,12 +118,20 @@
 
         HubConnection.On<string>("MessageToGroupClient", message => UpdateMessageGroup(message));
         HubConnection.On<int>("UpdateNumberOfConnectedUser", (nb) => UpdateNumberOfConnectedUser(nb));
+        HubConnection.On<string>("ReceiveRTCOffer", (offer) => RTCOfferHandle(offer));
 
         // Connection start
         await HubConnection.StartAsync();
 
         // Put into group
         await HubConnection.SendAsync("AddToGroup", currentUser.Pseudo, RoomId);
+    }
+
+    string receivedRTCOffer = "";
+    void RTCOfferHandle(string offer)
+    {
+        receivedRTCOffer = offer;
+        StateHasChanged();
     }
 
     void UpdateNumberOfConnectedUser(int nb)

@@ -39,7 +39,6 @@ namespace OnlineEducation.Hubs
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, roomId);
             await Clients.Group(roomId).SendAsync("MessageToGroupClient", $"{userPseudo} joined the room.");
-
         }
 
         public async Task GetNumberOfUsers(string roomId)
@@ -50,6 +49,9 @@ namespace OnlineEducation.Hubs
         
         public async Task MessageToGroup(string message, string roomId)
             => await Clients.Group(roomId).SendAsync("MessageToGroupClient", message);
+
+        public async Task ShareRTCOffer(string offer, string roomId)
+            => await Clients.OthersInGroup(roomId).SendAsync("ReceiveRTCOffer", offer);
 
         public async Task RemoveFromRoom(string roomName)
         {

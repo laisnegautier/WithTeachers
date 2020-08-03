@@ -30,7 +30,6 @@ async function makeCall() {
     const offer = await peerConnection.createOffer();
     await peerConnection.setLocalDescription(offer);
 
-    //console.log("offer: " + offer);
     return JSON.stringify(offer);
 
     //signalingChannel.send({ 'offer': offer });
