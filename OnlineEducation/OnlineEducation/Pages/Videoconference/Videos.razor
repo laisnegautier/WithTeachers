@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNetCore.SignalR.Client
+@using System.Text.Json
 @inject IJSRuntime JSRuntime
 @inject IModalService Modal
 @inject NavigationManager NavigationManager
@@ -6,6 +7,8 @@
 @inject ApplicationUserService ApplicationUserService
 
 <div class="connected-users">
+    <button @onclick="JSmakeCall">Make call</button>
+    <strong>@makeCallAnswer</strong>
     <h3>Group state</h3>
     <ul class="little">
         <li><span>@nbUsers persons</span></li>
@@ -29,10 +32,9 @@
 </div>
 
 <div class="videos">
-    @for(int i = 0; i < nbUsers; i++)
+    @for (int i = 0; i < nbUsers; i++)
     {
         <div class="video-user">
-
         </div>
     }
     <nav class="navbar fixed-bottom navbar-dark bg-dark toolbarSignalR">
@@ -90,6 +92,19 @@
 
         //VERY IMPORTANT TO PUT IT AT THE END
         await HubConnection.SendAsync("GetNumberOfUsers", RoomId);
+    }
+
+    //protected override async Task OnAfterRenderAsync(bool firstRender)
+    //{
+    //    await JSRuntime.InvokeVoidAsync("webRTC_init");
+    //    await base.OnAfterRenderAsync(firstRender);
+    //}
+
+    private string makeCallAnswer = "";
+    async Task JSmakeCall()
+    {
+        makeCallAnswer = await JSRuntime.InvokeAsync<string>("makeCall");
+        
     }
 
     async Task InitializeHubAsync()
