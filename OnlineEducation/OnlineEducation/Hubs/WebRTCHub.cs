@@ -56,6 +56,9 @@ namespace OnlineEducation.Hubs
         public async Task ShareRTCAnswer(string answer, string roomId)
             => await Clients.OthersInGroup(roomId).SendAsync("ReceiveRTCAnswer", answer);
 
+        public async Task ShareIceCandidate(string iceCandidate, string roomId)
+            => await Clients.OthersInGroup(roomId).SendAsync("ReceiveIceCandidate", iceCandidate);
+
         public async Task RemoveFromRoom(string roomName)
         {
             //Room room = await _context.Rooms.SingleOrDefaultAsync(x => x.RoomName == roomName);

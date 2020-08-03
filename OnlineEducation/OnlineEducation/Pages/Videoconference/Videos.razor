@@ -34,6 +34,12 @@
 </div>
 
 <div class="videos">
+    <div>
+        <button @onclick="@(() => JSRuntime.InvokeVoidAsync("webRTC_playVideoFromCamera"))">Play video local</button>
+        <video id="localVideoPlayback" autoplay />
+        <video id="remoteVideo" autoplay />
+    </div>
+
     @for (int i = 0; i < nbUsers; i++)
     {
         <div class="video-user">
@@ -74,7 +80,7 @@
     VideoconferenceUser vu;
     SignalRConnection signalRconnection;
 
-    HubConnection HubConnection;
+    static HubConnection HubConnection;
     List<string> groupMessages = new List<string>();
     int nbUsers;
 
@@ -98,7 +104,7 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        await JSRuntime.InvokeVoidAsync("attachHandlers");
+        await JSRuntime.InvokeVoidAsync("initParameters", RoomId);
     }
 
     private string RTCOffer = "";
@@ -120,6 +126,7 @@
         HubConnection.On<int>("UpdateNumberOfConnectedUser", (nb) => UpdateNumberOfConnectedUser(nb));
         HubConnection.On<string>("ReceiveRTCOffer", (offer) => RTCOfferHandle(offer));
         HubConnection.On<string>("ReceiveRTCAnswer", (answer) => RTCAnswerHandle(answer));
+        HubConnection.On<string>("ReceiveIceCandidate", (iceCandidate) => AddIceCandidate(iceCandidate));
 
         // Connection start
         await HubConnection.StartAsync();
@@ -144,21 +151,23 @@
         receivedRTCAnswer = answer;
         StateHasChanged();
 
-        await JSRuntime.InvokeAsync<string>("onReceivingAnswer", receivedRTCAnswer);
+        await JSRuntime.InvokeVoidAsync("onReceivingAnswer", receivedRTCAnswer);
     }
 
 
 
     //LISTENING TO ICE CANDIDATES
-    //static string iceCandidate = "";
 
-    //[JSInvokable]
-    //public static void IceCandidateTrigger(string candidate)
-    //{
-    //    iceCandidate = candidate;
-    //}
+    [JSInvokable]
+    public static async Task ShareIceCandidate(string iceCandidate, string roomId)
+    {
+        await HubConnection.SendAsync("ShareIceCandidate", iceCandidate, roomId);
+    }
 
-
+    async Task AddIceCandidate(string iceCandidate)
+    {
+        await JSRuntime.InvokeVoidAsync("onReceivingIceCandidate", iceCandidate);
+    }
 
 
 
