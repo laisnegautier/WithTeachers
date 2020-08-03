@@ -7,7 +7,8 @@
 @inject ApplicationUserService ApplicationUserService
 
 <div class="connected-users">
-    <em>@receivedRTCOffer</em>
+    <em>Offer: @receivedRTCOffer</em>
+    <em class="small">Answer: @receivedRTCAnswer</em>
     <button @onclick="JSmakeCall">Make call</button>
     <strong>@RTCOffer</strong>
     <h3>Group state</h3>
@@ -95,11 +96,10 @@
         await HubConnection.SendAsync("GetNumberOfUsers", RoomId);
     }
 
-    //protected override async Task OnAfterRenderAsync(bool firstRender)
-    //{
-    //    await JSRuntime.InvokeVoidAsync("webRTC_init");
-    //    await base.OnAfterRenderAsync(firstRender);
-    //}
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await JSRuntime.InvokeVoidAsync("attachHandlers");
+    }
 
     private string RTCOffer = "";
     async Task JSmakeCall()
@@ -119,6 +119,7 @@
         HubConnection.On<string>("MessageToGroupClient", message => UpdateMessageGroup(message));
         HubConnection.On<int>("UpdateNumberOfConnectedUser", (nb) => UpdateNumberOfConnectedUser(nb));
         HubConnection.On<string>("ReceiveRTCOffer", (offer) => RTCOfferHandle(offer));
+        HubConnection.On<string>("ReceiveRTCAnswer", (answer) => RTCAnswerHandle(answer));
 
         // Connection start
         await HubConnection.StartAsync();
@@ -128,11 +129,40 @@
     }
 
     string receivedRTCOffer = "";
-    void RTCOfferHandle(string offer)
+    async Task RTCOfferHandle(string offer)
     {
         receivedRTCOffer = offer;
         StateHasChanged();
+
+        string answerToSend = await JSRuntime.InvokeAsync<string>("onReceivingOffer", receivedRTCOffer);
+        await HubConnection.SendAsync("ShareRTCAnswer", answerToSend, RoomId);
     }
+
+    string receivedRTCAnswer = "";
+    async Task RTCAnswerHandle(string answer)
+    {
+        receivedRTCAnswer = answer;
+        StateHasChanged();
+
+        await JSRuntime.InvokeAsync<string>("onReceivingAnswer", receivedRTCAnswer);
+    }
+
+
+
+    //LISTENING TO ICE CANDIDATES
+    //static string iceCandidate = "";
+
+    //[JSInvokable]
+    //public static void IceCandidateTrigger(string candidate)
+    //{
+    //    iceCandidate = candidate;
+    //}
+
+
+
+
+
+
 
     void UpdateNumberOfConnectedUser(int nb)
     {
